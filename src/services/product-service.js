@@ -15,16 +15,7 @@ class ProductService {
     return total;
   }
 
-  async getProducts() {
-    const products = await this.productModel.findAll();
-
-    if (products.length < 1) {
-        throw new Error('상품이 없습니다.');
-    }
-    return products;
-  }
-
-  async getProductByPages(page, perPage) {
+  async getProducts(page, perPage) {
     let products = await this.productModel.findAllbyPage(page, perPage);
 
     if (products.length < 1) {
@@ -33,8 +24,8 @@ class ProductService {
     return products;
   }
 
-  async countCategorized(category) {
-    const total = await this.productModel.countProductsbyCategory(category);
+  async countCategorizedProduct(category) {
+    const total = await this.productModel.countbyCategory(category);
 
     if (total < 1) {
         throw new Error('상품이 없습니다.');
@@ -42,13 +33,8 @@ class ProductService {
     return total;
   }
 
-  async getProductsByCategory(category) {
-    const products = await this.productModel.findByCategory(category);
-    return products;
-  }
-
-  async getProdByCatByPages(category, page, perPage) {
-    let products = await this.productModel.findByCategorybyPage(category, page, perPage);
+  async getProductsByCategory(category, page, perPage) {
+    let products = await this.productModel.findByCategory(category, page, perPage);
 
     if (products.length < 1) {
         throw new Error('상품이 없습니다.');
@@ -88,7 +74,7 @@ class ProductService {
     }
 
     await this.productModel.delete(productId);
-    return;
+    return '삭제가 완료되었습니다';
   }
 
   async setProduct(productId, toUpdate) {
