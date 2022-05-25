@@ -52,7 +52,8 @@ class ProductService {
   }
 
     // 가격으로 상품 검색
-    async getProductsByPrice(price) {
+    async getProductsByPrice(from, to) {
+      const price = { $gte: from, $lte: to }
       const products = await this.productModel.findByPrice(price);
       return products;
     }

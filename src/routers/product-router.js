@@ -56,13 +56,16 @@ productRouter.get('/products/category/:category', asyncHandler(async (req, res) 
 }));
 
 // 상품 가격으로 검색 후 정보 가져옴
-productRouter.get('/products/price/:price', asyncHandler(async (req, res) => {
-    const { price } = req.params;
-    const products = await productService.getProductsByPrice(price);
+productRouter.get('/products/price', asyncHandler(async (req, res) => {
+    
+    // 검색을 원하는 최소가격, 최대가격 query로 받기
+    const { from, to } = req.query;
+    
+    const products = await productService.getProductsByPrice(from, to);
     res.status(200).json(products);
 }));
 
-// 상품 가격으로 검색 후 정보 가져옴
+// 상품 제조사로 검색 후 정보 가져옴
 productRouter.get('/products/manufacturer/:manufacturer', asyncHandler(async (req, res) => {
     const { manufacturer } = req.params;
     const products = await productService.getProductsByManufacturer(manufacturer);

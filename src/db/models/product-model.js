@@ -30,8 +30,8 @@ export class ProductModel {
     return product;
   }
 
-  async findByPrice(price) {
-    const products = await Product.find({ price });
+  async findByPrice(priceRange) {
+    const products = await Product.find({ price: priceRange });
     return products;
   }
 
