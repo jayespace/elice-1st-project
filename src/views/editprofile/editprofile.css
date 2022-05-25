@@ -15,6 +15,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 /***input-label***/
 .image-input{
+    margin-top: 1rem;
     text-align: center;
 }
 .image-input input{
@@ -23,9 +24,9 @@ input[type=number]::-webkit-outer-spin-button {
 .image-input label{
     display: block;
     color: #FFF;
-    background: #000;	
+    background: rgb(64, 39, 207);	
     padding: .3rem .6rem;
-    font-size: 95%;
+    font-size: 85%;
     cursor: pointer;
 }
 .image-input i{

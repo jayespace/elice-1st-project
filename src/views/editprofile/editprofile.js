@@ -12,13 +12,13 @@ function searchByDaumPost() {
             // 주요한 data
             // data.zoncode 우편번호
             // data.roadAddress/data.jibunAddress 지번
-            // data.buildingName 건물이름
+            // {data.buildingName} 건물이름
             
             //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
             if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                addr = data.roadAddress + data.buildingName;
+                addr = `${data.roadAddress} (${data.buildingName})`;
             } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                addr = data.jibunAddress+ data.buildingName;
+                addr = `${data.jibunAddress} (${data.buildingName})`;
             }
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
@@ -29,47 +29,27 @@ function searchByDaumPost() {
         }
     }).open();
 }
-function loadFile(input) {
-    var file = input.files[0];	//선택된 파일 가져오기
 
-    //미리 만들어 놓은 div에 text(파일 이름) 추가
-    var name = document.getElementById('fileName');
-    name.textContent = file.name;
+function insertImageFile(file) {
+    let input = file.target
+    //이미지 파일 유효성 검사
+	if(input.files && input.files[0]) {
+		fileReader = new FileReader();
+		fileReader.onload = function (data) {
+            const img = document.querySelector('#profile-image');
+		    img.src = data.target.result;
+            img.style.width = "100%"
+            img.style.height = "100%"
 
-  	//새로운 이미지 div 추가
-    var newImage = document.createElement("img");
-    newImage.setAttribute("class", 'img');
+		}
+        //readAsDataURL 진행후 fileReader의 onload가 진행됩니다.
+		fileReader.readAsDataURL(input.files[0]); 
 
-    //이미지 source 가져오기
-    newImage.src = URL.createObjectURL(file);   
-
-    newImage.style.width = "70%";
-    newImage.style.height = "70%";
-    newImage.style.visibility = "hidden";   //버튼을 누르기 전까지는 이미지를 숨긴다
-    newImage.style.objectFit = "contain";
-
-    //이미지를 image-show div에 추가
-    var container = document.getElementById('image-show');
-    container.appendChild(newImage);
-};
-
-// var submit = document.getElementById('submitButton');
-// submit.onclick = showImage;     //Submit 버튼 클릭시 이미지 보여주기
-
-// function showImage() {
-//     var newImage = document.getElementById('image-show').lastElementChild;
-  
-//     //이미지는 화면에 나타나고
-//     newImage.style.visibility = "visible";
-  
-//     //이미지 업로드 버튼은 숨겨진다
-//     document.getElementById('image-upload').style.visibility = 'hidden';
-
-//     document.getElementById('fileName').textContent = null;     //기존 파일 이름 지우기
-// }
-
+	}
+}
+document.querySelector('#imageInput')
+    .addEventListener('change', insertImageFile);
+						
 
 document.querySelector("#searchAddressButton")
     .addEventListener('click', searchByDaumPost);
-document.querySelector("#image-button")
-    .addEventListener('click',loadFile);
