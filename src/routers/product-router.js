@@ -76,12 +76,6 @@ productRouter.get('/products/keyword/:keyword', asyncHandler(async (req, res) =>
     res.status(200).json(products);
 }));
 
-// // 카테고리 정보를 가져옴
-// productRouter.get('/categories', asyncHandler(async (req, res) => {
-//     const categories = await productService.getCategories();
-//     res.status(200).json(categories);
-// }));
-
 // 상품 id로 검색 후 상세 정보 가져옴
 productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
     const { productId } = req.params;

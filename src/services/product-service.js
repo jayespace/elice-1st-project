@@ -51,13 +51,6 @@ class ProductService {
     return detail;
   }
 
-  // 카테고리 확인
-  async getCategories() {
-    const products = await this.productModel.findAll();
-    const categories = products.map(product => product.category);
-    return [...new Set(categories)];
-  }
-
     // 가격으로 상품 검색
     async getProductsByPrice(price) {
       const products = await this.productModel.findByPrice(price);

@@ -6,7 +6,7 @@ const Category = model('categories', CategorySchema);
 export class CategoryModel {
 
   async findAll() {
-    const categories = await Category.find({}).sort({ createdAt : 1 });
+    const categories = await Category.find({});
     return categories;
   }
 
@@ -16,7 +16,7 @@ export class CategoryModel {
   }
 
   async findByName(categoryName) {
-    const category = await Category.find({ name: categoryName });
+    const category = await Category.findOne({ name: categoryName });
     return category;
   }
 
