@@ -52,19 +52,21 @@ function searchByDaumPost() {
 
             // 각 주소의 노출 규칙에 따라 주소를 조합한다.
             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            var addr = ''; // 주소 변수
-            var extraAddr = ''; // 참고항목 변수
+            let addr = ''; // 주소 변수
+            let extraAddr = ''; // 참고항목 변수
 
             // 주요한 data
             // data.zoncode 우편번호
             // data.roadAddress/data.jibunAddress 지번
             // {data.buildingName} 건물이름
             
+            //빌딩 이름이 없을시 '' 값을 반환합니다.
+            let buildingName = data.buildingName ? ` (${data.buildingName})`:''; 
             //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
             if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                addr = `${data.roadAddress} (${data.buildingName})`;
+                addr = `${data.roadAddress}${buildingName}`;
             } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                addr = `${data.jibunAddress} (${data.buildingName})`;
+                addr = `${data.jibunAddress}${buildingName}`;
             }
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
@@ -96,6 +98,48 @@ function insertImageFile(file) {
 	}
 }
 
+function checkForm(){
+
+    //비밀번호를 검사합니다.
+    function checkPassword(){
+        const password = document.querySelector('#password').value;
+        const passwordConfirm = document.querySelector('#passwordConfirm').value;
+        if(password && passwordConfirm){
+            if(password === passwordConfirm){
+                return password
+            }
+        }
+        return false;
+    }
+
+    //주소를 검사합니다.
+    function checkAddress(){
+        const postalCodeInput = document
+            .querySelector('#postalCodeInput').value;
+        const address1Input = document
+            .querySelector('#address1Input').value;
+        const address2Input = document
+            .querySelector('#address2Input').value;
+
+        if(postalCodeInput && address1Input){
+            if(address2Input){
+                return [postalCodeInput, address1Input, address2Input];
+            }
+        }
+
+        return false;
+    }
+
+    const password = checkPassword();
+    const address = checkAddress();
+    if(password && address){
+        console.log(password, address);
+    }
+    else{
+        alert('입력해주세요');
+    }
+}
+
 
 
 document.querySelector('#imageInput')
@@ -105,4 +149,6 @@ document.querySelector('#imageInput')
 document.querySelector("#searchAddressButton")
     .addEventListener('click', searchByDaumPost);
 
+document.querySelector('#saveButton')
+    .addEventListener('click', checkForm);
 
