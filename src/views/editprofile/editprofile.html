@@ -79,22 +79,26 @@
                 <figure class="image is-128x128">
                   <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
                 </figure>
+                <div class="image-input">
+                  <input type="file" accept="image/*" id="imageInput">
+                  <label for="imageInput" class="image-button"><i class="far fa-image"></i> Choose image</label>
+                </div>
               </div>
               <div class="media-content">
                 <div class="field">
-                  <label class="label">이름</label>
+                  <label class="label" for="fullNameInput">이름</label>
                   <div class="control">
                     <input class="input" type="name">
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">비밀번호</label>
+                  <label class="label" for="passwordInput">비밀번호</label>
                   <div class="control">
                     <input class="input" type="password">
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">비밀번호</label>
+                  <label class="label" for="passwordConfirmInput">비밀번호 확인</label>
                   <div class="control">
                     <input class="input" type="password">
                   </div>
@@ -162,14 +166,18 @@
                   </div>
               </div>
               <div class="field">
-                <label class="label">전화번호</label>
+                <label class="label" for="phoneNumberInput">전화번호</label>
                 <div class="control">
-                  <input class="input" type="password">
+                  <input class="input"
+                  id="phoneNumberInput"
+                  type="number" 
+                  placeholder="- 없이 입력해 주세요."
+                  autocomplete="on">
                 </div>
               </div>
               
               <button
-                class="button button-submit is-info is-half is-con js-modal-trigger"
+                class="button button-submit is-info is-half"
                 id="saveButton"
                 data-target="modal-js-example"
               >
