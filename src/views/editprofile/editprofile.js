@@ -22,14 +22,12 @@ function insertImageFile(file) {
   let input = file.target
   //이미지 파일 유효성 검사
 if(input.files && input.files[0]) {
-  fileReader = new FileReader();
+  const fileReader = new FileReader();
   fileReader.onload = function (data) {
-          //
           const img = document.querySelector('#profile-image');
-      img.src = data.target.result;
+          img.src = data.target.result;
           img.style.width = "100%"
           img.style.height = "100%"
-
   }
       //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
   fileReader.readAsDataURL(input.files[0]); 
