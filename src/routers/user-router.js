@@ -2,6 +2,7 @@ import { Router } from 'express';
 import is from '@sindresorhus/is';
 // 폴더에서 import하면, 자동으로 폴더의 index.js에서 가져옴
 import { loginRequired } from '../middlewares';
+import { adminRequired } from '../middlewares';
 import { userService } from '../services';
 
 const userRouter = Router();
@@ -52,10 +53,10 @@ userRouter.post('/login', async function (req, res, next) {
     const password = req.body.password;
 
     // 로그인 진행 (로그인 성공 시 jwt 토큰을 프론트에 보내 줌)
-    const userToken = await userService.getUserToken({ email, password });
+    const userTokenAndInfo = await userService.getUserToken({ email, password });
 
-    // jwt 토큰을 프론트에 보냄 (jwt 토큰은, 문자열임)
-    res.status(200).json(userToken);
+    // jwt 토큰과 유저정보을 프론트에 보냄 (jwt 토큰은, 문자열임)
+    res.status(200).json(userTokenAndInfo);
   } catch (error) {
     next(error);
   }
@@ -63,7 +64,7 @@ userRouter.post('/login', async function (req, res, next) {
 
 // 전체 유저 목록을 가져옴 (배열 형태임)
 // 미들웨어로 loginRequired 를 썼음 (이로써, jwt 토큰이 없으면 사용 불가한 라우팅이 됨)
-userRouter.get('/userlist', loginRequired, async function (req, res, next) {
+userRouter.get('/userlist', loginRequired,adminRequired, async function (req, res, next) {
   try {
     // 전체 사용자 목록을 얻음
     const users = await userService.getUsers();
@@ -74,6 +75,7 @@ userRouter.get('/userlist', loginRequired, async function (req, res, next) {
     next(error);
   }
 });
+
 
 // 사용자 정보 수정
 // (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
