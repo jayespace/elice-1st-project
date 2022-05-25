@@ -134,4 +134,45 @@ userRouter.patch(
   }
 );
 
+// 사용자 정보 삭제
+// (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.delete(
+  '/users/:userId',
+  loginRequired,
+  async function (req, res, next) {
+    try {
+      // content-type 을 application/json 로 프론트에서
+      // 설정 안 하고 요청하면, body가 비어 있게 됨.
+      if (is.emptyObject(req.body)) {
+        throw new Error(
+          'headers의 Content-Type을 application/json으로 설정해주세요'
+        );
+      }
+
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // body data로부터, 확인용으로 사용할 현재 비밀번호를 추출함.
+      const currentPassword = req.body.currentPassword;
+
+      // currentPassword 없을 시, 진행 불가
+      if (!currentPassword) {
+        throw new Error('회원을 탈퇴할려면, 현재의 비밀번호가 필요합니다.');
+      }
+
+      const userInfoRequired = { userId, currentPassword };
+
+      // 사용자 정보를 업데이트함.
+      const deleteUserInfo = await userService.deleteUser(
+        userInfoRequired,
+      );
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(deleteUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export { userRouter };
