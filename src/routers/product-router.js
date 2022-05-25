@@ -62,11 +62,11 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
     res.status(200).json(product);
 }));
 
-// 카테고리 정보를 가져옴
-productRouter.get('/categories', asyncHandler(async (req, res) => {
-    const categories = await productService.getCategories();
-    res.status(200).json(categories);
-}));
+// // 카테고리 정보를 가져옴
+// productRouter.get('/categories', asyncHandler(async (req, res) => {
+//     const categories = await productService.getCategories();
+//     res.status(200).json(categories);
+// }));
 
 // 로그인 후 admin일 경우 상품 추가
 productRouter.post('/products', loginRequired, adminRequired, asyncHandler(async(req,res) => {
