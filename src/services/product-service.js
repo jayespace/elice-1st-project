@@ -98,6 +98,21 @@ class ProductService {
 
     return product;
   }
+
+  // const updateInfo = (async (fields) => {
+  //   const { userId, requestedFields, profile_picture } = fields
+  //   console.log(profile_picture)
+    
+  //   return prisma.users.update({
+  //       where: {
+  //           id: Number(userId),
+  //       },
+  //       data: {
+  //           phone_number : requestedFields.phone_number,
+  //           profile_picture
+  //       }
+  //       })
+  //   })
 };
 
 

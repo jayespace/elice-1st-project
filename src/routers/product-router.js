@@ -4,6 +4,7 @@ import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
 import { productService } from '../services';
+import { upload } from '../utils'; // 사진 업로드 모듈
 
 const productRouter = Router();
 
@@ -77,12 +78,17 @@ productRouter.post('/products', loginRequired, adminRequired, asyncHandler(async
         );
     }
 
+    // AWS s3로 이미지 업로드
+    upload.single('product_image');
+        
     const { name, price, category, desc } = req.body;
+    const image = req.file.location;
 
     const newProduct = await productService.addProduct({
         name,
         price,
         category,
+        image,
         desc
     });
     res.status(200).json(newProduct);

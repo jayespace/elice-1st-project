@@ -15,7 +15,6 @@ const ProductSchema = new Schema({
     },
     image: {
         type: String,
-        data: Buffer,
         required: false
     },
     desc: {
