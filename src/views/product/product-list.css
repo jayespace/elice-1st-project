@@ -1,0 +1,41 @@
+.section{
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+.section .container{
+    max-width: 1100px;
+    margin:auto;
+    justify-content: center;
+}
+.section .container .product_list{
+    display: flex;
+    flex-wrap: wrap;
+}
+.section .container .product_list .product{
+    width: 300px;
+    height:450px;
+    padding: 5px;
+    margin: 0 10px 30px 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+.product img{
+    height: 300px;
+    width: 450px;
+}
+.name{
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+}
+.price{
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8px;
+}
+.price span{
+     font-weight: bold; 
+    color:crimson;
+    text-align: center;
+    margin-top: 8px;
+}
