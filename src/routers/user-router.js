@@ -62,15 +62,45 @@ userRouter.post('/login', async function (req, res, next) {
   }
 });
 
-// 전체 유저 목록을 가져옴 (배열 형태임)
+// 유저정보를 가져옴 (배열 형태임)
 // 미들웨어로 loginRequired 를 썼음 (이로써, jwt 토큰이 없으면 사용 불가한 라우팅이 됨)
 userRouter.get('/userlist', loginRequired,adminRequired, async function (req, res, next) {
+
+  //pagination 변수
+  //page : 현재 페이지
+  //perPage : 페이지 당 게시글개수
+  const page = Number(req.query.page || 1);
+  const perPage = Number(req.query.perPage || 10);
+  
+  //동적 쿼리 적용 
+  // option 유저 목록 검색 기능
+  let searchOptions = {}
+  if (req.query.option == 'email') {
+      searchOptions = { email: req.query.content }
+  } else if (req.query.option == 'fullName') {
+      searchOptions = { fullName: req.query.content }
+  } else if (req.query.option == 'role') {
+      searchOptions = { role : req.query.content }
+  } else if (req.query.option == 'phoneNumber') {
+      searchOptions = { phoneNumber: req.query.content }
+  } 
+ 
   try {
     // 전체 사용자 목록을 얻음
-    const users = await userService.getUsers();
+    const totalUsers = await userService.countTotalUsers();
+    const users = await userService.getUsers(page, perPage,searchOptions);
+
+    const totalPage = Math.ceil(totalUsers / perPage);
 
     // 사용자 목록(배열)을 JSON 형태로 프론트에 보냄
-    res.status(200).json(users);
+    res.status(200).json({
+        searchOptions,
+        users,
+        page,
+        perPage,
+        totalPage,
+        totalUsers,
+    });
   } catch (error) {
     next(error);
   }

@@ -73,10 +73,21 @@ class UserService {
 
     return { token ,user};
   }
+  
+  //유저 수 확인
+  async countTotalUsers() {
+    const total = await this.userModel.countUsers();
+
+    if (total < 1) {
+        throw new Error('유저가 없습니다.');
+    }
+    return total;
+  }
+
 
   // 사용자 목록을 받음.
-  async getUsers() {
-    const users = await this.userModel.findAll();
+  async getUsers(page, perPage,searchOptions) {
+    const users = await this.userModel.findByOption(page, perPage,searchOptions);
     return users;
   }
 
