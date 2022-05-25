@@ -1,0 +1,9 @@
+.edit-box{
+   margin: auto;
+    width: 600px;
+}
+.button.is-half{
+    margin: 0 auto;
+    display: flex;
+    width: 35%;
+}
