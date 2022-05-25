@@ -5,7 +5,7 @@ class ProductService {
   constructor(productModel) {
     this.productModel = productModel;
   }
-
+  // 전체 상품 갯수 확인
   async countTotalProducts() {
     const total = await this.productModel.countProducts();
 
@@ -15,6 +15,7 @@ class ProductService {
     return total;
   }
 
+  // 페이지 별로 전체 상품 확인 (pagination)
   async getProducts(page, perPage) {
     let products = await this.productModel.findAllbyPage(page, perPage);
 
@@ -24,6 +25,7 @@ class ProductService {
     return products;
   }
 
+  // 선택된 카테고리에 포함된 상품 갯수 확인
   async countCategorizedProduct(category) {
     const total = await this.productModel.countbyCategory(category);
 
@@ -33,6 +35,7 @@ class ProductService {
     return total;
   }
 
+  // 페이지 별로 카테고리에 포함된 상품 확인 (pagination)
   async getProductsByCategory(category, page, perPage) {
     let products = await this.productModel.findByCategory(category, page, perPage);
 
@@ -42,17 +45,20 @@ class ProductService {
     return products;
   }
 
+  // 상품 상세정보 확인
   async getProductDetail(productId) {
     const detail = await this.productModel.findById(productId);
     return detail;
   }
 
+  // 카테고리 확인
   async getCategories() {
     const products = await this.productModel.findAll();
     const categories = products.map(product => product.category);
     return [...new Set(categories)];
   }
 
+  // 상품 추가
   async addProduct(productInfo) {
     const { name, price, category, desc } = productInfo;
 
@@ -66,17 +72,18 @@ class ProductService {
     return createdNewProduct;
   }
 
+  // 상품 삭제
   async deleteProduct(productId) {
     let product = await this.productModel.findById(productId);
 
     if (!product) {
         throw new Error('상품 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
-
     await this.productModel.delete(productId);
     return '삭제가 완료되었습니다';
   }
 
+  // 상품 정보 수정
   async setProduct(productId, toUpdate) {
     let product = await this.productModel.findById(productId);
 
