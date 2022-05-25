@@ -1,3 +1,49 @@
+//Bulma 에서 제공하는 Modal 활성화 코드
+document.addEventListener('DOMContentLoaded', () => {
+    // Functions to open and close a modal
+    function openModal($el) {
+      $el.classList.add('is-active');
+    }
+  
+    function closeModal($el) {
+      $el.classList.remove('is-active');
+    }
+  
+    function closeAllModals() {
+      (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+        closeModal($modal);
+      });
+    }
+  
+    // Add a click event on buttons to open a specific modal
+    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+      const modal = $trigger.dataset.target;
+      const $target = document.getElementById(modal);
+  
+      $trigger.addEventListener('click', () => {
+        openModal($target);
+      });
+    });
+  
+    // Add a click event on various child elements to close the parent modal
+    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+      const $target = $close.closest('.modal');
+  
+      $close.addEventListener('click', () => {
+        closeModal($target);
+      });
+    });
+  
+    // Add a keyboard event to close all modals
+    document.addEventListener('keydown', (event) => {
+      const e = event || window.event;
+  
+      if (e.keyCode === 27) { // Escape key
+        closeAllModals();
+      }
+    });
+  });
+//다음지번 API를 활용한 함수 입니다.
 function searchByDaumPost() {
     console.log("open DaumJibunAPI");
     new daum.Postcode({
@@ -30,26 +76,33 @@ function searchByDaumPost() {
     }).open();
 }
 
+// 파일 업로드 함수 입니다.
 function insertImageFile(file) {
     let input = file.target
     //이미지 파일 유효성 검사
 	if(input.files && input.files[0]) {
 		fileReader = new FileReader();
 		fileReader.onload = function (data) {
+            //
             const img = document.querySelector('#profile-image');
 		    img.src = data.target.result;
             img.style.width = "100%"
             img.style.height = "100%"
 
 		}
-        //readAsDataURL 진행후 fileReader의 onload가 진행됩니다.
+        //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
 		fileReader.readAsDataURL(input.files[0]); 
 
 	}
 }
+
+
+
 document.querySelector('#imageInput')
     .addEventListener('change', insertImageFile);
 						
 
 document.querySelector("#searchAddressButton")
     .addEventListener('click', searchByDaumPost);
+
+
