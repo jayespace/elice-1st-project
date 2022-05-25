@@ -5,8 +5,18 @@ const Product = model('products', ProductSchema);
 
 export class ProductModel {
 
+  async countProducts() {
+    const counts = await Product.countDocuments({})
+    return counts;
+  }
+
+  async countbyCategory(category) {
+    const counts = await Product.countDocuments({ category });
+    return counts;
+  }
+
   async findAll() {
-    const products = await Product.find({}).sort({ createdAt : 1 });
+    const products = await Product.find({});
     return products;
   }
 
@@ -18,6 +28,21 @@ export class ProductModel {
   async findById(productId) {
     const product = await Product.findById({ _id: productId });
     return product;
+  }
+
+  async findByPrice(price) {
+    const products = await Product.find({ price });
+    return products;
+  }
+
+  async findByKeyword(keyword) {
+    const products = await Product.find({ keyword });
+    return products;
+  }
+
+  async findByManufacturer(manufacturer) {
+    const products = await Product.find({ manufacturer });
+    return products;
   }
 
   async findAllbyPage(page, perPage) {
@@ -36,16 +61,6 @@ export class ProductModel {
                               .skip(perPage * (page - 1))
                               .limit(perPage);
     return products;
-  }
-
-  async countProducts() {
-    const counts = await Product.countDocuments({})
-    return counts;
-  }
-
-  async countbyCategory(category) {
-    const counts = await Product.countDocuments({ category })
-    return counts;
   }
 
   async create(productInfo) {

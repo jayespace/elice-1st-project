@@ -45,7 +45,7 @@ class ProductService {
     return products;
   }
 
-  // 상품 상세정보 확인
+  // id로 상품 상세정보 확인
   async getProductDetail(productId) {
     const detail = await this.productModel.findById(productId);
     return detail;
@@ -58,15 +58,50 @@ class ProductService {
     return [...new Set(categories)];
   }
 
+    // 가격으로 상품 검색
+    async getProductsByPrice(price) {
+      const products = await this.productModel.findByPrice(price);
+      return products;
+    }
+
+    // 제조사로 상품 검색
+    async getProductsByManufacturer(manufacture) {
+      const products = await this.productModel.findByManufacturer(manufacture);
+      return products;
+    }
+
+    // 제조사로 상품 검색
+    async getProductsByKeyword(keyword) {
+    const products = await this.productModel.findByKeyword(keyword);
+    return products;
+    }
+
+
   // 상품 추가
   async addProduct(productInfo) {
-    const { name, price, category, desc } = productInfo;
+    const { 
+      name,
+      price,
+      category,
+      briefDesc,
+      fullDesc,
+      manufacturer,
+      stock,
+      keyword } = productInfo;
 
     const isExist = await this.productModel.findByName(name);
     if (isExist) {
         throw new Error('이 이름으로 생성된 제품이 있습니다. 다른 이름을 지어주세요.');
     }
-    const newProductInfo = { name, price, category, desc };
+    const newProductInfo = {
+      name,
+      price,
+      category,
+      briefDesc,
+      fullDesc,
+      manufacturer,
+      stock,
+      keyword };
     // db에 저장
     const createdNewProduct = await this.productModel.create(newProductInfo);
     return createdNewProduct;
