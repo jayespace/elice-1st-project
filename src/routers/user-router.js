@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 // 폴더에서 import하면, 자동으로 폴더의 index.js에서 가져옴
+//loginRequired : 로그인 여부&&토큰 여부
+//adminRequired : 토큰에서 role이 admin인지 판별
+//tokenMatchRequest : 토큰의 userid와 req의 userid와 비교
 import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
+import { tokenMatchRequest } from '../middlewares';
 import { userService } from '../services';
 
 const userRouter = Router();
@@ -153,6 +157,7 @@ userRouter.patch(
 userRouter.get(
   '/users/:userId',
   loginRequired,
+  tokenMatchRequest,
   async function (req, res, next) {
     try {
      
@@ -170,11 +175,37 @@ userRouter.get(
   }
 );
 
+
+// 사용자 정보 조회
+// (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.get(
+  '/admin/users/:userId',
+  loginRequired,
+  adminRequired,
+  async function (req, res, next) {
+    try {
+     
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // 사용자 정보를 업데이트함.
+      const findUserInfo = await userService.getUser(userId);
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(findUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
 // 사용자 정보 수정
 // (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
 userRouter.patch(
   '/users/:userId',
   loginRequired,
+  tokenMatchRequest,
   async function (req, res, next) {
     try {
       // content-type 을 application/json 로 프론트에서
@@ -234,6 +265,7 @@ userRouter.patch(
 userRouter.delete(
   '/users/:userId',
   loginRequired,
+  tokenMatchRequest,
   async function (req, res, next) {
     try {
       // content-type 을 application/json 로 프론트에서
