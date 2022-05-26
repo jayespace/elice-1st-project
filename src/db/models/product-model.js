@@ -5,6 +5,11 @@ const Product = model('products', ProductSchema);
 
 export class ProductModel {
 
+  async findAll() {
+    const products = await Product.find({}).sort({ createdAt : 1 });
+    return products;
+  }
+
   async findByName(productName) {
     const product = await Product.findOne({ name: productName });
     return product;
@@ -15,7 +20,7 @@ export class ProductModel {
     return product;
   }
 
-  async findAll(page, perPage) {
+  async findAllbyPage(page, perPage) {
     const products = await Product
                               .find({})
                               .sort({ createdAt : -1 })
@@ -38,7 +43,7 @@ export class ProductModel {
     return counts;
   }
 
-  async countProductsbyCategory(category) {
+  async countbyCategory(category) {
     const counts = await Product.countDocuments({ category })
     return counts;
   }

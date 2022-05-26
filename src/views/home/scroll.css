@@ -1,0 +1,23 @@
+#top-btn {
+  position: fixed;
+  width: 52px;
+  height: 52px;
+  right: 31px;
+  bottom: 0px;
+  z-index: 99;
+  border-radius: 50%;
+  border: 1px solid #ec994b;
+  background: #ec994b url('../images/common/topbtn.svg');
+  box-shadow: 0 0 5px 3px rgb(0 0 0 / 1%);
+  outline: none;
+  cursor: pointer;
+  transition: 0.5s;
+  opacity: 0;
+  visibility: hidden;
+}
+#top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  bottom: 90px;
+  transition: 0.5s;
+}
