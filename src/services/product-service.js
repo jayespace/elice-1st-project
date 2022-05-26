@@ -1,9 +1,11 @@
 import { productModel } from '../db';
+import { categoryService } from './category-service';
 
 class ProductService {
 
-  constructor(productModel) {
+  constructor(productModel, categoryService) {
     this.productModel = productModel;
+    this.categoryService = categoryService;
   }
   // 전체 상품 갯수 확인
   async countTotalProducts() {
@@ -48,7 +50,29 @@ class ProductService {
   // id로 상품 상세정보 확인
   async getProductDetail(productId) {
     const detail = await this.productModel.findById(productId);
-    return detail;
+
+    const { 
+      name,
+      price,
+      category,
+      briefDesc,
+      fullDesc,
+      manufacturer,
+      stock,
+      keyword } = detail;
+
+    const categoryName = await this.categoryService.getCategoryName(category);
+
+      const newProductInfo = {
+        name,
+        price,
+        category: categoryName,
+        briefDesc,
+        fullDesc,
+        manufacturer,
+        stock,
+        keyword };
+    return newProductInfo;
   }
 
     // 가격으로 상품 검색
@@ -127,24 +151,10 @@ class ProductService {
 
     return product;
   }
-
-  // const updateInfo = (async (fields) => {
-  //   const { userId, requestedFields, profile_picture } = fields
-  //   console.log(profile_picture)
-    
-  //   return prisma.users.update({
-  //       where: {
-  //           id: Number(userId),
-  //       },
-  //       data: {
-  //           phone_number : requestedFields.phone_number,
-  //           profile_picture
-  //       }
-  //       })
-  //   })
+  
 };
 
 
-const productService = new ProductService(productModel);
+const productService = new ProductService(productModel, categoryService);
 
 export { productService };

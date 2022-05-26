@@ -4,7 +4,8 @@ import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
 import { productService } from '../services';
-// import { upload } from '../utils'; // 사진 업로드 모듈
+import { categoryService } from '../services';
+import { upload } from '../utils'; // 사진 업로드 모듈
 
 const productRouter = Router();
 
@@ -87,7 +88,8 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
 }));
 
 // 로그인 후 admin일 경우 상품 추가
-productRouter.post('/products', loginRequired, adminRequired, asyncHandler(async(req,res) => {
+productRouter.post('/products',
+  loginRequired, adminRequired, upload.single('product_image'), asyncHandler(async(req,res) => {
 
     // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
     if (is.emptyObject(req.body)) {
@@ -95,9 +97,6 @@ productRouter.post('/products', loginRequired, adminRequired, asyncHandler(async
         'headers의 Content-Type을 application/json으로 설정해주세요'
         );
     }
-
-    // // AWS s3로 이미지 업로드
-    // upload.single('product_image');
         
     const {
         name,
@@ -110,17 +109,21 @@ productRouter.post('/products', loginRequired, adminRequired, asyncHandler(async
         keyword
     } = req.body;
 
-    // const image = req.file.location;
+    //request로 들어온 파일의 경로를 저장. 파일의 수가 많다면 files[index_num] 혹은 files[field_name]
+    const image = req.file.location 
+
+    const categoryId = await categoryService.getCategoryId(category)
 
     const newProduct = await productService.addProduct({
         name,
         price,
-        category,
+        category: categoryId,
         briefDesc,
         fullDesc,
         manufacturer,
         stock,
-        keyword
+        keyword,
+        image
     });
     res.status(200).json(newProduct);
 }));
@@ -154,12 +157,14 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired, asyncH
             stock,
             keyword } = req.body;
 
+    const categoryId = await categoryService.getCategoryId(category)
+
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
     const toUpdate = {
         ...(name && { name }),
         ...(price && { price }),
-        ...(category && { category }),
+        ...(category && { category: categoryId }),
         ...(briefDesc && { briefDesc }),
         ...(fullDesc && { fullDesc }),
         ...(manufacturer && { manufacturer }),
