@@ -1,70 +1,58 @@
-import {modalExecution, DaumJibunAPI} from './profile-utils.js'
+import * as Api from '/api.js';
 
-const fullNameInput = document.querySelector('#fullNameInput');
-const passwordInput = document.querySelector('#password')
-const passwordConfirmInput = document.querySelector('#passwordConfirm');
-const postalCodeInput = document.querySelector('#postalCodeInput');
-const address1Input = document.querySelector('#address1Input');
-const address2Input = document.querySelector('#address2Input');
-const phoneNumberInput = document.querySelector('#phoneNumberInput');
+const productNameInput = document.querySelector('#productNameInput');
+const productTextInput = document.querySelector('#productTextInput')
 
 const imageInput = document.querySelector('#imageInput');
-const searchAddressButton = document.querySelector("#searchAddressButton");
-const saveButton = document.querySelector('#saveButton');
+const addNewProductButton = document.querySelector('#addNewProductButton');
+const image = document.querySelector('#product-image');
 
-modalExecution();
+let imagedata ='';
+
 addAllElements();
 addAllEvents();
 
 
 // 파일 업로드 함수 입니다.
 function insertImageFile(file) {
-  let input = file.target
+
+  let input = file.target;
   //이미지 파일 유효성 검사
 if(input.files && input.files[0]) {
-  const fileReader = new FileReader();
-  fileReader.onload = function (data) {
-          const img = document.querySelector('#profile-image');
-          img.src = data.target.result;
-          img.style.width = "100%"
-          img.style.height = "100%"
-  }
+    const fileReader = new FileReader();
+    fileReader.onload = function (data) {
+            image.src = data.target.result;
+            imagedata = data.target.result;
+            image.style.width = "100%"
+            image.style.height = "100%"
+    }
       //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
-  fileReader.readAsDataURL(input.files[0]); 
-
-}
+    fileReader.readAsDataURL(input.files[0]);
+    
+    }
 }
 
 async function addAllElements(){}
 
 function addAllEvents(){
   imageInput.addEventListener('change', insertImageFile);
-  searchAddressButton.addEventListener('click',
-    DaumJibunAPI(
-        postalCodeInput, 
-        address1Input, 
-        address2Input
-    ));
-  saveButton.addEventListener('click', handlePatch);
-  ;
+  addNewProductButton.addEventListener('click', handlePatch);;
 }
 
 //회원정보 수정 진행
 async function handlePatch(e){
   e.preventDefault();
 
-  const fullName = fullNameInput.value;
-  const password = passwordInput.value;
-  const passwordConfirm = passwordConfirmInput.value;
-  const postalCode = postalCodeInput.value
-  const address1 = address1Input.value;
-  const address2 = address2Input.value;
-  const phoneNumber = phoneNumberInput.value;
-  // const image = imageInput.value;
-
-  const isFullNameValid = fullName.length >= 2;
-  const isPasswordValid = password.length >= 4;
-  const isPasswordSame = password === passwordConfirm;
-
+  const productName = productNameInput.value;
+  const productText = productTextInput.value;
+    
+  try{
+      const data = { fullName, email, password };
+      await Api.post('/api/register', data);
+  }catch (err) {
+    console.error(err.stack);
+    alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
+  }
+//   alert(productName+" "+productText+" "+imagedata);
 
 }

@@ -63,7 +63,7 @@
             <!--업로드된 이미지 표시-->
             <div class="field-body">
               <figure class="image is-128x128">
-                <img class="is-rounded" id="profile-image" src="https://bulma.io/images/placeholders/128x128.png">
+                <img class="is-rounded" id="product-image" src="https://bulma.io/images/placeholders/128x128.png">
               </figure>
             </div>
             <!--이미지 업로드 Form-->
@@ -72,19 +72,19 @@
               <label for="imageInput" class="image-button"><i class="far fa-image"></i> Choose image</label>
             </div>
           </div>
-          <!--사용자 이름 입력 Form-->
           <div class="media-content">
+          <!--상품명 이름 입력 Form-->
             <div class="field">
               <label class="label" for="productNameInput">상품명</label>
               <div class="control">
                 <input class="input" type="name" id="productNameInput">
               </div>
             </div>
-            <!--비밀번호 입력 Form-->
+            <!--이미지 설명 Form-->
             <div class="field">
-              <label class="label" for="textInput">이미지 설명</label>
+              <label class="label" for="productTextInput">상품 설명</label>
               <div class="control">
-                <input class="input" type="text" id="textInput">
+                <input class="input" type="text" id="productTextInput">
               </div>
             </div>
             <!--비밀번호 확인 Form-->
@@ -92,8 +92,8 @@
         </div>
         <div class="profile-sub">
           <div class="field-body">
-            <!--수정하기 버튼-->
-            <button class="button button-submit is-warning is-half" id="Button" data-target="modal-js-example">
+            <!--등록하기 버튼-->
+            <button class="button button-submit is-warning is-half" id="addNewProductButton" data-target="modal-js-example">
               <span class="icon-text">
                 <span class="icon">
                   <i class="fas fa-paw"></i>
