@@ -45,6 +45,9 @@
       text-align: center;
       margin-top: 20px;
 }
+.name:hover{
+    color: gray;
+}
 .price{
     font-weight: bold;
     text-align: center;
