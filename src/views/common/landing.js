@@ -13,11 +13,9 @@ async function addAllElements() {
   insertHeaderEl();
   insertFooterEl();
 }
-
 function insertHeaderEl() {
-  headerEl.insertAdjacentHTML('beforeend', headerTemplate);
+  headerEl.insertAdjacentHTML('afterbegin', headerTemplate());
 }
-
 function insertFooterEl() {
-  footerEl.insertAdjacentHTML('beforeend', footerTemplate);
+  footerEl.insertAdjacentHTML('afterbegin', footerTemplate);
 }
