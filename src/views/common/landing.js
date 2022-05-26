@@ -17,12 +17,12 @@ async function addAllElements() {
   insertFooterEl();
 }
 function insertHeaderEl() {
-  headEl.insertAdjacentHTML(
-    'beforeend',
-    `<link rel="stylesheet" href="../common/common.css"/>
-    <script src="../common/common.js" defer></script>
-    `
-  );
+  // headEl.insertAdjacentHTML(
+  //   'beforeend',
+  //   `<link rel="stylesheet" href="../common/common.css"/>
+  //   <script src="../common/common.js" defer></script>
+  //   `
+  // );
   headerEl.insertAdjacentHTML('afterbegin', headerTemplate());
 }
 function insertFooterEl() {
