@@ -1,0 +1,358 @@
+/*/////////////////////////// Section1 :: Main Slide ///////////////////////////*/
+.main-visual-wrap {
+  width: 100%;
+  height: 808px;
+  padding: 0 80px;
+  box-sizing: border-box;
+  margin-top: 120px;
+}
+.main-visual {
+  width: 100%;
+  height: 100%;
+}
+
+/* main slide */
+.main-slide-wrap {
+  width: 66%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  float: left;
+}
+.main-slide {
+  width: 100%;
+  height: 100%;
+}
+.main-slide > ul > li > a > img {
+  width: 100%;
+  height: 100%;
+}
+.cbp-bislideshow li {
+  position: absolute;
+  width: 101%;
+  height: 101%;
+  top: -0.5%;
+  left: -0.5%;
+  opacity: 0;
+  -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  transition: opacity 1s;
+}
+.backgroundsize .cbp-bislideshow li {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  background-position: center center;
+}
+.backgroundsize .cbp-bislideshow li img {
+  display: none;
+}
+.cbp-bislideshow > li > a {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cbp-bislideshow li img {
+  display: block;
+  width: 100%;
+  z-index: 9999;
+}
+.cbp-bicontrols {
+  position: relative;
+  height: auto;
+  width: 100%;
+  background-color: gold;
+  margin: -50px 0 0 0;
+  top: 57%;
+}
+.cbp-biprev {
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  outline: none;
+  width: 56px;
+  height: 56px;
+  position: relative;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  transform: translateY(-50%) rotate(45deg);
+}
+.cbp-binext {
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  outline: none;
+  width: 56px;
+  height: 56px;
+  position: relative;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 40px;
+  transform: translateY(-50%) rotate(225deg);
+}
+
+/* main visual SUB */
+.main-visual-sub {
+  width: 33%;
+  height: 808px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: space-between;
+  float: right;
+}
+.main-visual-sublist {
+  width: 100%;
+  height: calc(33.33% - (20px / 3));
+  position: relative;
+  overflow: hidden;
+}
+.main-visual-sublist-title {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 600;
+  z-index: 5;
+}
+.main-visual-sublist > a > img {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/*/////////////////////////// Section1 :: Main Slide ///////////////////////////*/
+
+/* //////////////////// Media Query ///////////////////// */
+@media all and (max-width: 1440px) {
+  .main-visual-wrap,
+  .main-visual-sub {
+    height: 600px;
+    max-height: 600px;
+  }
+}
+
+@media all and (max-width: 1280px) {
+  .main-visual-wrap,
+  .main-visual-sub {
+    height: 480px;
+    max-height: 480px;
+  }
+  .main-visual-sublist-title {
+    top: 24px;
+    left: 24px;
+    font-size: 16px;
+  }
+
+  .hot-wrap {
+    padding: 80px 80px;
+  }
+  .hot-title > h2 {
+    font-size: 24px;
+  }
+  .hot-content {
+    margin-top: 28px;
+  }
+  .hot-img {
+    min-width: 350px;
+    height: 260px;
+  }
+  .h-price-pre {
+    font-size: 14px;
+  }
+  .h-content {
+    font-size: 13px;
+  }
+  .hot-more-btn {
+    right: 80px;
+  }
+
+  .event-wrap {
+    padding: 80px 80px;
+  }
+  .event-title > h2 {
+    font-size: 24px;
+  }
+  .event-more-btn {
+    right: 80px;
+    top: 95px;
+  }
+  .event-content {
+    margin-top: 28px;
+  }
+  .event-content::after {
+    height: 280px;
+  }
+  .event-content > a {
+    min-width: 48%;
+  }
+  .event-img {
+    min-width: 100%;
+    height: 280px;
+  }
+  .event-img > img {
+    height: auto;
+    width: 100%;
+    min-height: auto;
+    max-width: inherit;
+  }
+  .e-title {
+    font-size: 20px;
+  }
+  .e-content {
+    font-size: 16px;
+  }
+
+  .main-banner-wrap {
+    height: 200px;
+  }
+  .main-banner {
+    padding-top: 30px;
+    transform: scale(0.8);
+  }
+  .main-banner-text {
+    top: 100px;
+    transform: scale(0.8);
+  }
+  .main-banner::before {
+    top: 70px;
+  }
+
+  .campaign-wrap {
+    padding: 80px 80px;
+  }
+  .campaign-title > h3 {
+    font-size: 24px;
+  }
+  .campaign-box-wrap {
+    margin-top: 28px;
+  }
+  /* .campaign-img{ height: 150px; } */
+  .campaign-content {
+    margin-top: 12px;
+  }
+  .campaign-content02 {
+    font-size: 14px;
+  }
+  .campaign-content04 {
+    font-size: 14px;
+  }
+
+  .magazine-wrap {
+    padding: 80px 80px;
+  }
+  .magazine-content01 {
+    font-size: 18px;
+  }
+  .magazine-content03 {
+    margin-top: 36px;
+  }
+}
+
+@media all and (max-width: 1024px) {
+  .main-visual-wrap {
+    padding: 0;
+    margin-top: 70px;
+  }
+
+  .cbp-biprev,
+  .cbp-binext {
+    width: 40px;
+    height: 40px;
+  } /* mainslide btn */
+
+  .hot-wrap {
+    padding: 40px 24px;
+  }
+  .hot-more-btn {
+    right: 24px;
+    top: 80px;
+  }
+
+  .event-wrap {
+    padding: 40px 24px;
+  }
+  .event-img {
+    height: 160px;
+  }
+  .event-more-btn {
+    right: 24px;
+    top: 50px;
+  }
+  .event-content::after {
+    height: 160px;
+  }
+
+  .magazine-wrap {
+    padding: 44px 24px;
+  }
+
+  /* .campaign-img{ height: 200px; } */
+}
+
+@media all and (max-width: 768px) {
+  .main-slide {
+    width: 100%;
+  }
+  .main-slide-wrap {
+    width: 100%;
+  }
+
+  .main-visual-sub {
+    display: none;
+  }
+
+  .cbp-biprev,
+  .cbp-binext {
+    width: 30px;
+    height: 30px;
+  }
+
+  .main-banner-wrap {
+    height: 120px;
+  }
+  .main-banner {
+    padding-top: 0px;
+    transform: scale(0.65);
+    max-width: 600px;
+  }
+  .main-banner::before {
+    top: 27px;
+    left: 25px;
+  }
+  .slick-track {
+    transform: scale(0.8);
+    margin-top: -10px;
+  }
+  .slick-num {
+    justify-content: space-around;
+    width: 245px;
+  }
+  .main-banner-text {
+    right: 0;
+    top: 47px;
+  }
+}
+
+/* slick banner background image */
+@media all and (max-width: 610px) {
+  .main-banner-text {
+    right: -30px;
+  }
+  /* .campaign-img{ height: 100px; }  */
+}
+@media all and (max-width: 570px) {
+  .main-banner-text {
+    right: -130px;
+  }
+  .cbp-biprev,
+  .cbp-binext {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* keyframes */
