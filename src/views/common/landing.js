@@ -20,7 +20,7 @@ function insertHeaderEl() {
   headEl.insertAdjacentHTML(
     'beforeend',
     `<link rel="stylesheet" href="../common/common.css"/>
-    <script src="../common/common.js"></script>
+    <script src="../common/common.js" defer></script>
     `
   );
   headerEl.insertAdjacentHTML('afterbegin', headerTemplate());

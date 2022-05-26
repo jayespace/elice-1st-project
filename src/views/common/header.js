@@ -45,15 +45,14 @@ export const headerTemplate = () => {
   <!-- 회원가입, 로그인 -->
   <div class="menu_top">
     <ul>
-      <li><a href="#">로그인</a></li>
-      <li><a href="#">회원가입</a></li>
+    ${template}
     </ul>
   </div>
   
   <!-- Menu Bottom :: 로고, 메뉴, 검색, 장바구니 -->
   <div class="menu_bottom">
     <div class="logo">
-      <a href="#"><img src="../common/logo.png" alt="logo image" /></a>
+      <a href="/"><img src="../common/logo.png" alt="logo image" /></a>
     </div>
   
     <ul class="menu">
