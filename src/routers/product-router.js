@@ -5,7 +5,7 @@ import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
 import { productService } from '../services';
 import { categoryService } from '../services';
-import { upload } from '../utils'; // 사진 업로드 모듈
+import { upload } from '../utils';
 
 const productRouter = Router();
 
@@ -87,9 +87,15 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
     res.status(200).json(product);
 }));
 
+// ****** 이미지저장 테스트 **********
+productRouter.post('/image', upload.single('image'), asyncHandler(async(req,res) => {
+    // const image = req.file.location;
+    res.send(req.file.location)
+}))
+
 // 로그인 후 admin일 경우 상품 추가
 productRouter.post('/products',
-  loginRequired, adminRequired, upload.single('product_image'), asyncHandler(async(req,res) => {
+  loginRequired, adminRequired, asyncHandler(async(req,res) => {
 
     // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
     if (is.emptyObject(req.body)) {
@@ -109,9 +115,7 @@ productRouter.post('/products',
         keyword
     } = req.body;
 
-    //request로 들어온 파일의 경로를 저장. 파일의 수가 많다면 files[index_num] 혹은 files[field_name]
-    const image = req.file.location 
-
+    // 카테고리 이름으로 id 찾기
     const categoryId = await categoryService.getCategoryId(category)
 
     const newProduct = await productService.addProduct({
@@ -122,11 +126,11 @@ productRouter.post('/products',
         fullDesc,
         manufacturer,
         stock,
-        keyword,
-        image
+        keyword
     });
     res.status(200).json(newProduct);
 }));
+
 
 // 로그인 후 admin일 경우 상품 삭제
 productRouter.delete('/products/:productId', loginRequired, adminRequired, asyncHandler(async (req, res) => {

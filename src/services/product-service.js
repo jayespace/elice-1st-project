@@ -7,6 +7,7 @@ class ProductService {
     this.productModel = productModel;
     this.categoryService = categoryService;
   }
+
   // 전체 상품 갯수 확인
   async countTotalProducts() {
     const total = await this.productModel.countProducts();
@@ -24,6 +25,14 @@ class ProductService {
     if (products.length < 1) {
         throw new Error('상품이 없습니다.');
     }
+
+    // 카테고리 id를 이름으로 변환
+    for(let i = 0; i < products.length; i++) {
+      const id = products[i].category;
+      const categoryId = await this.categoryService.getCategoryName(id);
+      products[i].category = categoryId;
+    }
+
     return products;
   }
 
@@ -44,6 +53,14 @@ class ProductService {
     if (products.length < 1) {
         throw new Error('상품이 없습니다.');
     }
+
+    // 카테고리 id를 이름으로 변환
+    for(let i = 0; i < products.length; i++) {
+      const id = products[i].category;
+      const categoryId = await this.categoryService.getCategoryName(id);
+      products[i].category = categoryId;
+    }
+
     return products;
   }
 
@@ -61,6 +78,7 @@ class ProductService {
       stock,
       keyword } = detail;
 
+    // 카테고리 id를 이름으로 변환
     const categoryName = await this.categoryService.getCategoryName(category);
 
       const newProductInfo = {
@@ -79,21 +97,40 @@ class ProductService {
     async getProductsByPrice(from, to) {
       const price = { $gte: from, $lte: to }
       const products = await this.productModel.findByPrice(price);
+
+      for(let i = 0; i < products.length; i++) {
+        const id = products[i].category;
+        const categoryId = await this.categoryService.getCategoryName(id);
+        products[i].category = categoryId;
+      }
+
       return products;
     }
 
     // 제조사로 상품 검색
     async getProductsByManufacturer(manufacture) {
       const products = await this.productModel.findByManufacturer(manufacture);
+
+      // 카테고리 id를 이름으로 변환
+      for(let i = 0; i < products.length; i++) {
+        const id = products[i].category;
+        const categoryId = await this.categoryService.getCategoryName(id);
+        products[i].category = categoryId;
+      }
       return products;
     }
 
-    // 제조사로 상품 검색
+    // **** 키워드로 상품 검색 **** 미완성
     async getProductsByKeyword(keyword) {
     const products = await this.productModel.findByKeyword(keyword);
     return products;
     }
-
+  
+  // *** 이미지 추가 test  ***
+  async addImage(image) {
+    const createdNewProduct = await this.productModel.create(image);
+    return createdNewProduct;
+  }
 
   // 상품 추가
   async addProduct(productInfo) {
@@ -120,7 +157,8 @@ class ProductService {
       manufacturer,
       stock,
       keyword };
-    // db에 저장
+
+    // // db에 저장
     const createdNewProduct = await this.productModel.create(newProductInfo);
     return createdNewProduct;
   }
