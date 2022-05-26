@@ -41,16 +41,16 @@ async function handleSubmit(e) {
     const result = await Api.post('/api/login', data);
     const token = result.token;
     const user = result.user;
-    const { fullName, role } = user;
+    const { _id, fullName, role } = user;
 
     // 로그인 성공, 토큰 및 유저정보를 세션 스토리지에 저장
     sessionStorage.setItem('token', token);
+    sessionStorage.setItem('userid', _id);
     sessionStorage.setItem('username', fullName);
     sessionStorage.setItem('role', role);
 
+    // 로그인 성공 알림
     alert(`정상적으로 로그인되었습니다.`);
-
-    // 로그인 성공
 
     // 기본 페이지로 이동
     window.location.href = '/';
