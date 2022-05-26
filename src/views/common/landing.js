@@ -6,14 +6,23 @@ const $ = (selector) => document.querySelector(selector);
 const headerEl = $('#header');
 const footerEl = $('#footer');
 
+// head 요소
+const headEl = $('head');
+
 addAllElements();
 
-// html에 header와 footer 요소를 추가하는 함수
+// header, footer 요소를 추가하는 함수
 async function addAllElements() {
   insertHeaderEl();
   insertFooterEl();
 }
 function insertHeaderEl() {
+  headEl.insertAdjacentHTML(
+    'beforeend',
+    `<link rel="stylesheet" href="../common/common.css"/>
+    <script src="../common/common.js"></script>
+    `
+  );
   headerEl.insertAdjacentHTML('afterbegin', headerTemplate());
 }
 function insertFooterEl() {
