@@ -62,9 +62,9 @@ userRouter.post('/login', async function (req, res, next) {
   }
 });
 
-// 유저정보를 가져옴 (배열 형태임)
+// 관리자 유저리스트를 가져옴 (배열 형태임) - 페이지네이션/검색기능
 // 미들웨어로 loginRequired 를 썼음 (이로써, jwt 토큰이 없으면 사용 불가한 라우팅이 됨)
-userRouter.get('/userlist', loginRequired,adminRequired, async function (req, res, next) {
+userRouter.get('/admin/userlist', loginRequired,adminRequired, async function (req, res, next) {
 
   //pagination 변수
   //page : 현재 페이지
@@ -106,6 +106,27 @@ userRouter.get('/userlist', loginRequired,adminRequired, async function (req, re
   }
 });
 
+// 사용자 정보 조회
+// (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.get(
+  '/users/:userId',
+  loginRequired,
+  async function (req, res, next) {
+    try {
+     
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // 사용자 정보를 업데이트함.
+      const findUserInfo = await userService.getUser(userId);
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(findUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 // 사용자 정보 수정
 // (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
