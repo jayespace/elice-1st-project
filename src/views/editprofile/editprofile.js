@@ -1,3 +1,10 @@
+if(sessionStorage.length<1){
+  alert('잘못된 접근입니다.');
+  location.href = '/'
+}
+
+import * as Api from '/api.js';
+import { randomId } from '/useful-functions.js';
 import {modalExecution, DaumJibunAPI} from './profile-utils.js'
 
 const fullNameInput = document.querySelector('#fullNameInput');
@@ -35,7 +42,9 @@ if(input.files && input.files[0]) {
 }
 }
 
-async function addAllElements(){}
+async function addAllElements(){
+  setUserInfoToInputs();
+}
 
 function addAllEvents(){
   imageInput.addEventListener('change', insertImageFile);
@@ -48,7 +57,13 @@ function addAllEvents(){
   saveButton.addEventListener('click', handlePatch);
   ;
 }
+//회원정보 셋팅
+async function setUserInfoToInputs(){
+  const userid = sessionStorage.userid;
+  const data = await Api.get(`/api/users/${userid}`);
+  fullNameInput.value = data.fullName;
 
+}
 //회원정보 수정 진행
 async function handlePatch(e){
   e.preventDefault();
