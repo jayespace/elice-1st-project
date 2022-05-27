@@ -29,16 +29,16 @@ class ProductService {
     // 카테고리 id를 이름으로 변환
     for(let i = 0; i < products.length; i++) {
       const id = products[i].category;
-      const categoryId = await this.categoryService.getCategoryName(id);
-      products[i].category = categoryId;
+      const categoryName = await this.categoryService.getCategoryName(id);
+      products[i].category = categoryName;
     }
 
     return products;
   }
 
   // 선택된 카테고리에 포함된 상품 갯수 확인
-  async countCategorizedProduct(category) {
-    const total = await this.productModel.countbyCategory(category);
+  async countCategorizedProduct(categoryName) {
+    const total = await this.productModel.countbyCategory(categoryName);
 
     if (total < 1) {
         throw new Error('상품이 없습니다.');
@@ -98,11 +98,12 @@ class ProductService {
       const price = { $gte: from, $lte: to }
       const products = await this.productModel.findByPrice(price);
 
-      for(let i = 0; i < products.length; i++) {
-        const id = products[i].category;
-        const categoryId = await this.categoryService.getCategoryName(id);
-        products[i].category = categoryId;
-      }
+    // 카테고리 id를 이름으로 변환
+    for(let i = 0; i < products.length; i++) {
+      const id = products[i].category;
+      const categoryId = await this.categoryService.getCategoryName(id);
+      products[i].category = categoryId;
+    }
 
       return products;
     }
@@ -120,7 +121,7 @@ class ProductService {
       return products;
     }
 
-    // **** 키워드로 상품 검색 **** 미완성
+    // **** 키워드로 상품 검색 **** 미완성 ********
     async getProductsByKeyword(keyword) {
     const products = await this.productModel.findByKeyword(keyword);
     return products;
@@ -142,7 +143,9 @@ class ProductService {
       fullDesc,
       manufacturer,
       stock,
-      keyword } = productInfo;
+      keyword,
+      image 
+      } = productInfo;
 
     const isExist = await this.productModel.findByName(name);
     if (isExist) {
@@ -156,7 +159,8 @@ class ProductService {
       fullDesc,
       manufacturer,
       stock,
-      keyword };
+      keyword,
+      image };
 
     // // db에 저장
     const createdNewProduct = await this.productModel.create(newProductInfo);

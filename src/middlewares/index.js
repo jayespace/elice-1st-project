@@ -3,6 +3,5 @@
 
 export * from './error-handler';
 export * from './async-handler';
-export * from './image-handler';
 export * from './login-required';
 export * from './admin-required';

@@ -36,7 +36,7 @@ class CategoryService {
     return category;
   }
 
-  // 카테고리 이름으로 id 찾기
+  // 카테고리 이름으로 id 찾기 ******** NEED TO FIX ******
   async getCategoryId(name) {
     const category = await this.categoryModel.findByName(name);
     const categoryId = category._id;

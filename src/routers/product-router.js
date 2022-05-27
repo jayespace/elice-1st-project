@@ -3,9 +3,9 @@ import is from '@sindresorhus/is';
 import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
-import { imageHandler } from '../middlewares';
 import { productService } from '../services';
 import { categoryService } from '../services';
+import { upload } from '../utils';
 
 const productRouter = Router();
 
@@ -32,9 +32,10 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
     );
 }));
 
-// 특정 카테고리에 속해 있는 상품 정보 가져옴 (page 형태로 확인)
+// 특정 카테고리에 속해 있는 상품 정보 가져옴 (page 형태로 확인) **** 현재 카테고리ID로 검색가능 (수정중) ******
 productRouter.get('/products/category/:category', asyncHandler(async (req, res) => {
     const { category } = req.params;
+
     const totalProducts = await productService.countCategorizedProduct(category);
 
     // 페이지 번호와 페이지에 표시할 상품 갯수 설정
@@ -73,7 +74,7 @@ productRouter.get('/products/manufacturer/:manufacturer', asyncHandler(async (re
     res.status(200).json(products);
 }));
 
-// 키워드로 검색 후 정보 가져옴
+// 키워드로 검색 후 정보 가져옴 ****** 미완성 *******
 productRouter.get('/products/keyword/:keyword', asyncHandler(async (req, res) => {
     const { keyword } = req.params;
     const products = await productService.getProductsByKeyword(keyword);
@@ -87,15 +88,9 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
     res.status(200).json(product);
 }));
 
-// ****** 이미지저장 테스트 **********
-productRouter.post('/image', imageHandler.single('image'), asyncHandler(async(req,res) => {
-    // const image = req.file.location;
-    res.send(req.file.location)
-}))
-
 // 로그인 후 admin일 경우 상품 추가
 productRouter.post('/products',
-  loginRequired, adminRequired, asyncHandler(async(req,res) => {
+  loginRequired, adminRequired, upload.single('image'), asyncHandler(async(req,res) => {
 
     // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
     if (is.emptyObject(req.body)) {
@@ -103,7 +98,10 @@ productRouter.post('/products',
         'headers의 Content-Type을 application/json으로 설정해주세요'
         );
     }
-        
+    
+    /// AWS S3 저장소의 이미지 주소 
+    const image = req.file.location;
+
     const {
         name,
         price,
@@ -112,7 +110,7 @@ productRouter.post('/products',
         fullDesc,
         manufacturer,
         stock,
-        keyword
+        keyword,
     } = req.body;
 
     // 카테고리 이름으로 id 찾기
@@ -126,14 +124,16 @@ productRouter.post('/products',
         fullDesc,
         manufacturer,
         stock,
-        keyword
+        keyword,
+        image
     });
     res.status(200).json(newProduct);
 }));
 
 
 // 로그인 후 admin일 경우 상품 삭제
-productRouter.delete('/products/:productId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
+productRouter.delete('/products/:productId',
+    loginRequired, adminRequired, asyncHandler(async (req, res) => {
     const { productId } = req.params;
 
     const del = await productService.deleteProduct(productId)
@@ -141,8 +141,9 @@ productRouter.delete('/products/:productId', loginRequired, adminRequired, async
 
 }));
 
-// 로그인 후 admin일 경우 상품 정보 수정
-productRouter.patch('/products/:productId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
+// 로그인 후 admin일 경우 상품 정보 수정 ******* NEED TO FIX **********
+productRouter.patch('/products/:productId',
+    loginRequired, adminRequired, upload.single('image'), asyncHandler(async (req, res) => {
 
     // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
     if (is.emptyObject(req.body)) {
@@ -150,6 +151,9 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired, asyncH
         'headers의 Content-Type을 application/json으로 설정해주세요'
         );
     }
+
+    /// AWS S3 저장소의 이미지 주소 
+    const image = req.file.location;
 
     const { productId } = req.params;
     const { name,
@@ -174,6 +178,7 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired, asyncH
         ...(manufacturer && { manufacturer }),
         ...(stock && { stock }),
         ...(keyword && { keyword }),
+        ...(image && { image }),
     };
     // 상품 정보를 업데이트함.
     const updatedProductInfo = await productService.setProduct(productId, toUpdate);

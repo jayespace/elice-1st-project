@@ -20,7 +20,7 @@ const s3 = new AWS.S3({
   params: {Bucket: bucket}
 });
 
-const imageHandler = multer({
+const upload = multer({
   storage: multerS3({
       s3: s3,
       bucket: bucket, // 버킷 이름
@@ -36,4 +36,4 @@ const imageHandler = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 용량 제한
 });
 
-export { imageHandler };
+export { upload };
