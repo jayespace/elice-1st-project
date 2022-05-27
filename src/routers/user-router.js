@@ -57,7 +57,10 @@ userRouter.post('/login', async function (req, res, next) {
     const password = req.body.password;
 
     // 로그인 진행 (로그인 성공 시 jwt 토큰을 프론트에 보내 줌)
-    const userTokenAndInfo = await userService.getUserToken({ email, password });
+    const userTokenAndInfo = await userService.getUserToken({
+      email,
+      password,
+    });
 
     // jwt 토큰과 유저정보을 프론트에 보냄 (jwt 토큰은, 문자열임)
     res.status(200).json(userTokenAndInfo);
@@ -68,47 +71,51 @@ userRouter.post('/login', async function (req, res, next) {
 
 // 관리자 유저리스트를 가져옴 (배열 형태임) - 페이지네이션/검색기능
 // 미들웨어로 loginRequired 를 썼음 (이로써, jwt 토큰이 없으면 사용 불가한 라우팅이 됨)
-userRouter.get('/admin/userlist', loginRequired,adminRequired, async function (req, res, next) {
+userRouter.get(
+  '/admin/userlist',
+  loginRequired,
+  adminRequired,
+  async function (req, res, next) {
+    //pagination 변수
+    //page : 현재 페이지
+    //perPage : 페이지 당 게시글개수
+    const page = Number(req.query.page || 1);
+    const perPage = Number(req.query.perPage || 10);
 
-  //pagination 변수
-  //page : 현재 페이지
-  //perPage : 페이지 당 게시글개수
-  const page = Number(req.query.page || 1);
-  const perPage = Number(req.query.perPage || 10);
-  
-  //동적 쿼리 적용 
-  // option 유저 목록 검색 기능
-  let searchOptions = {}
-  if (req.query.option == 'email') {
-      searchOptions = { email: req.query.content }
-  } else if (req.query.option == 'fullName') {
-      searchOptions = { fullName: req.query.content }
-  } else if (req.query.option == 'role') {
-      searchOptions = { role : req.query.content }
-  } else if (req.query.option == 'phoneNumber') {
-      searchOptions = { phoneNumber: req.query.content }
-  } 
- 
-  try {
-    // 전체 사용자 목록을 얻음
-    const totalUsers = await userService.countTotalUsers();
-    const users = await userService.getUsers(page, perPage,searchOptions);
+    //동적 쿼리 적용
+    // option 유저 목록 검색 기능
+    let searchOptions = {};
+    if (req.query.option == 'email') {
+      searchOptions = { email: req.query.content };
+    } else if (req.query.option == 'fullName') {
+      searchOptions = { fullName: req.query.content };
+    } else if (req.query.option == 'role') {
+      searchOptions = { role: req.query.content };
+    } else if (req.query.option == 'phoneNumber') {
+      searchOptions = { phoneNumber: req.query.content };
+    }
 
-    const totalPage = Math.ceil(totalUsers / perPage);
+    try {
+      // 전체 사용자 목록을 얻음
+      const totalUsers = await userService.countTotalUsers();
+      const users = await userService.getUsers(page, perPage, searchOptions);
 
-    // 사용자 목록(배열)을 JSON 형태로 프론트에 보냄
-    res.status(200).json({
+      const totalPage = Math.ceil(totalUsers / perPage);
+
+      // 사용자 목록(배열)을 JSON 형태로 프론트에 보냄
+      res.status(200).json({
         searchOptions,
         users,
         page,
         perPage,
         totalPage,
         totalUsers,
-    });
-  } catch (error) {
-    next(error);
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 // 관리자가 사용자 role부여 수정
 // (예를 들어 /api/admin/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
@@ -160,7 +167,6 @@ userRouter.get(
   tokenMatchRequest,
   async function (req, res, next) {
     try {
-     
       // params로부터 id를 가져옴
       const userId = req.params.userId;
 
@@ -174,7 +180,6 @@ userRouter.get(
     }
   }
 );
-
 
 // 사용자 정보 조회
 // (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
@@ -184,7 +189,6 @@ userRouter.get(
   adminRequired,
   async function (req, res, next) {
     try {
-     
       // params로부터 id를 가져옴
       const userId = req.params.userId;
 
@@ -198,7 +202,6 @@ userRouter.get(
     }
   }
 );
-
 
 // 사용자 정보 수정
 // (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
@@ -290,9 +293,7 @@ userRouter.delete(
       const userInfoRequired = { userId, currentPassword };
 
       // 사용자 정보를 업데이트함.
-      const deleteUserInfo = await userService.deleteUser(
-        userInfoRequired,
-      );
+      const deleteUserInfo = await userService.deleteUser(userInfoRequired);
 
       // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
       res.status(200).json(deleteUserInfo);
