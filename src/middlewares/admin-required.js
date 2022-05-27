@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-
 function adminRequired(req, res, next) {
 
   if (!req.currentUserRole || req.currentUserRole === 'null' || req.currentUserRole !== 'admin') {

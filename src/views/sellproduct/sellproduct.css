@@ -1,0 +1,71 @@
+main{
+    margin-top: 3.9rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.edit-box {
+    margin: auto;
+    width: 600px;
+}
+
+.button.is-half {
+    margin: 0 auto;
+    display: flex;
+    width: 35%;
+}
+
+/***input-label***/
+.image-input {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.image-input input {
+    display: none;
+}
+
+.image-input label {
+    display: block;
+    color: rgba(0, 0, 0, 0.7);
+    background: hsl(48, 100%, 67%);
+    padding: .3rem .6rem;
+    font-size: 85%;
+    cursor: pointer;
+}
+
+.image-input i {
+    font-size: 125%;
+    margin-right: .3rem;
+}
+
+.image-input i:hover {
+    animation: shake .35s;
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    25% {
+        transform: rotate(10deg)
+    }
+
+    50% {
+        transform: rotate(0deg)
+    }
+
+    75% {
+        transform: rotate(-10deg)
+    }
+
+    100% {
+        transform: rotate(0deg)
+    }
+}

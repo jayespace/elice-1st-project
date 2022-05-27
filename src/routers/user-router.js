@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 // 폴더에서 import하면, 자동으로 폴더의 index.js에서 가져옴
+//loginRequired : 로그인 여부&&토큰 여부
+//adminRequired : 토큰에서 role이 admin인지 판별
+//tokenMatchRequest : 토큰의 userid와 req의 userid와 비교
 import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
+import { tokenMatchRequest } from '../middlewares';
 import { userService } from '../services';
 
 const userRouter = Router();
@@ -65,7 +69,7 @@ userRouter.post('/login', async function (req, res, next) {
   }
 });
 
-// 전체 유저 목록을 가져옴 (배열 형태임)
+// 관리자 유저리스트를 가져옴 (배열 형태임) - 페이지네이션/검색기능
 // 미들웨어로 loginRequired 를 썼음 (이로써, jwt 토큰이 없으면 사용 불가한 라우팅이 됨)
 userRouter.get(
   '/userlist',
@@ -89,6 +93,7 @@ userRouter.get(
 userRouter.patch(
   '/users/:userId',
   loginRequired,
+  tokenMatchRequest,
   async function (req, res, next) {
     try {
       // content-type 을 application/json 로 프론트에서
@@ -108,9 +113,9 @@ userRouter.patch(
       const address = req.body.address;
       const phoneNumber = req.body.phoneNumber;
       const role = req.body.role;
-
       // body data로부터, 확인용으로 사용할 현재 비밀번호를 추출함.
       const currentPassword = req.body.currentPassword;
+      console.log(password, currentPassword);
 
       // currentPassword 없을 시, 진행 불가
       if (!currentPassword) {
@@ -148,6 +153,7 @@ userRouter.patch(
 userRouter.delete(
   '/users/:userId',
   loginRequired,
+  tokenMatchRequest,
   async function (req, res, next) {
     try {
       // content-type 을 application/json 로 프론트에서

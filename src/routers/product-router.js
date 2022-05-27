@@ -4,6 +4,7 @@ import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
 import { productService } from '../services';
+// import { upload } from '../utils'; // 사진 업로드 모듈
 
 const productRouter = Router();
 
@@ -54,17 +55,35 @@ productRouter.get('/products/category/:category', asyncHandler(async (req, res) 
     );
 }));
 
+// 상품 가격으로 검색 후 정보 가져옴
+productRouter.get('/products/price', asyncHandler(async (req, res) => {
+    
+    // 검색을 원하는 최소가격, 최대가격 query로 받기
+    const { from, to } = req.query;
+    
+    const products = await productService.getProductsByPrice(from, to);
+    res.status(200).json(products);
+}));
+
+// 상품 제조사로 검색 후 정보 가져옴
+productRouter.get('/products/manufacturer/:manufacturer', asyncHandler(async (req, res) => {
+    const { manufacturer } = req.params;
+    const products = await productService.getProductsByManufacturer(manufacturer);
+    res.status(200).json(products);
+}));
+
+// 키워드로 검색 후 정보 가져옴
+productRouter.get('/products/keyword/:keyword', asyncHandler(async (req, res) => {
+    const { keyword } = req.params;
+    const products = await productService.getProductsByKeyword(keyword);
+    res.status(200).json(products);
+}));
+
 // 상품 id로 검색 후 상세 정보 가져옴
 productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
     const { productId } = req.params;
     const product = await productService.getProductDetail(productId);
     res.status(200).json(product);
-}));
-
-// 카테고리 정보를 가져옴
-productRouter.get('/categories', asyncHandler(async (req, res) => {
-    const categories = await productService.getCategories();
-    res.status(200).json(categories);
 }));
 
 // 로그인 후 admin일 경우 상품 추가
@@ -77,13 +96,31 @@ productRouter.post('/products', loginRequired, adminRequired, asyncHandler(async
         );
     }
 
-    const { name, price, category, desc } = req.body;
+    // // AWS s3로 이미지 업로드
+    // upload.single('product_image');
+        
+    const {
+        name,
+        price,
+        category,
+        briefDesc,
+        fullDesc,
+        manufacturer,
+        stock,
+        keyword
+    } = req.body;
+
+    // const image = req.file.location;
 
     const newProduct = await productService.addProduct({
         name,
         price,
         category,
-        desc
+        briefDesc,
+        fullDesc,
+        manufacturer,
+        stock,
+        keyword
     });
     res.status(200).json(newProduct);
 }));
@@ -108,7 +145,14 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired, asyncH
     }
 
     const { productId } = req.params;
-    const { name, price, category, desc } = req.body;
+    const { name,
+            price,
+            category,
+            briefDesc,
+            fullDesc,
+            manufacturer,
+            stock,
+            keyword } = req.body;
 
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
@@ -116,7 +160,11 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired, asyncH
         ...(name && { name }),
         ...(price && { price }),
         ...(category && { category }),
-        ...(desc && { desc }),
+        ...(briefDesc && { briefDesc }),
+        ...(fullDesc && { fullDesc }),
+        ...(manufacturer && { manufacturer }),
+        ...(stock && { stock }),
+        ...(keyword && { keyword }),
     };
     // 상품 정보를 업데이트함.
     const updatedProductInfo = await productService.setProduct(productId, toUpdate);
