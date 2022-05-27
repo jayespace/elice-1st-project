@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>쇼핑-데모</title>
+    <!-- 아이콘 -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/elice-rabbit-favicon.png"
+    />
+    <!-- bulma css 관련 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+      defer
+      src="https://kit.fontawesome.com/7630448495.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="detail.css" />
+    <script src="detail.js" defer></script>
+  </head>
+  <body>
+    <!-- 헤더 -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="container mt-3">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <img src="/elice-rabbit.png" width="30" height="30" />
+            <span class="has-text-link">쇼핑-데모</span>
+          </a>
+
+          <a
+            role="button"
+            class="navbar-burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="navbarBasicExample"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+          <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+            <ul id="navbar">
+              <li>
+                <a href="/cart" aria-current="page">
+                  <span class="icon">
+                    <i class="fas fa-cart-shopping"></i>
+                  </span>
+                  <span>카트</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 제품 상세 설명 카드 -->
+    <section class="section">
+      <div class="container">
+        <div class="product-detail">
+            <div class="product-image">
+                <img id="productImageTag" src="1.jpg" />
+            </div>
+            <div class="product-detail-contents">
+                <div class="info">
+                    <h1 class="name">캐츠랑 리브레 5KG</h1>
+                    <h1 class="price">9500원</h1>
+                    <p class="description"> 전연령 고양이 건강 사료입니다. 전연령 고양이 건강 사료입니다. 전연령 고양이 건강 사료입니다. 전연령 고양이 건강 사료입니다. 전연령 고양이 건강 사료입니다. 전연령 고양이 건강 사료입니다. 전연령 고양이 건강 사료입니다. </p>
+                    <div class="selected">
+                        <select class="select-qty">
+                            <option value="0">1</option>
+                            <option value="1">2</option>
+                            <option value="2">3</option>
+                            <option value="3">4</option>
+                            <option value="4">5</option>
+                        </select>
+                        <p class="total">9500 원</p>
+                        
+                    </div>
+                </div>
+
+                <div class="buttons-container">
+                    <div class="buttons">
+                        <button class="add-button" id="addToCartButton">
+                          장바구니
+                        </button>
+                        <button class="purchase-button" id="purchaseButton">
+                          바로구매
+                        </button>
+                    </div>
+                  </div>
+            </div>
+          <!-- <div class="tile is-6 is-parent">
+            <div class="product-image">
+                <img id="productImageTag" src="1.jpg" />
+            </div>
+          </div> -->
+          <!-- <div class="tile is-parent is-vertical">
+            <div class="tile is-child box product-detail">
+              <div class="tabs">
+                <ul>
+                  <li id="manufacturerTag"></li>
+                </ul>
+              </div>
+              <div class="content">
+                <p class="subtitle is-3 is-family-monospace" id="titleTag"></p>
+                <h1 id="priceTag"></h1>
+                <p class="detail-description" id="detailDescriptionTag"></p>
+              </div>
+            </div> -->
+            <!-- <div class="tile is-child box buttons-container">
+              <button class="button is-warning" id="addToCartButton">
+                장바구니 추가하기
+              </button>
+              <button class="button is-info ml-2" id="purchaseButton">
+                바로 구매하기
+              </button>
+            </div> -->
+          <!-- </div> -->
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
