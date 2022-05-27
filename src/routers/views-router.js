@@ -9,7 +9,13 @@ const viewsRouter = express.Router();
 viewsRouter.use('/', serveStatic('home'));
 viewsRouter.use('/register', serveStatic('register'));
 viewsRouter.use('/login', serveStatic('login'));
+<<<<<<< HEAD
 viewsRouter.use('/sellproduct', serveStatic('sellproduct'));
+=======
+viewsRouter.use('/editprofile', serveStatic('editprofile'));
+viewsRouter.use('/account', serveStatic('account'));
+viewsRouter.use('/products', serveStatic('product'));
+>>>>>>> front-merge
 
 // views 폴더의 최상단 파일인 rabbit.png, api.js 등을 쓸 수 있게 함
 viewsRouter.use('/', serveStatic(''));
