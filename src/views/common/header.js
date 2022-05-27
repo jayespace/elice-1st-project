@@ -4,7 +4,7 @@ export const headerTemplate = () => {
   let template = '';
   if (userIsLogIn) {
     template =
-      '<li><a href="/">계정관리</a></li><li><a href="/api/logout">로그아웃</a></li>';
+      '<li><a href="/account">계정관리</a></li><li><a href="/api/logout">로그아웃</a></li>';
   } else {
     template =
       '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
