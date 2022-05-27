@@ -22,6 +22,7 @@ const phoneNumberInput = document.querySelector('#phoneNumberInput');
 const imageInput = document.querySelector('#imageInput');
 const searchAddressButton = document.querySelector("#searchAddressButton");
 const saveButton = document.querySelector('#saveButton');
+const deleteCompleteButton = document.querySelector('#deleteCompleteButton');
 
 let userInfoObject = {};
 
@@ -62,11 +63,20 @@ function addAllEvents(){
         address2Input
     ));
   saveButton.addEventListener('click', handlePatch);
-  ;
+  deleteCompleteButton.addEventListener('click', deleteAccount);
 }
+async function deleteAccount(){
+  alert('execute'); 
+  try{
+  const result = await Api.delete(`/api/users/${userid}`);
+  if(result){
+    location.href = '/login'
+  }
+  }catch(e){
+  }
+}
+
 //회원정보 셋팅
-
-
 async function setUserInfoToInputs(){
 const userid = sessionStorage.userid;
   const data = await Api.get(`/api/users/${userid}`);
@@ -152,6 +162,7 @@ async function handlePatch(e){
       if(result){
         reenPasswordInput.value='';
         reenPasswordConfirmInput.value='';
+        location.href = '/'
       }
     }
     catch(e){
