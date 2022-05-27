@@ -3,9 +3,9 @@ import is from '@sindresorhus/is';
 import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
+import { imageHandler } from '../middlewares';
 import { productService } from '../services';
 import { categoryService } from '../services';
-import { upload } from '../utils';
 
 const productRouter = Router();
 
@@ -88,7 +88,7 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
 }));
 
 // ****** 이미지저장 테스트 **********
-productRouter.post('/image', upload.single('image'), asyncHandler(async(req,res) => {
+productRouter.post('/image', imageHandler.single('image'), asyncHandler(async(req,res) => {
     // const image = req.file.location;
     res.send(req.file.location)
 }))
