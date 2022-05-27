@@ -71,24 +71,24 @@ async function setUserInfoToInputs(){
 const userid = sessionStorage.userid;
   const data = await Api.get(`/api/users/${userid}`);
   console.log(data);
-  const {fullName, email, password, postalCode, address1, address2, phoneNumber} = data;
+  const {fullName, email, password, address, phoneNumber} = data;
 
-  console.log(fullName, password, postalCode, address1, address2, phoneNumber);
+  console.log(fullName, password, address.postalCode, address.address1, address.address2, phoneNumber);
 
   userInfoObject = {
     fullName,
     password, 
-    postalCode, 
-    address1, 
-    address2, 
+    postalCode: address.postalCode, 
+    address1 : address.address1, 
+    address2 : address.address2, 
     phoneNumber
   };
   profileHeadLabel.insertAdjacentText('beforeend', `(${email})`);
   fullNameInput.value = fullName;
-  postalCodeInput.value = postalCode ?? '';
+  postalCodeInput.value = address.postalCode ?? '';
   reenPasswordInput.value = '';
-  address1Input.value = address1 ?? '';
-  address2Input.value = address2 ?? '';
+  address1Input.value = address.address1 ?? '';
+  address2Input.value = address.address2 ?? '';
   phoneNumberInput.value = phoneNumber ?? '';
 
 }
@@ -144,11 +144,15 @@ async function handlePatch(e){
           address1  :address1,
           address2 : address2,
         },
-        phoneNumbe: phoneNumber,
+        phoneNumber: phoneNumber,
       }
 
       const result = await Api.patch(`/api/users/${sessionStorage.userid}`,'',data);
       console.log(result, "color: #ff0000;");
+      if(result){
+        reenPasswordInput.value='';
+        reenPasswordConfirmInput.value='';
+      }
     }
     catch(e){
       e.message;
