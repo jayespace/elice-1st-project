@@ -11,11 +11,19 @@ getDataFromApi();
 
 async function getDataFromApi() {
   // 예시 URI입니다. 현재 주어진 프로젝트 코드에는 없는 URI입니다.
+  // const data = await Api.get('/api/products');
+  const id = 
+  '628ea213a0cbc4e934743e8f';
   const data = await Api.get('/api/products');
-  const random = randomId();
+  // const length = data.products.length;
+  // console.log(length);
+  console.log(data.products);
+  console.log(data.products[0]);
+  // const random = randomId();
 
+  // document.write({data});
   console.log({ data });
-  console.log({ random });
+  // console.log({ random });
 }
 // html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllElements() {
