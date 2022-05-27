@@ -1,29 +1,34 @@
-import * as Api from '/api.js'; //api.js에서 쉽게 Post, Get을 가져올 수 있어요.
-import { randomId } from '/useful-functions.js'; //useful-functions.js에서 기능 가져올 수 있다고 하네요.. 뭐 전 잘 안써요.
+import * as Api from '../api.js'; //api.js에서 쉽게 Post, Get을 가져올 수 있어요.
+// import { randomId } from '/useful-functions.js'; //useful-functions.js에서 기능 가져올 수 있다고 하네요.. 뭐 전 잘 안써요.
 
 // 요소(element), input 혹은 상수 <== 요기요기요기 요기 밑에 처럼 Node, 즉 안드로이드 findViewById 처럼 변수 - 태그 를 연결합니다.
 // const landingDiv = document.querySelector('#landingDiv');
 // const greetingDiv = document.querySelector('#greetingDiv');
-
+const list = document.querySelector(".product-list");
 // addAllElements(); //addAllElements 실행한데요
 // addAllEvents(); //addAllEvents 도 실행합니다.
 getDataFromApi();
 
 async function getDataFromApi() {
   // 예시 URI입니다. 현재 주어진 프로젝트 코드에는 없는 URI입니다.
-  // const data = await Api.get('/api/products');
-  const id = 
-  '628ea213a0cbc4e934743e8f';
+  
   const data = await Api.get('/api/products');
-  // const length = data.products.length;
-  // console.log(length);
+  const arr = data.products;
   console.log(data.products);
-  console.log(data.products[0]);
-  // const random = randomId();
 
-  // document.write({data});
-  console.log({ data });
-  // console.log({ random });
+  arr.map((a)=>{
+      list.insertAdjacentHTML('beforeend',
+        `<div class="product">
+          <div class="img">
+          <img src="${a.image}" alt="상품이미지">
+          </div>
+          <div class="content">
+            <h2 class="name">${a.name}</h2>
+            <p class="price">${a.price}원</p>
+          </div></div>
+        `
+      )  
+  });
 }
 // html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllElements() {
@@ -40,7 +45,9 @@ function addAllEvents() {
 
 
 /**************여기 밑에 함수(function)을 입력해주세요***************/
-
+function insertName(){
+  
+}
 function insertTextToLanding() {
   landingDiv.insertAdjacentHTML(
     'beforeend',

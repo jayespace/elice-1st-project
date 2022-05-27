@@ -46,7 +46,7 @@
       margin-top: 20px;
 }
 .name:hover{
-    color: gray;
+    opacity: .8;
 }
 .price{
     font-weight: bold;
