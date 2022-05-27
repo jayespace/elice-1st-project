@@ -140,20 +140,33 @@ async function handlePatch(e) {
   // if(!isShortDescriptionValid){
   //   return alert("제품에 대한 1~2문장의 설명을 적어주세요.")
   // }
+
+  // const formData = new FormData();
+  // formData.append('name', productName);
+  // formData.append('price', price);
+  // formData.append('category', categorySelect);
+  // formData.append('briefDesc', shortDescription);
+  // formData.append('fullDesc', detailDescription);
+  // formData.append('manufacturer', manufacturer);
+  // formData.append('stock', inventory);
+  // formData.append('keyword', keywordArray);
+  // formData.append('files',imagedata);
+
   const formData = new FormData();
-  formData.append('name', productName);
-  formData.append('price', price);
+  formData.append('name', '나는야 인프제이');
+  formData.append('price', 50000);
   formData.append('category', categorySelect);
-  formData.append('briefDesc', shortDescription);
-  formData.append('fullDesc', detailDescription);
-  formData.append('manufacturer', manufacturer);
-  formData.append('stock', inventory);
+  formData.append('briefDesc', '호이이이잇');
+  formData.append('fullDesc', '이제 잠자러 가볼까?');
+  formData.append('manufacturer', '인프제이월드');
+  formData.append('stock', 29);
   formData.append('keyword', keywordArray);
-  formData.append('files',imagedata);
+  formData.append('image',imagedata);
+
 
   try{
-      // const result = Api.postMulti('/product', formData);
-      console.log(keywordArray);
+    const result = await Api.postMulti('/api/products', formData);
+    alert(result)
   }catch (err) {
     console.error(err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
