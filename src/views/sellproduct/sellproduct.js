@@ -69,7 +69,7 @@ async function insertCategoryToCategorySelectBox(){
 
     categorySelectBox.insertAdjacentHTML(
       'beforeend',
-      data.map(data => insertCategory(data, "임시 카테고리")).join(" ")
+      data.map(({_id, name}) => insertCategory(_id, name)).join(" ")
     )
   }catch(e){
     console.error(e.massage);
