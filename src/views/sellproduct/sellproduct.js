@@ -40,9 +40,9 @@ function insertImageFile(file) {
       image.style.width = "128px";
       image.style.height = "128px";
 
-      imagedata = uploadedImage;
     };
     //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
+    imagedata = input.files[0];
     fileReader.readAsDataURL(input.files[0]);
   }
 }
@@ -69,7 +69,7 @@ async function insertCategoryToCategorySelectBox(){
 
     categorySelectBox.insertAdjacentHTML(
       'beforeend',
-      data.map(data => insertCategory(data, "임시 카테고리")).join(" ")
+      data.map(({_id, name}) => insertCategory(_id, name)).join(" ")
     )
   }catch(e){
     console.error(e.massage);
@@ -78,9 +78,10 @@ async function insertCategoryToCategorySelectBox(){
 //
 function addKeywordTag(){
   const keyword = searchKeywordInput.value;
+  if(!keyword)return;
+
   const rand = randomId();
   searchKeywordInput.value='';
-  
   keywordContainer.insertAdjacentHTML(
     'beforeend',
     `
@@ -92,7 +93,7 @@ function addKeywordTag(){
     </div>
     `
   )
-  const control = document.querySelector(`#keywordContainer #${rand}`);
+  const control = document.getElementById(rand);
   control.querySelector('a').addEventListener('click', ()=>control.remove());
    
 }
@@ -132,19 +133,30 @@ async function handlePatch(e) {
   // if(!isManufacturerValid){
   //   return alert("제조사를 입력해주세요.");
   // }
-  const keyword = document.querySelectorAll('span .tag');
+  const keyword = document.querySelectorAll('span.tag');
   console.log(keyword);
+  const keywordArray = []
+  keyword.forEach(data => keywordArray.push(data.textContent));
   // if(!isShortDescriptionValid){
   //   return alert("제품에 대한 1~2문장의 설명을 적어주세요.")
   // }
+  const formData = new FormData();
+  formData.append('name', productName);
+  formData.append('price', price);
+  formData.append('category', categorySelect);
+  formData.append('briefDesc', shortDescription);
+  formData.append('fullDesc', detailDescription);
+  formData.append('manufacturer', manufacturer);
+  formData.append('stock', inventory);
+  formData.append('keyword', keywordArray);
+  formData.append('files',imagedata);
 
-
-  // try{
-  //     const data = { fullName, email, password };
-  //     await Api.post('/api/register', data);
-  // }catch (err) {
-  //   console.error(err.stack);
-  //   alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
-  // }
-  //   alert(productName+" "+productText+" "+imagedata);
+  try{
+      // const result = Api.postMulti('/product', formData);
+      console.log(keywordArray);
+  }catch (err) {
+    console.error(err.stack);
+    alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
+  }
+    // alert(productName+" "+productText+" "+imagedata);
 }
