@@ -1,5 +1,5 @@
-import * as Api from '/api.js';
-import { randomId } from '/useful-functions.js';
+import * as Api from "/api.js";
+import { randomId } from "/useful-functions.js";
 
 const categorySelectBox = document.querySelector("#categorySelectBox");
 
@@ -39,7 +39,6 @@ function insertImageFile(file) {
       image.src = uploadedImage;
       image.style.width = "128px";
       image.style.height = "128px";
-
     };
     //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
     imagedata = input.files[0];
@@ -48,42 +47,41 @@ function insertImageFile(file) {
 }
 
 async function addAllElements() {
-  insertCategoryToCategorySelectBox();
+  createCategoryToCategorySelectBox();
 }
 
 function addAllEvents() {
   imageInput.addEventListener("change", insertImageFile);
   addNewProductButton.addEventListener("click", handlePatch);
-  addKeywordButton.addEventListener('click', addKeywordTag)
+  addKeywordButton.addEventListener("click", addKeywordTag);
 }
 //카테고리 표시 기능
-async function insertCategoryToCategorySelectBox(){
-  function insertCategory(value, nameCategory){
-      return `
+async function createCategoryToCategorySelectBox() {
+  function createCategoryItem(value, nameCategory) {
+    return `
       <option value="${nameCategory}" class="notification is-primary is-light"> ${nameCategory} </option>
-      `
+      `;
   }
-
-  try{
-    const data  = await Api.get('/api/categories');
+  try {
+    const data = await Api.get("/api/categories");
 
     categorySelectBox.insertAdjacentHTML(
-      'beforeend',
-      data.map(({_id, name}) => insertCategory(_id, name)).join(" ")
-    )
-  }catch(e){
+      "beforeend",
+      data.map(({ _id, name }) => createCategoryItem(_id, name)).join(" ")
+    );
+  } catch (e) {
     console.error(e.massage);
   }
 }
 //
-function addKeywordTag(){
+function addKeywordTag() {
   const keyword = searchKeywordInput.value;
-  if(!keyword)return;
+  if (!keyword) return;
 
   const rand = randomId();
-  searchKeywordInput.value='';
+  searchKeywordInput.value = "";
   keywordContainer.insertAdjacentHTML(
-    'beforeend',
+    "beforeend",
     `
     <div class="control" id="${rand}"
       <div class="tags has-addons">
@@ -92,12 +90,10 @@ function addKeywordTag(){
     </div>
     </div>
     `
-  )
+  );
   const control = document.getElementById(rand);
-  control.querySelector('a').addEventListener('click', ()=>control.remove());
-   
+  control.querySelector("a").addEventListener("click", () => control.remove());
 }
-
 
 //회원정보 수정 진행
 async function handlePatch(e) {
@@ -115,66 +111,47 @@ async function handlePatch(e) {
   const isInventoryValid = inventory > 0;
   const isPriceValid = price >= 1000;
   const isManufacturerValid = manufacturer.length >= 1;
-  const isShortDescriptionValid = shortDescription
-  const isDetailDescriptionValid = detailDescription
+  const isShortDescriptionValid = shortDescription;
 
-  if(!isProductNameValid){
+  if (!isProductNameValid) {
     return alert("제품 이름을 입력해주세요.");
   }
-  if(!categorySelect){
-    return alert("카테고리를 선택해주세요.")
+  if (!categorySelect) {
+    return alert("카테고리를 선택해주세요.");
   }
-  if(!isInventoryValid){
+  if (!isInventoryValid) {
     return alert("재고 수량은 1 개 이상입니다.");
   }
-  if(!isPriceValid){
+  if (!isPriceValid) {
     return alert("1000원 이상 입력해주세요.");
   }
-  if(!isManufacturerValid){
+  if (!isManufacturerValid) {
     return alert("제조사를 입력해주세요.");
   }
-  if(!isShortDescriptionValid){
-    return alert("제품에 대한 1~2문장의 설명을 적어주세요.")
+  if (!isShortDescriptionValid) {
+    return alert("제품에 대한 1~2문장의 설명을 적어주세요.");
   }
-  const keyword = document.querySelectorAll('span.tag');
-  // console.log(keyword);
-  // const keywordArray = []
-  // keyword.forEach(data => keywordArray.push(data.textContent));
+  const keyword = document.querySelectorAll("span.tag");
 
   const formData = new FormData();
-  formData.append('name', productName);
-  formData.append('price', price);
-  formData.append('category', categorySelect);
-  formData.append('briefDesc', shortDescription);
-  formData.append('fullDesc', detailDescription);
-  formData.append('manufacturer', manufacturer);
-  formData.append('stock', inventory);
-  keyword.forEach(data => formData.append('keyword', data.textContent));
-  // formData.append('keyword', keywordArray);
-  formData.append('image',imagedata);
+  formData.append("name", productName);
+  formData.append("price", price);
+  formData.append("category", categorySelect);
+  formData.append("briefDesc", shortDescription);
+  formData.append("fullDesc", detailDescription);
+  formData.append("manufacturer", manufacturer);
+  formData.append("stock", inventory);
+  keyword.forEach((data) => formData.append("keyword", data.textContent));
+  formData.append("image", imagedata);
 
-  console.log(categorySelect)
-
-  // const formData = new FormData();
-  // formData.append('name', '나는야 인프제이');
-  // formData.append('price', 50000);
-  // formData.append('category', categorySelect);
-  // formData.append('briefDesc', '호이이이잇');
-  // formData.append('fullDesc', '이제 잠자러 가볼까?');
-  // formData.append('manufacturer', '인프제이월드');
-  // formData.append('stock', 29);
-  // formData.append('keyword', keywordArray);
-  // formData.append('image',imagedata);
-
-
-  try{
-    const result = await Api.postMulti('/api/products', formData);
-    if(result){
-      alert('이미지가 업로드 됐습니다.')
+  try {
+    const result = await Api.postMulti("/api/products", formData);
+    if (result) {
+      alert("이미지가 업로드 됐습니다.");
+      location.reload();
     }
-  }catch (err) {
+  } catch (err) {
     console.error(err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
   }
-    // alert(productName+" "+productText+" "+imagedata);
 }

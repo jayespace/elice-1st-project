@@ -1,17 +1,18 @@
-if(sessionStorage.length<1){
-  const e = window.location.pathname,
-    t = window.location.search;
-  window.location.replace(`/login?previouspage=${e + t}`);
+//토큰이 없다면 로그인 페이지로 이동
+if(!sessionStorage.getItem("token")){
+  const {pathname, search}= window.location;
+  window.location.replace(`/login?previouspage=${pathname + search}`);
 }
 
 import * as Api from '/api.js';
 import { randomId } from '/useful-functions.js';
-import {modalExecution, DaumJibunAPI} from './profile-utils.js'
+import {prepareModal, searchByDaumPost} from './profile-utils.js'
 
 const profileHeadLabel = document.querySelector('.profile-header h1');
 
 const fullNameInput = document.querySelector('#fullNameInput');
 const currentPasswordInput = document.querySelector('#currentPasswordInput');
+//비밀번호 재생성 Inputs 
 const reenPasswordInput = document.querySelector('#reenPasswordInput')
 const reenPasswordConfirmInput = document.querySelector('#reenPasswordConfirmInput');
 const postalCodeInput = document.querySelector('#postalCodeInput');
@@ -24,10 +25,10 @@ const searchAddressButton = document.querySelector("#searchAddressButton");
 const saveButton = document.querySelector('#saveButton');
 const deleteCompleteButton = document.querySelector('#deleteCompleteButton');
 
-let userInfoObject = {};
+const userInfoObject = {};
 
 
-modalExecution();
+prepareModal();
 addAllElements();
 addAllEvents();
 
