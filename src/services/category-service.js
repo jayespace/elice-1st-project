@@ -36,7 +36,7 @@ class CategoryService {
     return category;
   }
 
-  // 카테고리 이름으로 id 찾기 ******** NEED TO FIX ******
+  // 카테고리 이름으로 id 찾기
   async getCategoryId(name) {
     const category = await this.categoryModel.findByName(name);
     const categoryId = category._id;
@@ -49,6 +49,7 @@ class CategoryService {
     const categoryName = category.name;
     return categoryName;
   }
+
 
   // 상품 추가
   async addCategory(categoryInfo) {
