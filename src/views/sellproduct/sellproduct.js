@@ -60,7 +60,7 @@ function addAllEvents() {
 async function insertCategoryToCategorySelectBox(){
   function insertCategory(value, nameCategory){
       return `
-      <option value="${value}" class="notification is-primary is-light"> ${nameCategory} </option>
+      <option value="${nameCategory}" class="notification is-primary is-light"> ${nameCategory} </option>
       `
   }
 
@@ -118,55 +118,60 @@ async function handlePatch(e) {
   const isShortDescriptionValid = shortDescription
   const isDetailDescriptionValid = detailDescription
 
-  // if(!isProductNameValid){
-  //   return alert("제품 이름을 입력해주세요.");
-  // }
-  // if(!categorySelect){
-  //   return alert("카테고리를 선택해주세요.")
-  // }
-  // if(!isInventoryValid){
-  //   return alert("재고 수량은 1 개 이상입니다.");
-  // }
-  // if(!isPriceValid){
-  //   return alert("1000원 이상 입력해주세요.");
-  // }
-  // if(!isManufacturerValid){
-  //   return alert("제조사를 입력해주세요.");
-  // }
+  if(!isProductNameValid){
+    return alert("제품 이름을 입력해주세요.");
+  }
+  if(!categorySelect){
+    return alert("카테고리를 선택해주세요.")
+  }
+  if(!isInventoryValid){
+    return alert("재고 수량은 1 개 이상입니다.");
+  }
+  if(!isPriceValid){
+    return alert("1000원 이상 입력해주세요.");
+  }
+  if(!isManufacturerValid){
+    return alert("제조사를 입력해주세요.");
+  }
+  if(!isShortDescriptionValid){
+    return alert("제품에 대한 1~2문장의 설명을 적어주세요.")
+  }
   const keyword = document.querySelectorAll('span.tag');
-  console.log(keyword);
-  const keywordArray = []
-  keyword.forEach(data => keywordArray.push(data.textContent));
-  // if(!isShortDescriptionValid){
-  //   return alert("제품에 대한 1~2문장의 설명을 적어주세요.")
-  // }
-
-  // const formData = new FormData();
-  // formData.append('name', productName);
-  // formData.append('price', price);
-  // formData.append('category', categorySelect);
-  // formData.append('briefDesc', shortDescription);
-  // formData.append('fullDesc', detailDescription);
-  // formData.append('manufacturer', manufacturer);
-  // formData.append('stock', inventory);
-  // formData.append('keyword', keywordArray);
-  // formData.append('files',imagedata);
+  // console.log(keyword);
+  // const keywordArray = []
+  // keyword.forEach(data => keywordArray.push(data.textContent));
 
   const formData = new FormData();
-  formData.append('name', '나는야 인프제이');
-  formData.append('price', 50000);
+  formData.append('name', productName);
+  formData.append('price', price);
   formData.append('category', categorySelect);
-  formData.append('briefDesc', '호이이이잇');
-  formData.append('fullDesc', '이제 잠자러 가볼까?');
-  formData.append('manufacturer', '인프제이월드');
-  formData.append('stock', 29);
-  formData.append('keyword', keywordArray);
+  formData.append('briefDesc', shortDescription);
+  formData.append('fullDesc', detailDescription);
+  formData.append('manufacturer', manufacturer);
+  formData.append('stock', inventory);
+  keyword.forEach(data => formData.append('keyword', data.textContent));
+  // formData.append('keyword', keywordArray);
   formData.append('image',imagedata);
+
+  console.log(categorySelect)
+
+  // const formData = new FormData();
+  // formData.append('name', '나는야 인프제이');
+  // formData.append('price', 50000);
+  // formData.append('category', categorySelect);
+  // formData.append('briefDesc', '호이이이잇');
+  // formData.append('fullDesc', '이제 잠자러 가볼까?');
+  // formData.append('manufacturer', '인프제이월드');
+  // formData.append('stock', 29);
+  // formData.append('keyword', keywordArray);
+  // formData.append('image',imagedata);
 
 
   try{
     const result = await Api.postMulti('/api/products', formData);
-    alert(result)
+    if(result){
+      alert('이미지가 업로드 됐습니다.')
+    }
   }catch (err) {
     console.error(err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);

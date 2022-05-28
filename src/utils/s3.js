@@ -29,7 +29,7 @@ const upload = multer({
       key: (req, file, cb) => {
           console.log(file);
           let extension = path.extname(file.originalname);
-          cb(null, 'productimage/'+Date.now().toString()+extension);
+          cb(null, 'product_dummy/'+Date.now().toString()+extension);
           // cb(null, file.originalname)
       },
   }),
