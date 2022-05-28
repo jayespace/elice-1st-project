@@ -153,7 +153,7 @@ class UserService {
   }
 
   //관리자 사용자 권한 수정  
-  async amdinGrantUserRole(userId,toUpdate) {
+  async adminGrantUserRole(userId,toUpdate) {
     // 객체 destructuring
 
     // 우선 해당 id의 유저가 db에 있는지 확인
