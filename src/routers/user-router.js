@@ -1,7 +1,12 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 // 폴더에서 import하면, 자동으로 폴더의 index.js에서 가져옴
+//loginRequired : 로그인 여부&&토큰 여부
+//adminRequired : 토큰에서 role이 admin인지 판별
+//tokenMatchRequest : 토큰의 userid와 req의 userid와 비교
 import { loginRequired } from '../middlewares';
+import { adminRequired } from '../middlewares';
+import { tokenMatchRequest } from '../middlewares';
 import { userService } from '../services';
 
 const userRouter = Router();
@@ -52,34 +57,158 @@ userRouter.post('/login', async function (req, res, next) {
     const password = req.body.password;
 
     // 로그인 진행 (로그인 성공 시 jwt 토큰을 프론트에 보내 줌)
-    const userToken = await userService.getUserToken({ email, password });
+    const userTokenAndInfo = await userService.getUserToken({
+      email,
+      password,
+    });
 
-    // jwt 토큰을 프론트에 보냄 (jwt 토큰은, 문자열임)
-    res.status(200).json(userToken);
+    // jwt 토큰과 유저정보을 프론트에 보냄 (jwt 토큰은, 문자열임)
+    res.status(200).json(userTokenAndInfo);
   } catch (error) {
     next(error);
   }
 });
 
-// 전체 유저 목록을 가져옴 (배열 형태임)
+// 관리자 유저리스트를 가져옴 (배열 형태임) - 페이지네이션/검색기능
 // 미들웨어로 loginRequired 를 썼음 (이로써, jwt 토큰이 없으면 사용 불가한 라우팅이 됨)
-userRouter.get('/userlist', loginRequired, async function (req, res, next) {
-  try {
-    // 전체 사용자 목록을 얻음
-    const users = await userService.getUsers();
+userRouter.get(
+  '/admin/userlist',
+  loginRequired,
+  adminRequired,
+  async function (req, res, next) {
+    //pagination 변수
+    //page : 현재 페이지
+    //perPage : 페이지 당 게시글개수
+    const page = Number(req.query.page || 1);
+    const perPage = Number(req.query.perPage || 10);
 
-    // 사용자 목록(배열)을 JSON 형태로 프론트에 보냄
-    res.status(200).json(users);
-  } catch (error) {
-    next(error);
+    //동적 쿼리 적용
+    // option 유저 목록 검색 기능
+    let searchOptions = {};
+    if (req.query.option == 'email') {
+      searchOptions = { email: req.query.content };
+    } else if (req.query.option == 'fullName') {
+      searchOptions = { fullName: req.query.content };
+    } else if (req.query.option == 'role') {
+      searchOptions = { role: req.query.content };
+    } else if (req.query.option == 'phoneNumber') {
+      searchOptions = { phoneNumber: req.query.content };
+    }
+
+    try {
+      // 전체 사용자 목록을 얻음
+      const totalUsers = await userService.countTotalUsers();
+      const users = await userService.getUsers(page, perPage, searchOptions);
+
+      const totalPage = Math.ceil(totalUsers / perPage);
+
+      // 사용자 목록(배열)을 JSON 형태로 프론트에 보냄
+      res.status(200).json({
+        searchOptions,
+        users,
+        page,
+        perPage,
+        totalPage,
+        totalUsers,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
+
+// 관리자가 사용자 role부여 수정
+// (예를 들어 /api/admin/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.patch(
+  '/admin/users/:userId',
+  loginRequired,
+  adminRequired,
+  async function (req, res, next) {
+    try {
+      // content-type 을 application/json 로 프론트에서
+      // 설정 안 하고 요청하면, body가 비어 있게 됨.
+      if (is.emptyObject(req.body)) {
+        throw new Error(
+          'headers의 Content-Type을 application/json으로 설정해주세요'
+        );
+      }
+
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // body data 로부터 업데이트할 사용자 정보를 추출함.
+      const role = req.body.role;
+
+      // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
+      // 보내주었다면, 업데이트용 객체에 삽입함.
+      const toUpdate = {
+        ...(role && { role }),
+      };
+
+      // 사용자 정보를 업데이트함.
+      const updatedUserInfo = await userService.adminGrantUserRole(
+        userId,
+        toUpdate
+      );
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(updatedUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 사용자 정보 조회
+// (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.get(
+  '/users/:userId',
+  loginRequired,
+  tokenMatchRequest,
+  async function (req, res, next) {
+    try {
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // 사용자 정보를 업데이트함.
+      const findUserInfo = await userService.getUser(userId);
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(findUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 사용자 정보 조회
+// (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.get(
+  '/admin/users/:userId',
+  loginRequired,
+  adminRequired,
+  async function (req, res, next) {
+    try {
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // 사용자 정보를 업데이트함.
+      const findUserInfo = await userService.getUser(userId);
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(findUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 // 사용자 정보 수정
 // (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
 userRouter.patch(
   '/users/:userId',
   loginRequired,
+  tokenMatchRequest,
   async function (req, res, next) {
     try {
       // content-type 을 application/json 로 프론트에서
@@ -99,9 +228,9 @@ userRouter.patch(
       const address = req.body.address;
       const phoneNumber = req.body.phoneNumber;
       const role = req.body.role;
-
       // body data로부터, 확인용으로 사용할 현재 비밀번호를 추출함.
       const currentPassword = req.body.currentPassword;
+      console.log(password, currentPassword);
 
       // currentPassword 없을 시, 진행 불가
       if (!currentPassword) {
@@ -128,6 +257,46 @@ userRouter.patch(
 
       // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
       res.status(200).json(updatedUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 사용자 정보 삭제
+// (예를 들어 /api/users/abc12345 로 요청하면 req.params.userId는 'abc12345' 문자열로 됨)
+userRouter.delete(
+  '/users/:userId',
+  loginRequired,
+  tokenMatchRequest,
+  async function (req, res, next) {
+    try {
+      // content-type 을 application/json 로 프론트에서
+      // 설정 안 하고 요청하면, body가 비어 있게 됨.
+      if (is.emptyObject(req.body)) {
+        throw new Error(
+          'headers의 Content-Type을 application/json으로 설정해주세요'
+        );
+      }
+
+      // params로부터 id를 가져옴
+      const userId = req.params.userId;
+
+      // body data로부터, 확인용으로 사용할 현재 비밀번호를 추출함.
+      const currentPassword = req.body.currentPassword;
+
+      // currentPassword 없을 시, 진행 불가
+      if (!currentPassword) {
+        throw new Error('회원을 탈퇴할려면, 현재의 비밀번호가 필요합니다.');
+      }
+
+      const userInfoRequired = { userId, currentPassword };
+
+      // 사용자 정보를 업데이트함.
+      const deleteUserInfo = await userService.deleteUser(userInfoRequired);
+
+      // 업데이트 이후의 유저 데이터를 프론트에 보내 줌
+      res.status(200).json(deleteUserInfo);
     } catch (error) {
       next(error);
     }

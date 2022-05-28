@@ -19,8 +19,16 @@ export class UserModel {
     return createdNewUser;
   }
 
-  async findAll() {
-    const users = await User.find({});
+  async countUsers() {
+    const counts = await User.countDocuments({})
+    return counts;
+  }
+
+  async findByOption(page, perPage,searchOptions) {
+    const users = await User.find(searchOptions)
+                            .sort({ createdAt : -1 })
+                            .skip(perPage * (page - 1))
+                            .limit(perPage);
     return users;
   }
 
@@ -30,6 +38,11 @@ export class UserModel {
 
     const updatedUser = await User.findOneAndUpdate(filter, update, option);
     return updatedUser;
+  }
+
+  async delete(userId) {
+    const deleteUser = await User.findOneAndDelete({ _id: userId });
+    return deleteUser;
   }
 }
 
