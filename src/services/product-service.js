@@ -66,15 +66,15 @@ class ProductService {
 
 
   ///// 선택된 카테고리에 포함된 상품 갯수 확인
-  async countProducts(field) {
-    const total = await this.productModel.countbyField(field);
+  async countProductsByCategory(field) {
+    const total = await this.productModel.countbyCategory(field);
 
     if (total < 1) {
         throw new Error('상품이 없습니다.');
     }
     return total;
   }
-  
+
   // **** 페이지 별로 카테고리에 포함된 상품 확인 (pagination) ****
   async getProductsByCateogory(category, page, perPage) {
 
