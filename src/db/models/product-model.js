@@ -15,6 +15,11 @@ export class ProductModel {
     return counts;
   }
 
+  async countbyManufacturer(manufacturer) {
+    const counts = await Product.countDocuments({ manufacturer });
+    return counts;
+  }
+
   async findAll() {
     const products = await Product.find({});
     return products;
@@ -40,11 +45,6 @@ export class ProductModel {
     return products;
   }
 
-  async findByManufacturer(manufacturer) {
-    const products = await Product.find({ manufacturer });
-    return products;
-  }
-
   async findAllbyPage(page, perPage) {
     const products = await Product
                               .find({})
@@ -54,9 +54,18 @@ export class ProductModel {
     return products;
   }
 
-  async findByField(field, value, page, perPage) {
+  async findByCategory(category, page, perPage) {
     const products = await Product
-                              .find({ field: value })
+                              .find({ category })
+                              .sort({ createdAt : -1 })
+                              .skip(perPage * (page - 1))
+                              .limit(perPage);
+    return products;
+  }
+
+  async findByManufacturer(manufacturer, page, perPage) {
+    const products = await Product
+                              .find({ manufacturer })
                               .sort({ createdAt : -1 })
                               .skip(perPage * (page - 1))
                               .limit(perPage);
