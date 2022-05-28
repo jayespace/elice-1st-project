@@ -9,43 +9,16 @@ import { upload } from '../utils';
 const productRouter = Router();
 
 
-// 전체 상품 검색 (page 별로 확인)
-productRouter.get('/products', asyncHandler(async (req, res) => {
-
-    const totalProducts = await productService.countTotalProducts();
-
-    // 페이지 번호와 페이지에 표시할 상품 갯수 설정
-    const page = Number(req.query.page || 1);
-    const perPage = Number(req.query.perPage || 10);
-
-    const products = await productService.getProducts(page, perPage);
-
-    const totalPage = Math.ceil(totalProducts / perPage);
-
-    // 페이지에 표시할 제품 상세 목록, 페이지 번호, 한 페이지에 표시할 수량, 총 페이지 수, 전체 제품 수량 반환
-    res.status(200).json({
-        products,
-        page,
-        perPage,
-        totalPage,
-        totalProducts
-        }
-    );
-}));
-
-
-// 특정 카테고리에 속해 있는 상품 정보 가져옴 (page 형태로 확인) **** 현재 카테고리ID로 검색가능 (수정중) ******
+// // 전체 상품 검색 (page 별로 확인)
 // productRouter.get('/products', asyncHandler(async (req, res) => {
-//     const { category } = req.query;
-//     console.log(category);
 
-//     const totalProducts = await productService.countProducts(field);
+//     const totalProducts = await productService.countTotalProducts();
 
 //     // 페이지 번호와 페이지에 표시할 상품 갯수 설정
 //     const page = Number(req.query.page || 1);
 //     const perPage = Number(req.query.perPage || 10);
 
-//     const products = await productService.getProductsByField(field, page, perPage);
+//     const products = await productService.getProducts(page, perPage);
 
 //     const totalPage = Math.ceil(totalProducts / perPage);
 
@@ -61,6 +34,53 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
 // }));
 
 
+// 특정 카테고리에 속해 있는 상품 정보 가져옴 (page 형태로 확인) **** 현재 카테고리ID로 검색가능 (수정중) ******
+productRouter.get('/products', asyncHandler(async (req, res) => {
+
+    let field = ""
+    let value = ""
+
+        // 페이지 번호와 페이지에 표시할 상품 갯수 설정
+        const page = Number(req.query.page || 1);
+        const perPage = Number(req.query.perPage || 10);
+
+    if (req.query){
+    
+        if(req.query.category) {
+            field = 'category';
+            value = req.query.category
+        } else if (req.query.manufacturer) {
+            field = 'manufacturer'; 
+            value = req.query.manufacturer
+        } else if (req.query.price) {
+            field = 'price '
+            value = req.query.price
+        } else if (req.query.keyword) {
+            field = 'keyword'
+            value = req.query.keyword
+        }
+
+        const totalProducts = await productService.countProducts(field, value);
+    }
+    
+
+
+    const products = await productService.getProductsByField(field, value, page, perPage);
+
+    const totalPage = Math.ceil(totalProducts / perPage);
+
+    // 페이지에 표시할 제품 상세 목록, 페이지 번호, 한 페이지에 표시할 수량, 총 페이지 수, 전체 제품 수량 반환
+    res.status(200).json({
+        products,
+        page,
+        perPage,
+        totalPage,
+        totalProducts
+        }
+    );
+}));
+
+
 ///// 상품 id로 검색 후 상세 정보 가져옴
 productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
     const { productId } = req.params;
@@ -71,21 +91,23 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
 
 // ////// 상품 가격으로 검색 후 정보 가져옴
 // productRouter.get('/products/price', asyncHandler(async (req, res) => {
-    
+
 //     // 검색을 원하는 최소가격, 최대가격 query로 받기
 //     const { from, to } = req.query;
-    
+
 //     const products = await productService.getProductsByPrice(from, to);
 //     res.status(200).json(products);
 // }));
 
 
-// ////// 상품 제조사로 검색 후 정보 가져옴
-// productRouter.get('/products/manufacturer/:manufacturer', asyncHandler(async (req, res) => {
-//     const { manufacturer } = req.params;
-//     const products = await productService.getProductsByManufacturer(manufacturer);
-//     res.status(200).json(products);
-// }));
+////// 상품 제조사로 검색 후 정보 가져옴
+productRouter.get('/products/manufacturer/:manufacturer', asyncHandler(async (req, res) => {
+    const { manufacturer } = req.params;
+    const products = await productService.getProductsByManufacturer(manufacturer);
+    res.status(200).json(products);
+}));
+
+
 
 
 // // 키워드로 검색 후 정보 가져옴 ****** 미완성 *******
@@ -94,9 +116,6 @@ productRouter.get('/products/:productId', asyncHandler(async (req, res) => {
 //     const products = await productService.getProductsByKeyword(keyword);
 //     res.status(200).json(products);
 // }));
-
-
-
 
 
 // 로그인 후 admin일 경우 상품 추가
@@ -109,7 +128,7 @@ productRouter.post('/products',
         'headers의 Content-Type을 application/json으로 설정해주세요'
         );
     }
-    
+
     /// 이미지 url 주소
     const image = req.file.location;
 
@@ -134,7 +153,7 @@ productRouter.post('/products',
         keyword,
         image
     });
-    res.status(200).json(newProduct);
+    res.status(201).json(newProduct);
 }));
 
 
@@ -143,10 +162,9 @@ productRouter.patch('/products/:productId',
     loginRequired, adminRequired, upload.single('image'), asyncHandler(async (req, res) => {
 
     const { productId } = req.params;
-    
+    console.log(req.file)
     // 만약 이미지가 있다면 url 받아오고 이미지가 없을 시 body가 비어있는지 확인
     let newImage = "none";
-
     if (req.file) {
 
         newImage = req.file.location;

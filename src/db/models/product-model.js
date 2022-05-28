@@ -10,8 +10,8 @@ export class ProductModel {
     return counts;
   }
 
-  async countbyField(field) {
-    const counts = await Product.countDocuments({ field });
+  async countbyCategory(category) {
+    const counts = await Product.countDocuments({ category });
     return counts;
   }
 
@@ -54,9 +54,9 @@ export class ProductModel {
     return products;
   }
 
-  async findByField(field, page, perPage) {
+  async findByField(field, value, page, perPage) {
     const products = await Product
-                              .find(field)
+                              .find({ field: value })
                               .sort({ createdAt : -1 })
                               .skip(perPage * (page - 1))
                               .limit(perPage);

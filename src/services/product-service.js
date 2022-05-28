@@ -19,17 +19,6 @@ class ProductService {
   }
 
 
-  ///// 선택된 카테고리에 포함된 상품 갯수 확인
-  async countProducts(field) {
-    const total = await this.productModel.countbyField(field);
-
-    if (total < 1) {
-        throw new Error('상품이 없습니다.');
-    }
-    return total;
-  }
-
-
   ///// 페이지 별로 전체 상품 확인 (pagination)
   async getProducts(page, perPage) {
     let products = await this.productModel.findAllbyPage(page, perPage);
@@ -76,10 +65,20 @@ class ProductService {
   }
 
 
+  ///// 선택된 카테고리에 포함된 상품 갯수 확인
+  async countProducts(field) {
+    const total = await this.productModel.countbyField(field);
 
+    if (total < 1) {
+        throw new Error('상품이 없습니다.');
+    }
+    return total;
+  }
+  
   // **** 페이지 별로 카테고리에 포함된 상품 확인 (pagination) ****
-  async getProductsByField(field, page, perPage) {
-    let products = await this.productModel.findByField(field, page, perPage);
+  async getProductsByCateogory(category, page, perPage) {
+
+    let products = await this.productModel.findByCategory(category, page, perPage);
 
     if (products.length < 1) {
         throw new Error('상품이 없습니다.');
