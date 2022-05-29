@@ -182,7 +182,7 @@ class ProductService {
     const products = await this.productModel.findByPrice(price);
     return products;
   }
-  
+
 
   //// 상품 추가
   async addProduct(productInfo) {
@@ -230,6 +230,7 @@ class ProductService {
     if (!product) {
         throw new Error('상품 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
+    
     const deletedProduct = await this.productModel.delete(productId);
     return deletedProduct;
   }
