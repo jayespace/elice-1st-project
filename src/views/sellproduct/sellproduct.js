@@ -1,26 +1,26 @@
 import * as Api from "/api.js";
 import { randomId } from "/useful-functions.js";
 
-const categorySelectBox = document.querySelector("#categorySelectBox");
+const categorySelectBox = document.getElementById("categorySelectBox");
 
-const productNameInput = document.querySelector("#productNameInput");
-const inventoryInput = document.querySelector("#inventoryInput");
-const priceInput = document.querySelector("#priceInput");
-const manufacturerInput = document.querySelector("#manufacturerInput");
-const shortDescriptionInput = document.querySelector("#shortDescriptionInput");
-const detailDescriptionInput = document.querySelector(
-  "#detailDescriptionInput"
+const productNameInput = document.getElementById("productNameInput");
+const inventoryInput = document.getElementById("inventoryInput");
+const priceInput = document.getElementById("priceInput");
+const manufacturerInput = document.getElementById("manufacturerInput");
+const shortDescriptionInput = document.getElementById("shortDescriptionInput");
+const detailDescriptionInput = document.getElementById(
+  "detailDescriptionInput"
 );
-const searchKeywordInput = document.querySelector("#searchKeywordInput");
-const keywordContainer = document.querySelector("#keywordContainer");
+const searchKeywordInput = document.getElementById("searchKeywordInput");
+const keywordContainer = document.getElementById("keywordContainer");
 
 //버튼
-const addNewProductButton = document.querySelector("#addNewProductButton");
-const addKeywordButton = document.querySelector("#addKeywordButton");
+const addNewProductButton = document.getElementById("addNewProductButton");
+const addKeywordButton = document.getElementById("addKeywordButton");
 
 // 이미지 관련 패턴
-const imageInput = document.querySelector("#productimageInput");
-const image = document.querySelector("#product-image");
+const imageInput = document.getElementById("productimageInput");
+const image = document.getElementById("product-image");
 
 let imagedata = "";
 

@@ -10,20 +10,20 @@ import {prepareModal, DaumJibunAPI} from './profile-utils.js'
 
 const profileHeadLabel = document.querySelector('.profile-header h1');
 
-const fullNameInput = document.querySelector('#fullNameInput');
-const currentPasswordInput = document.querySelector('#currentPasswordInput');
+const fullNameInput = document.getElementById('fullNameInput');
+const currentPasswordInput = document.getElementById('currentPasswordInput');
 //비밀번호 재생성 Inputs 
-const reenPasswordInput = document.querySelector('#reenPasswordInput')
-const reenPasswordConfirmInput = document.querySelector('#reenPasswordConfirmInput');
-const postalCodeInput = document.querySelector('#postalCodeInput');
-const address1Input = document.querySelector('#address1Input');
-const address2Input = document.querySelector('#address2Input');
-const phoneNumberInput = document.querySelector('#phoneNumberInput');
+const reenPasswordInput = document.getElementById('reenPasswordInput')
+const reenPasswordConfirmInput = document.getElementById('reenPasswordConfirmInput');
+const postalCodeInput = document.getElementById('postalCodeInput');
+const address1Input = document.getElementById('address1Input');
+const address2Input = document.getElementById('address2Input');
+const phoneNumberInput = document.getElementById('phoneNumberInput');
 
-const imageInput = document.querySelector('#imageInput');
-const searchAddressButton = document.querySelector("#searchAddressButton");
-const saveButton = document.querySelector('#saveButton');
-const deleteCompleteButton = document.querySelector('#deleteCompleteButton');
+const imageInput = document.getElementById('imageInput');
+const searchAddressButton = document.getElementById("searchAddressButton");
+const saveButton = document.getElementById('saveButton');
+const deleteCompleteButton = document.getElementById('deleteCompleteButton');
 
 const userInfoObject = {};
 
