@@ -66,10 +66,23 @@ function addAllEvents(){
   saveButton.addEventListener('click', handlePatch);
   deleteCompleteButton.addEventListener('click', deleteAccount);
 }
+
+//계정삭제 관련
 async function deleteAccount(){
-  alert('execute'); 
+  const userid = sessionStorage.getItem("userid");
+  const currentPassword = currentPasswordInput.value;
+  const isCurrentPasswordValid = currentPassword.length > 1;
+  
+  if(!isCurrentPasswordValid){
+    return alert('정보 수정 시 현재 비빌번호를 입력해주세요.')
+  }
+
+  const data ={
+    userid,
+    currentPassword,
+  }
   try{
-  const result = await Api.delete(`/api/users/${userid}`);
+  const result = await Api.delete(`/api/users`, userid, data);
   if(result){
     location.href = '/login'
   }
@@ -79,7 +92,7 @@ async function deleteAccount(){
 
 //회원정보 셋팅
 async function setUserInfoToInputs(){
-const userid = sessionStorage.userid;
+  const userid = sessionStorage.getItem("userid");
   const data = await Api.get(`/api/users/${userid}`);
   const {fullName, email, password, address, phoneNumber} = data;
   
@@ -96,6 +109,7 @@ const userid = sessionStorage.userid;
   userInfoObject.address2 = address2;
   userInfoObject.phoneNumber = phoneNumber;
 
+  //input에 셋팅
   profileHeadLabel.insertAdjacentText('beforeend', `(${email})`);
   fullNameInput.value = fullName;
   currentPasswordInput.value = '';
@@ -121,18 +135,18 @@ async function handlePatch(e){
   const phoneNumber = phoneNumberInput.value;
   // const image = imageInput.value;
 
-  //세션 확실한 값
   const isFullNameValidModify = fullName === userInfoObject.fullName;
+  const isCurrentPasswordValid = currentPassword.length > 1;
   const isReenPasswordValidModify = reenPassword.length < 1;
   const isReenPasswordSame = reenPassword === reenPasswordConfirm;
-
-  //세션 불확실 값
   const isPostalCodeValidModify = postalCode === userInfoObject.postalCode;
   const isAddress1CodeValidModify = address1 === userInfoObject.address2Code;
   const isAddress2CodeValidModify = address2 === userInfoObject.address2Code;
   const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
 
-
+  if(!isCurrentPasswordValid){
+    return alert('정보 수정 시 현재 비빌번호를 입력해주세요.')
+  }
 
   if(!isReenPasswordSame){
     return alert('비밀번호가 일치하지 않습니다.')
@@ -144,10 +158,7 @@ async function handlePatch(e){
     !isAddress1CodeValidModify &&
     !isAddress2CodeValidModify &&
     !isPhoneNumberValidModify){
-      
       alert('데이터가 변경 됨.')
-    }
-
     try{
 
       const data ={
@@ -173,4 +184,5 @@ async function handlePatch(e){
     catch(e){
       e.message;
     }
+  }
 }
