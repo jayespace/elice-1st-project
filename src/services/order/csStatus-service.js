@@ -1,4 +1,4 @@
-import { csStatusModel } from '../db';
+import { csStatusModel } from '../../db';
 
 class CsStatusService {
 
@@ -27,9 +27,9 @@ class CsStatusService {
     return csStatus;
   }
 
-  // CS Status 정보로 id 찾기
-  async getCsStatusId(csStatusInfo) {
-    const csStatus = await this.csStatusModel.findByStatus(csStatusInfo);
+  // CS Status 이름으로 id 찾기
+  async getCsStatusId(csStatusName) {
+    const csStatus = await this.csStatusModel.findByName(csStatusName);
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
@@ -47,20 +47,20 @@ class CsStatusService {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
 
-    const csStatusName = csStatus.csStatus;
+    const csStatusName = csStatus.name;
     return csStatusName;
   }
 
 
   // CS Status 추가
   async addCsStatus(csStatusInfo) {
-    const { csStatus } = csStatusInfo;
+    const { name } = csStatusInfo;
 
-    const isExist = await this.csStatusModel.findByStatus(csStatus);
+    const isExist = await this.csStatusModel.findByName(name);
     if (isExist) {
         throw new Error('이 이름으로 생성된 CS Status가 있습니다. 다른 이름을 지어주세요.');
     }
-    const newInfo = { csStatus };
+    const newInfo = { name };
     // db에 저장
     const createdNew = await this.csStatusModel.create(newInfo);
     return createdNew;

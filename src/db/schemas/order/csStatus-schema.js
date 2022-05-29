@@ -1,14 +1,14 @@
 import { Schema } from 'mongoose';
 
-const PaymentTypeSchema = new Schema({
-    paymentMethod: {
+const CsStatusSchema = new Schema({
+    name: {
         type: String,
         required: true
     },
 }, {
-    collection: 'paymentType',
+    collection: 'csStatus',
     timestamps: true,
 }
 );
 
-export { PaymentTypeSchema };
+export { CsStatusSchema };

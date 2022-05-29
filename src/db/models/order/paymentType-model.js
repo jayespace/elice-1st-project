@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
-import { PaymentTypeSchema } from '../schemas/paymentType-schema';
+import { PaymentTypeSchema } from '../../schemas/order/paymentType-schema';
 
-const PaymentType = model('paymentStatus', PaymentTypeSchema);
+const PaymentType = model('paymentType', PaymentTypeSchema);
 
 export class PaymentTypeModel {
 

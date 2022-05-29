@@ -1,13 +1,13 @@
 import { model } from 'mongoose';
-import { PaymentStatusSchema } from '../schemas/paymentStatus-schema';
+import { PaymentStatusSchema } from '../../schemas/order/paymentStatus-schema';
 
 const PaymentStatus = model('paymentStatus', PaymentStatusSchema);
 
 export class PaymentStatusModel {
 
   async findAll() {
-    const paymentStatus = await PaymentStatus.find({});
-    return paymentStatus;
+    const allPaymentStatus = await PaymentStatus.find({});
+    return allPaymentStatus;
   }
 
   async findById(paymentStatusId) {
@@ -29,8 +29,8 @@ export class PaymentStatusModel {
     const filter = { _id: paymentStatusId };
     const option = { returnOriginal: false };
 
-    const updatedpaymentStatus = await PaymentStatus.findOneAndUpdate(filter, update, option);
-    return updatedpaymentStatus;
+    const updated = await PaymentStatus.findOneAndUpdate(filter, update, option);
+    return updated;
   }
 
   async delete(paymentStatusId) {

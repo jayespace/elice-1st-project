@@ -21,8 +21,7 @@ db.on('error', (error) =>
 export * from './models/user-model';
 export * from './models/product-model';
 export * from './models/category-model';
-// export * from './models/orderStatus-model';
-export * from './models/csStatus-model';
-// export * from './models/paymentStatus-model';
-// export * from './models/paymentType-model';
-// export * from './models/productOption-model';
+export * from './models/order/orderStatus-model';
+export * from './models/order/csStatus-model';
+export * from './models/order/paymentStatus-model';
+export * from './models/order/paymentType-model';

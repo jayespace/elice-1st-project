@@ -1,5 +1,5 @@
 import { model } from 'mongoose';
-import { OrderStatusSchema } from '../schemas/orderStatus-schema';
+import { OrderStatusSchema } from '../../schemas/order/orderStatus-schema';
 
 const OrderStatus = model('orderStatus', OrderStatusSchema);
 
@@ -20,8 +20,8 @@ export class OrderStatusModel {
     return orderStatus;
   }
 
-  async create(orderStatusId) {
-    const createdNew = await OrderStatus.create(orderStatusId);
+  async create(orderStatusInfo) {
+    const createdNew = await OrderStatus.create(orderStatusInfo);
     return createdNew;
   }
 

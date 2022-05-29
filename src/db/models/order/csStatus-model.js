@@ -1,5 +1,5 @@
 import { model } from 'mongoose';
-import { CsStatusSchema } from '../schemas/csStatus-schema';
+import { CsStatusSchema } from '../../schemas/order/csStatus-schema';
 
 const CsStatus = model('csStatus', CsStatusSchema);
 
@@ -15,8 +15,8 @@ export class CsStatusModel {
     return csStatus;
   }
 
-  async findByStatus(csStatusInfo) {
-    const csStatus = await CsStatus.findOne({ csStatus: csStatusInfo });
+  async findByName(csStatusName) {
+    const csStatus = await CsStatus.findOne({ name: csStatusName });
     return csStatus;
   }
 
