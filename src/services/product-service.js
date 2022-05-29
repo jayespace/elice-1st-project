@@ -64,76 +64,84 @@ class ProductService {
     return productList;
   }
 
+    ///// 선택된 카테고리에 포함된 상품 갯수 확인
+    async countByField(field, value) {
 
-  ///// 선택된 카테고리에 포함된 상품 갯수 확인
-  // async countProductsByField(field, value) {
+      let total = 0;
 
-  //     let total = 0
+      if (field == 'category') {
+        const categoryId = await this.categoryService.getCategoryId(value);
+        total = await this.productModel.countbyCategory(categoryId);
+      } else if (field == 'manufacturer') {
+        total = await this.productModel.countbyManufacturer(value);
+      } else if (field == 'price') {
+        total = await this.productModel.countbyPrice(value);
+      } else if (field == 'keyword') {
+        total = await this.productModel.countbyKeyword(value);
+      }
 
-  //     if (field = 'manufacturer') {
-  //         field = 'manufacturer'; 
-  //         total = await this.productModel.countbyManufacturer(value);
-  //     } else if(field === 'category') {
-  //         field = 'category';
-  //         total = await this.productModel.countbyCategory(value);
-  //     }
+      if (total < 1) {
+          throw new Error('상품이 없습니다.');
+      }
+      return total;
+    }
 
-  //   if (total < 1) {
-  //       throw new Error('상품이 없습니다.');
-  //   }
-  //   return total;
-  // }
+  //// **** 페이지 별로 특정 필드에 포함된 상품 확인 (pagination) ****
+  async getProductsByField(field, value, page, perPage) {
 
-  // // **** 페이지 별로 특정 필드에 포함된 상품 확인 (pagination) ****
-  // async getProductsByField(field, value, page, perPage) {
+    let products;
 
-  //   let products;
-  //   if(field === 'category') {
-  //       products = await this.productModel.findByCategory(value, page, perPage);
-  //   } else if (field = 'manufacturer') {
-  //       products = await this.productModel.findByManufacturer(value, page, perPage);
-  //   }
+    if (field == 'category') {
+      const categoryId = await this.categoryService.getCategoryId(value);
+      products = await this.productModel.findByCategory(categoryId, page, perPage);
+    } else if (field == 'manufacturer') {
+      products = await this.productModel.findByManufacturer(value, page, perPage);
+    } else if (field == 'price') {
+      products = await this.productModel.findByPrice(value, page, perPage);
+    } else if (field == 'keyword') {
+      products = await this.productModel.findByKeyword(value, page, perPage);
+    }
 
-  //   if (products.length < 1) {
-  //       throw new Error('상품이 없습니다.');
-  //   }
+    if (products.length < 1) {
+        throw new Error('상품이 없습니다.');
+    }
 
-  //   const productList = [];
-  //   for(let i = 0; i < products.length; i++) {
+    const productList = [];
+    for(let i = 0; i < products.length; i++) {
 
-  //     const product = products[i];
+      const product = products[i];
 
-  //     const { 
-  //       name,
-  //       price,
-  //       category,
-  //       briefDesc,
-  //       fullDesc,
-  //       manufacturer,
-  //       stock,
-  //       keyword,
-  //       image
-  //       } = product;
+      const { 
+        name,
+        price,
+        category,
+        briefDesc,
+        fullDesc,
+        manufacturer,
+        stock,
+        keyword,
+        image
+        } = product;
 
-  //     const product_category_id = product.category.valueOf();
-  //     const categoryName = await this.categoryService.getCategoryName(product_category_id);
+      const product_category_id = product.category.valueOf();
+      const categoryName = await this.categoryService.getCategoryName(product_category_id);
 
-  //     let modified = { 
-  //       name,
-  //       price,
-  //       category: categoryName,
-  //       briefDesc,
-  //       fullDesc,
-  //       manufacturer,
-  //       stock,
-  //       keyword,
-  //       image };
+      let modified = { 
+        name,
+        price,
+        category: categoryName,
+        briefDesc,
+        fullDesc,
+        manufacturer,
+        stock,
+        keyword,
+        image };
 
-  //       productList.push(modified)
-  //   }
+        productList.push(modified)
+    }
 
-  //   return productList;
-  // }
+    return productList;
+  }
 
 
   //// id로 상품 상세정보 확인
@@ -168,20 +176,13 @@ class ProductService {
     return newProductInfo;
   }
 
-  /////// 가격으로 상품 검색
-  // async getProductsByPrice(from, to) {
-  //   const price = { $gte: from, $lte: to }
-  //   const products = await this.productModel.findByPrice(price);
-  //   return products;
-  // }
-
-
-  // ////// **** 키워드로 상품 검색 **** 미완성 ********
-  // async getProductsByKeyword(keyword) {
-  //   const products = await this.productModel.findByKeyword(keyword);
-  //   return products;
-  // }
-
+  ///// 가격으로 상품 검색
+  async getProductsByPrice(from, to) {
+    const price = { $gte: from, $lte: to }
+    const products = await this.productModel.findByPrice(price);
+    return products;
+  }
+  
 
   //// 상품 추가
   async addProduct(productInfo) {
