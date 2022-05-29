@@ -1,14 +1,14 @@
 import { Schema } from 'mongoose';
 
-const OrderStatusSchema = new Schema({
-    orderStatus: {
+const CsStatusSchema = new Schema({
+    csStatus: {
         type: String,
         required: true
     },
 }, {
-    collection: 'orderStatus',
+    collection: 'csStatus',
     timestamps: true,
 }
 );
 
-export { OrderStatusSchema };
+export { CsStatusSchema };

@@ -42,7 +42,8 @@ categoryRouter.post('/categories',
 }));
 
 // 로그인 후 admin일 경우 카테고리 삭제
-categoryRouter.delete('/categories/:categoryId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
+categoryRouter.delete('/categories/:categoryId',
+    loginRequired, adminRequired, asyncHandler(async (req, res) => {
     const { categoryId } = req.params;
 
     const del = await categoryService.deleteCategory(categoryId)
@@ -51,7 +52,8 @@ categoryRouter.delete('/categories/:categoryId', loginRequired, adminRequired, a
 }));
 
 // 로그인 후 admin일 경우 카테고리 정보 수정
-categoryRouter.patch('/categories/:categoryId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
+categoryRouter.patch('/categories/:categoryId',
+    loginRequired, adminRequired, asyncHandler(async (req, res) => {
 
     // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
     if (is.emptyObject(req.body)) {

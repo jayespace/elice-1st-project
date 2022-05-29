@@ -61,7 +61,7 @@ class CategoryService {
   }
 
 
-  // 상품 추가
+  // 카테고리 추가
   async addCategory(categoryInfo) {
     const { name, desc } = categoryInfo;
 
@@ -75,7 +75,7 @@ class CategoryService {
     return createdNewCategory;
   }
 
-  // 상품 정보 수정
+  // 카테고리 정보 수정
   async setCategory(categoryId, toUpdate) {
     let category = await this.categoryModel.findById(categoryId);
 
@@ -91,7 +91,7 @@ class CategoryService {
     return category;
   }
 
-// 상품 삭제
+// 카테고리 삭제
   async deleteCategory(categoryId) {
     let category = await this.categoryModel.findById(categoryId);
 
