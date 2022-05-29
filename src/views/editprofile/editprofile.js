@@ -6,7 +6,7 @@ if(!sessionStorage.getItem("token")){
 
 import * as Api from '/api.js';
 import { randomId } from '/useful-functions.js';
-import {prepareModal, searchByDaumPost} from './profile-utils.js'
+import {prepareModal, DaumJibunAPI} from './profile-utils.js'
 
 const profileHeadLabel = document.querySelector('.profile-header h1');
 
@@ -81,26 +81,30 @@ async function deleteAccount(){
 async function setUserInfoToInputs(){
 const userid = sessionStorage.userid;
   const data = await Api.get(`/api/users/${userid}`);
-  console.log(data);
   const {fullName, email, password, address, phoneNumber} = data;
+  
+  //가져온 불확실한 정보 유효성 검사
+  const postalCode = address ? address.postalCode : '';
+  const address1 = address ? address.address1 : '';
+  const address2 = address ? address.address2 : '';
 
-  console.log(fullName, password, address.postalCode, address.address1, address.address2, phoneNumber);
+  //userInfo 저장
+  userInfoObject.fullName = fullName;
+  userInfoObject.password = password;
+  userInfoObject.postalCode = postalCode;
+  userInfoObject.address1 = address1;
+  userInfoObject.address2 = address2;
+  userInfoObject.phoneNumber = phoneNumber;
 
-  userInfoObject = {
-    fullName,
-    password, 
-    postalCode: address.postalCode, 
-    address1 : address.address1, 
-    address2 : address.address2, 
-    phoneNumber
-  };
   profileHeadLabel.insertAdjacentText('beforeend', `(${email})`);
   fullNameInput.value = fullName;
-  postalCodeInput.value = address.postalCode ?? '';
+  currentPasswordInput.value = '';
   reenPasswordInput.value = '';
-  address1Input.value = address.address1 ?? '';
-  address2Input.value = address.address2 ?? '';
-  phoneNumberInput.value = phoneNumber ?? '';
+  reenPasswordConfirmInput.value ='';  
+  postalCodeInput.value = postalCode;
+  address1Input.value = address1;
+  address2Input.value = address2;
+  phoneNumberInput.value = phoneNumber; 
 
 }
 //회원정보 수정 진행
@@ -123,10 +127,10 @@ async function handlePatch(e){
   const isReenPasswordSame = reenPassword === reenPasswordConfirm;
 
   //세션 불확실 값
-  const isPostalCodeValidModify = postalCode === (userInfoObject.postalCode ?? '');
-  const isAddress1CodeValidModify = address1 === (userInfoObject.address2Code ?? '');
-  const isAddress2CodeValidModify = address2 === (userInfoObject.address2Code ?? '');
-  const isPhoneNumberValidModify = phoneNumber === (userInfoObject.phoneNumber ?? '');
+  const isPostalCodeValidModify = postalCode === userInfoObject.postalCode;
+  const isAddress1CodeValidModify = address1 === userInfoObject.address2Code;
+  const isAddress2CodeValidModify = address2 === userInfoObject.address2Code;
+  const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
 
 
 
