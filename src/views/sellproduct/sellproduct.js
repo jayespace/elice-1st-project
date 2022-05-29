@@ -11,7 +11,7 @@ const shortDescriptionInput = document.getElementById("shortDescriptionInput");
 const detailDescriptionInput = document.getElementById(
   "detailDescriptionInput"
 );
-const searchKeywordInput = document.getElementById("searchKeywordInput");
+const addKeywordInput = document.getElementById("addKeywordInput");
 const keywordContainer = document.getElementById("keywordContainer");
 
 //버튼
@@ -54,6 +54,7 @@ function addAllEvents() {
   imageInput.addEventListener("change", insertImageFile);
   addNewProductButton.addEventListener("click", handlePatch);
   addKeywordButton.addEventListener("click", addKeywordTag);
+  addKeywordInput.addEventListener("keypress", (e) => e.key === 'Enter'? addKeywordTag() : '');
 }
 //카테고리 표시 기능
 async function createCategoryToCategorySelectBox() {
@@ -75,11 +76,11 @@ async function createCategoryToCategorySelectBox() {
 }
 //
 function addKeywordTag() {
-  const keyword = searchKeywordInput.value;
+  const keyword = addKeywordInput.value;
   if (!keyword) return;
 
   const rand = randomId();
-  searchKeywordInput.value = "";
+  addKeywordInput.value = "";
   keywordContainer.insertAdjacentHTML(
     "beforeend",
     `
