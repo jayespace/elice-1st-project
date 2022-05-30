@@ -27,9 +27,8 @@ const upload = multer({
       contentType: multerS3.AUTO_CONTENT_TYPE, // 자동을 콘텐츠 타입 세팅
       acl: 'public-read', // 클라이언트에서 자유롭게 가용하기 위함
       key: (req, file, cb) => {
-          console.log(file);
           let extension = path.extname(file.originalname);
-          cb(null, 'productimage/'+Date.now().toString()+extension);
+          cb(null, 'product_dummy/'+Date.now().toString()+extension);
           // cb(null, file.originalname)
       },
   }),

@@ -54,9 +54,9 @@ export class ProductModel {
     return products;
   }
 
-  async findByCategory(category, page, perPage) {
+  async findByField(field, value, page, perPage) {
     const products = await Product
-                              .find({ category })
+                              .find({ field: value })
                               .sort({ createdAt : -1 })
                               .skip(perPage * (page - 1))
                               .limit(perPage);

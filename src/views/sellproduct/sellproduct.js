@@ -1,26 +1,26 @@
-import * as Api from '/api.js';
-import { randomId } from '/useful-functions.js';
+import * as Api from "/api.js";
+import { randomId } from "/useful-functions.js";
 
-const categorySelectBox = document.querySelector("#categorySelectBox");
+const categorySelectBox = document.getElementById("categorySelectBox");
 
-const productNameInput = document.querySelector("#productNameInput");
-const inventoryInput = document.querySelector("#inventoryInput");
-const priceInput = document.querySelector("#priceInput");
-const manufacturerInput = document.querySelector("#manufacturerInput");
-const shortDescriptionInput = document.querySelector("#shortDescriptionInput");
-const detailDescriptionInput = document.querySelector(
-  "#detailDescriptionInput"
+const productNameInput = document.getElementById("productNameInput");
+const inventoryInput = document.getElementById("inventoryInput");
+const priceInput = document.getElementById("priceInput");
+const manufacturerInput = document.getElementById("manufacturerInput");
+const shortDescriptionInput = document.getElementById("shortDescriptionInput");
+const detailDescriptionInput = document.getElementById(
+  "detailDescriptionInput"
 );
-const searchKeywordInput = document.querySelector("#searchKeywordInput");
-const keywordContainer = document.querySelector("#keywordContainer");
+const addKeywordInput = document.getElementById("addKeywordInput");
+const keywordContainer = document.getElementById("keywordContainer");
 
 //버튼
-const addNewProductButton = document.querySelector("#addNewProductButton");
-const addKeywordButton = document.querySelector("#addKeywordButton");
+const addNewProductButton = document.getElementById("addNewProductButton");
+const addKeywordButton = document.getElementById("addKeywordButton");
 
 // 이미지 관련 패턴
-const imageInput = document.querySelector("#productimageInput");
-const image = document.querySelector("#product-image");
+const imageInput = document.getElementById("productimageInput");
+const image = document.getElementById("product-image");
 
 let imagedata = "";
 
@@ -39,7 +39,6 @@ function insertImageFile(file) {
       image.src = uploadedImage;
       image.style.width = "128px";
       image.style.height = "128px";
-
     };
     //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
     imagedata = input.files[0];
@@ -48,42 +47,42 @@ function insertImageFile(file) {
 }
 
 async function addAllElements() {
-  insertCategoryToCategorySelectBox();
+  createCategoryToCategorySelectBox();
 }
 
 function addAllEvents() {
   imageInput.addEventListener("change", insertImageFile);
   addNewProductButton.addEventListener("click", handlePatch);
-  addKeywordButton.addEventListener('click', addKeywordTag)
+  addKeywordButton.addEventListener("click", addKeywordTag);
+  addKeywordInput.addEventListener("keypress", (e) => e.key === 'Enter'? addKeywordTag() : '');
 }
 //카테고리 표시 기능
-async function insertCategoryToCategorySelectBox(){
-  function insertCategory(value, nameCategory){
-      return `
-      <option value="${value}" class="notification is-primary is-light"> ${nameCategory} </option>
-      `
+async function createCategoryToCategorySelectBox() {
+  function createCategoryItem(value, nameCategory) {
+    return `
+      <option value="${nameCategory}" class="notification is-primary is-light"> ${nameCategory} </option>
+      `;
   }
-
-  try{
-    const data  = await Api.get('/api/categories');
+  try {
+    const data = await Api.get("/api/categories");
 
     categorySelectBox.insertAdjacentHTML(
-      'beforeend',
-      data.map(({_id, name}) => insertCategory(_id, name)).join(" ")
-    )
-  }catch(e){
+      "beforeend",
+      data.map(({ _id, name }) => createCategoryItem(_id, name)).join(" ")
+    );
+  } catch (e) {
     console.error(e.massage);
   }
 }
 //
-function addKeywordTag(){
-  const keyword = searchKeywordInput.value;
-  if(!keyword)return;
+function addKeywordTag() {
+  const keyword = addKeywordInput.value;
+  if (!keyword) return;
 
   const rand = randomId();
-  searchKeywordInput.value='';
+  addKeywordInput.value = "";
   keywordContainer.insertAdjacentHTML(
-    'beforeend',
+    "beforeend",
     `
     <div class="control" id="${rand}"
       <div class="tags has-addons">
@@ -92,12 +91,10 @@ function addKeywordTag(){
     </div>
     </div>
     `
-  )
+  );
   const control = document.getElementById(rand);
-  control.querySelector('a').addEventListener('click', ()=>control.remove());
-   
+  control.querySelector("a").addEventListener("click", () => control.remove());
 }
-
 
 //회원정보 수정 진행
 async function handlePatch(e) {
@@ -115,48 +112,47 @@ async function handlePatch(e) {
   const isInventoryValid = inventory > 0;
   const isPriceValid = price >= 1000;
   const isManufacturerValid = manufacturer.length >= 1;
-  const isShortDescriptionValid = shortDescription
-  const isDetailDescriptionValid = detailDescription
+  const isShortDescriptionValid = shortDescription;
 
-  // if(!isProductNameValid){
-  //   return alert("제품 이름을 입력해주세요.");
-  // }
-  // if(!categorySelect){
-  //   return alert("카테고리를 선택해주세요.")
-  // }
-  // if(!isInventoryValid){
-  //   return alert("재고 수량은 1 개 이상입니다.");
-  // }
-  // if(!isPriceValid){
-  //   return alert("1000원 이상 입력해주세요.");
-  // }
-  // if(!isManufacturerValid){
-  //   return alert("제조사를 입력해주세요.");
-  // }
-  const keyword = document.querySelectorAll('span.tag');
-  console.log(keyword);
-  const keywordArray = []
-  keyword.forEach(data => keywordArray.push(data.textContent));
-  // if(!isShortDescriptionValid){
-  //   return alert("제품에 대한 1~2문장의 설명을 적어주세요.")
-  // }
+  if (!isProductNameValid) {
+    return alert("제품 이름을 입력해주세요.");
+  }
+  if (!categorySelect) {
+    return alert("카테고리를 선택해주세요.");
+  }
+  if (!isInventoryValid) {
+    return alert("재고 수량은 1 개 이상입니다.");
+  }
+  if (!isPriceValid) {
+    return alert("1000원 이상 입력해주세요.");
+  }
+  if (!isManufacturerValid) {
+    return alert("제조사를 입력해주세요.");
+  }
+  if (!isShortDescriptionValid) {
+    return alert("제품에 대한 1~2문장의 설명을 적어주세요.");
+  }
+  const keyword = document.querySelectorAll("span.tag");
+
   const formData = new FormData();
-  formData.append('name', productName);
-  formData.append('price', price);
-  formData.append('category', categorySelect);
-  formData.append('briefDesc', shortDescription);
-  formData.append('fullDesc', detailDescription);
-  formData.append('manufacturer', manufacturer);
-  formData.append('stock', inventory);
-  formData.append('keyword', keywordArray);
-  formData.append('files',imagedata);
+  formData.append("name", productName);
+  formData.append("price", price);
+  formData.append("category", categorySelect);
+  formData.append("briefDesc", shortDescription);
+  formData.append("fullDesc", detailDescription);
+  formData.append("manufacturer", manufacturer);
+  formData.append("stock", inventory);
+  keyword.forEach((data) => formData.append("keyword", data.textContent));
+  formData.append("image", imagedata);
 
-  try{
-      // const result = Api.postMulti('/product', formData);
-      console.log(keywordArray);
-  }catch (err) {
+  try {
+    const result = await Api.postMulti("/api/products", formData);
+    if (result) {
+      alert("이미지가 업로드 됐습니다.");
+      location.reload();
+    }
+  } catch (err) {
     console.error(err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
   }
-    // alert(productName+" "+productText+" "+imagedata);
 }
