@@ -54,7 +54,7 @@ function App() {
     }
     // 상품 개수 감소
     if (e.target.classList.contains('decrease-item')) {
-      this.cart[itemId].count--;
+      this.cart[itemId].count > 1 ? this.cart[itemId].count-- : 0;
       store.setLocalStorage(this.cart);
       render();
     }
