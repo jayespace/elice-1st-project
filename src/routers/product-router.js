@@ -136,7 +136,7 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired,
   } = req.body;
 
   // 이름이 있을 경우 에러 발생
-  const isExist = await this.productModel.getProductByName(name);
+  const isExist = await productService.getProductByName(name);
   if (isExist) {
       throw new Error('이 이름으로 생성된 제품이 있습니다. 다른 이름을 지어주세요.');
   }
@@ -160,6 +160,7 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired,
     ...(keyword && { keyword }),
     ...(image && { image }),
   };
+ 
   // 상품 정보를 업데이트함.
   const updatedProductInfo = await productService.setProduct(productId, toUpdate);
 

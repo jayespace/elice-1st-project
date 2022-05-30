@@ -31,10 +31,21 @@ const OrderSchema = new Schema(
     messageTo: {
       type: String,
       required: false,
-      default: "배송메세지"
+      default: "배송메세지가 없습니다."
     },
-    orderedProducts: {
-      type: [String],
+      products: {
+      type: [new Schema(
+        {
+          product_id: {
+            type: Schema.Types.ObjectId,
+            ref: 'products'
+          },
+          qty: Number
+        },
+        {
+          _id: false,
+        }
+      )],
       requred: true
     },
     paymentMethod: {
@@ -51,6 +62,7 @@ const OrderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'csStatus',
       required: false,
+      default: "6294c4d492ea8f2aaccafad1"
     },
   },
   {

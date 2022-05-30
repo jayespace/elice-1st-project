@@ -44,7 +44,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     phoneNumberTo,
     addressTo,
     messageTo,
-    orderedProducts
+    products
   } = req.body;
 
   const newOrder = await orderService.addOrder(
@@ -54,45 +54,45 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
       phoneNumberTo,
       addressTo,
       messageTo,
-      orderedProducts
+      products
     });
   res.status(201).json(newOrder);
 }));
 
 
-// 로그인 후 admin일 경우 주문 정보 수정
-orderRouter.patch('/orders/:orderId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
+// // 로그인 후 admin일 경우 주문 정보 수정
+// orderRouter.patch('/orders/:orderId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
 
-  // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
-  if (is.emptyObject(req.body)) {
-    throw new Error(
-    'headers의 Content-Type을 application/json으로 설정해주세요'
-    );
-  }
+//   // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
+//   if (is.emptyObject(req.body)) {
+//     throw new Error(
+//     'headers의 Content-Type을 application/json으로 설정해주세요'
+//     );
+//   }
 
-  const { orderId } = req.params;
-  const {
-    fullNameTo,
-    phoneNumberTo,
-    addressTo,
-    messageTo,
-    orderedProducts
-  } = req.body;
+//   const { orderId } = req.params;
+//   const {
+//     fullNameTo,
+//     phoneNumberTo,
+//     addressTo,
+//     messageTo,
+//     products
+//   } = req.body;
 
-  // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
-  // 보내주었다면, 업데이트용 객체에 삽입함.
-  const toUpdate = {
-    ...(fullNameTo && { fullNameTo }),
-    ...(phoneNumberTo && { phoneNumberTo }),
-    ...(addressTo && { addressTo }),
-    ...(messageTo && { messageTo }),
-    ...(orderedProducts && { orderedProducts })
-  };
-  // 상품 정보를 업데이트함.
-  const updatedorderInfo = await orderService.setOrder(orderId, toUpdate);
+//   // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
+//   // 보내주었다면, 업데이트용 객체에 삽입함.
+//   const toUpdate = {
+//     ...(fullNameTo && { fullNameTo }),
+//     ...(phoneNumberTo && { phoneNumberTo }),
+//     ...(addressTo && { addressTo }),
+//     ...(messageTo && { messageTo }),
+//     ...(products && { products })
+//   };
+//   // 상품 정보를 업데이트함.
+//   const updatedorderInfo = await orderService.setOrder(orderId, toUpdate);
 
-  // 업데이트 이후의 데이터를 프론트에 보내 줌
-  res.status(200).json(updatedorderInfo);
-}));
+//   // 업데이트 이후의 데이터를 프론트에 보내 줌
+//   res.status(200).json(updatedorderInfo);
+// }));
 
 export { orderRouter };

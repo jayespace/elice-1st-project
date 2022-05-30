@@ -143,7 +143,6 @@ class ProductService {
     return productList;
   }
 
-
   //// id로 상품 상세정보 확인
   async getProductDetail(productId) {
     const detail = await this.productModel.findById(productId);
@@ -266,6 +265,30 @@ class ProductService {
     
     return product;
   }
+
+  /// id로 정보조회
+  async getDetail(productId) {
+    const product = await this.productModel.findById(productId);
+    return product;
+  }
+
+  /// 주문 들어올 경우 재고 수정
+  async modifyStock(productId, orderedQty) {
+    let product = await this.productModel.findById(productId);
+    const { stock } = product;
+    const qty = orderedQty
+    const toUpdate = {
+      stock: stock-qty
+    }
+
+    product = await this.productModel.update({
+      productId,
+      update: toUpdate,
+    });
+
+    return product.stock;
+  }
+
 };
 
 

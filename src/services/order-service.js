@@ -1,11 +1,13 @@
 import { orderModel } from '../db';
 import { userService } from './user-service';
+import { productService } from './product-service';
 
 class OrderService {
 
   constructor(orderModel) {
     this.orderModel = orderModel;
     this.userService = userService;
+    this.productService = productService;
   }
 
   // 전체 주문 갯수 확인
@@ -100,7 +102,32 @@ class OrderService {
       email
     }
 
-    const returnOrder = [userInfo, order]
+    /// orderedProducts의 정보로 제품 정보 가공
+    const orderedProducts = order.products;
+    let productInfo = [];
+    for(let i = 0; i < orderedProducts.length; i++) {
+      const order_product_id = orderedProducts[i].product_id.valueOf();
+      const orderQty = orderedProducts[i].qty
+
+      // product_id로 product 정보를 가져와서 주문정보 array에 담음
+      const product = await this.productService.getDetail(order_product_id);
+      const {
+        name,
+        price
+      } = product;
+    
+      const modifiedProduct = {
+        name,
+        price,
+        qty: orderQty,
+        totalPrice: price * orderQty
+      }
+
+      productInfo.push(modifiedProduct)
+    }
+
+    /// 유저, 주문, 제품 정보 담아서 return
+    const returnOrder = [userInfo, productInfo, order]
     return returnOrder;
   }
 
@@ -113,7 +140,7 @@ class OrderService {
       phoneNumberTo,
       addressTo,
       messageTo,
-      orderedProducts 
+      products 
     } = orderInfo;
 
     const neworderInfo = {
@@ -122,13 +149,13 @@ class OrderService {
       phoneNumberTo,
       addressTo,
       messageTo,
-      orderedProducts 
+      products 
     };
     
-    // db에 저장
+    // db에 주문 정보 저장
     const newOrder = await this.orderModel.create(neworderInfo);
 
-    // user_id로 user 정보를 가져와서 주문정보와 연결
+    // user_id로 user 정보를 가져와서 가공
     const user = await this.userService.getUser(user_id);
     const {
       fullName,
@@ -141,30 +168,57 @@ class OrderService {
       email
     }
 
-    const returnOrder = [userInfo, newOrder]
+    /// orderedProducts의 정보로 제품 정보 가공
+    let productInfo = [];
+    for(let i = 0; i < products.length; i++) {
+      const product_id = products[i].product_id
+      const orderQty = products[i].qty
+
+      /// db의 재고 수정
+      const stock = await this.productService.modifyStock(product_id, orderQty);
+
+      // product_id로 product 정보를 가져와서 주문정보 array에 담음
+      const product = await this.productService.getDetail(product_id);
+      const {
+        name,
+        price
+      } = product;
+    
+      const modifiedProduct = {
+        name,
+        price,
+        qty: orderQty,
+        totalPrice: price * orderQty
+      }
+
+      productInfo.push(modifiedProduct)
+    }
+
+    /// 유저, 주문, 제품 정보 담아서 return
+    const returnOrder = [userInfo, productInfo, newOrder,]
     return returnOrder;
   }
 
-  // 주문 정보 수정
-  async setOrder(orderId, toUpdate) {
-    let order = await this.orderModel.findById(orderId);
+  // // 주문 정보 수정
+  // async setOrder(orderId, toUpdate) {
+  //   let order = await this.orderModel.findById(orderId);
 
-    if (!order) {
-      throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+  //   if (!order) {
+  //     throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
+  //   }
     
-    order = await this.orderModel.update(
-      {
-        orderId,
-        update: toUpdate,
-      }
-    );
+  //   order = await this.orderModel.update(
+  //     {
+  //       orderId,
+  //       update: toUpdate,
+  //     }
+  //   );
 
-    return order;
-  }
+  //   return order;
+  // }
 };
 
 
-const orderService = new OrderService(orderModel, userService);
+const orderService = new OrderService(orderModel, userService, productService);
 
 export { orderService };
