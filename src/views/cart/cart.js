@@ -16,9 +16,8 @@ function App() {
 
   // 스토리지에서 카트 리스트 불러오기
   this.init = () => {
-    if (store.getLocalStorage().length > 1) {
+    if (store.getLocalStorage().length > 0) {
       this.cart = store.getLocalStorage();
-      console.log(this.cart);
     }
     render();
   };
