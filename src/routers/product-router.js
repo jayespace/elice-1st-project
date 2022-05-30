@@ -52,18 +52,18 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
     }
     
 
-//     const totalPage = Math.ceil(totalProducts / perPage);
+    const totalPage = Math.ceil(totalProducts / perPage);
 
-//     // 페이지에 표시할 제품 상세 목록, 페이지 번호, 한 페이지에 표시할 수량, 총 페이지 수, 전체 제품 수량 반환
-//     res.status(200).json({
-//         products,
-//         page,
-//         perPage,
-//         totalPage,
-//         totalProducts
-//         }
-//     );
-// }));
+    // 페이지에 표시할 제품 상세 목록, 페이지 번호, 한 페이지에 표시할 수량, 총 페이지 수, 전체 제품 수량 반환
+    res.status(200).json({
+        products,
+        page,
+        perPage,
+        totalPage,
+        totalProducts
+        }
+    );
+}));
 
 
 // 로그인 후 admin일 경우 상품 추가
