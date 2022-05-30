@@ -56,7 +56,11 @@ addbtn.addEventListener("click",()=>{
     } 
     if(!getItem instanceof Array){
       getItem = [getItem];
+      
     }
+
+    getItem = getItem.filter(a=>a._id !== objectId);
+
     getItem.push(get);
     
     window.localStorage.setItem("cart",JSON.stringify(getItem));
