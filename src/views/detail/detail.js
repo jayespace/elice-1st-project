@@ -41,41 +41,27 @@ async function addAllElements() {
 }
 function addAllEvents() {
 }
-// let a = [];
+
 const addbtn = document.querySelector('.buttons-container');
 addbtn.addEventListener("click",()=>{
-    // a.push(JSON.stringify(get));
-    let getItem = window.localStorage.getItem("cart");
+  get.count = 1; //상품 정보
+   
+    let getItem = JSON.parse(window.localStorage.getItem("cart"));
     let objectId = get._id;
-    let a =JSON.stringify(get);
 
     console.log(getItem);
 
     if(getItem === null){
         getItem = [];
     } 
-    else{
-
-        // getItem = getItem.split("||");
-        var result = getItem.filter((item1, idx1)=>{
-            return arr.findIndex((item2, idx2)=>{
-                return item1.id == item2.id;
-            }) == idx1;
-        });
-       
+    if(!getItem instanceof Array){
+      getItem = [getItem];
     }
-    getItem.push(a);
+    getItem.push(get);
     
-    
-    window.localStorage.setItem("cart",getItem.join("||"));
-    
-
+    window.localStorage.setItem("cart",JSON.stringify(getItem));
+  
     console.log(getItem);
-    // getItem.push(JSON.stringify(get));
-
-    
-    
-   
 })
 /**************여기 밑에 함수(function)을 입력해주세요***************/
 function insertHTMLToDetail(a){
