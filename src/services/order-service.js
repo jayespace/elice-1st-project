@@ -10,7 +10,7 @@ class OrderService {
     this.productService = productService;
   }
 
-  // 전체 주문 갯수 확인
+  // 1. 전체 주문 갯수 확인
   async countTotalOrders() {
     const total = await this.orderModel.countOrders();
 
@@ -20,7 +20,7 @@ class OrderService {
     return total;
   }
 
-  // 전체 주문 목록 확인
+  // 2. 전체 주문 목록 확인
   async getOrders() {
     const orders = await this.orderModel.findAll();
 
@@ -44,13 +44,41 @@ class OrderService {
         phoneNumber,
         email
       }
-      returnOrders.push([userInfo, orders[i]])
+      // **** 유저 정보 가공 끝 ***
+
+      /// orderedProducts의 정보로 제품 정보 가공
+      let productInfo = [];
+      const orderedProducts = orders[i].products;
+
+      for(let i = 0; i < orderedProducts.length; i++) {
+        const order_product_id = orderedProducts[i].product_id.valueOf();
+        const orderQty = orderedProducts[i].qty
+
+        // product_id로 product 정보를 가져와서 주문정보 array에 담음
+        const product = await this.productService.getDetail(order_product_id);
+        const {
+          name,
+          price
+        } = product;
+      
+        const modifiedProduct = {
+          name,
+          price,
+          qty: orderQty,
+          totalPrice: price * orderQty
+        }
+        productInfo.push(modifiedProduct)
+      }
+      // ***** 제품 가공 끝 ************
+
+
+      returnOrders.push([userInfo, productInfo, orders[i]])
     }
 
     return returnOrders;
   }
 
-  // 유저의 전체 주문 목록 확인
+  // 3. 유저의 전체 주문 목록 확인
   async getOrdersByUser(userId) {
     const orders = await this.orderModel.findByUser(userId);
 
@@ -61,8 +89,8 @@ class OrderService {
     /// db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
-      const order_user_id = orders[i].user_id.valueOf();
 
+      const order_user_id = orders[i].user_id.valueOf();
       const user = await this.userService.getUser(order_user_id);
       const {
         fullName,
@@ -74,13 +102,41 @@ class OrderService {
         phoneNumber,
         email
       }
-      returnOrders.push([userInfo, orders[i]])
+      ////*** 유저정보 가공 끝 ******
+
+      /// orderedProducts의 정보로 제품 정보 가공
+      let productInfo = [];
+      const orderedProducts = orders[i].products;
+
+      for(let i = 0; i < orderedProducts.length; i++) {
+        const order_product_id = orderedProducts[i].product_id.valueOf();
+        const orderQty = orderedProducts[i].qty
+
+        // product_id로 product 정보를 가져와서 주문정보 array에 담음
+        const product = await this.productService.getDetail(order_product_id);
+        const {
+          name,
+          price
+        } = product;
+      
+        const modifiedProduct = {
+          name,
+          price,
+          qty: orderQty,
+          totalPrice: price * orderQty
+        }
+        productInfo.push(modifiedProduct)
+      }
+      // ***** 제품 가공 끝 *****************
+
+      /// 가공된 데이터 반환
+      returnOrders.push(userInfo, productInfo, orders[i]);
     }
 
     return returnOrders;
   }
 
-  // 주문 상세정보 확인
+  // 4. 주문 상세정보 확인
   async getOrder(orderId) {
     const order = await this.orderModel.findById(orderId);
 
@@ -125,13 +181,14 @@ class OrderService {
 
       productInfo.push(modifiedProduct)
     }
+    // ***** 제품 가공 끝 *****************
 
     /// 유저, 주문, 제품 정보 담아서 return
     const returnOrder = [userInfo, productInfo, order]
     return returnOrder;
   }
 
-  // 주문 추가
+  // 5. 주문 추가
   async addOrder(orderInfo) {
 
     let {
@@ -168,7 +225,7 @@ class OrderService {
       email
     }
 
-    /// orderedProducts의 정보로 제품 정보 가공
+    /// 주문한 제품의 id로 제품 정보 가공
     let productInfo = [];
     for(let i = 0; i < products.length; i++) {
       const product_id = products[i].product_id
@@ -193,13 +250,14 @@ class OrderService {
 
       productInfo.push(modifiedProduct)
     }
+    // ***** 제품 가공 끝 *****************
 
     /// 유저, 주문, 제품 정보 담아서 return
     const returnOrder = [userInfo, productInfo, newOrder,]
     return returnOrder;
   }
 
-  // // 주문 정보 수정
+  // // 6. 주문 정보 수정
   // async setOrder(orderId, toUpdate) {
   //   let order = await this.orderModel.findById(orderId);
 
