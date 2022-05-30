@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>쇼핑-n팀</title>
+    <!-- 아이콘 -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/elice-rabbit-favicon.png"
+    />
+    <!-- bulma css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+      defer
+      src="https://kit.fontawesome.com/7630448495.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="account.css" />
+    <script src="../common/landing.js" type="module" defer></script>
+  </head>
+  <body>
+    <!-- header -->
+    <header id="header"></header>
+
+    <!-- contents -->
+    <main id="main" role="main">
+        
+
+    <!---계정관리 목록 -->
+    <section>
+        <div class="container">
+            <div class="container">
+                <h1>Bootstrap Table</h1>
+                <p> Mémo pour les options du Bootstrap Table : <a href="http://bootstrap-table.wenzhixin.net.cn/documentation/">Bootstrap Table Documentation</a></p>
+                <p>Eléments de Bootstrap Table utilisés : <a href="http://jsfiddle.net/wenyi/e3nk137y/3178/">Data Checkbox</a>, pour cocher les éléments à sélectionner, <a href="https://github.com/wenzhixin/bootstrap-table-examples/blob/master/extensions/filter-control.html">extension Filter control</a>, pour les filtres via les colonnes, <a href="https://github.com/kayalshri/tableExport.jquery.plugin">extension Data export</a> pour exporter</p>
+                
+                <div id="toolbar">
+                        <select class="form-control">
+                                <option value="">Export Basic</option>
+                                <option value="all">Export All</option>
+                                <option value="selected">Export Selected</option>
+                        </select>
+                </div>
+                
+                <table id="table" 
+                             data-toggle="table"
+                             data-search="true"
+                             data-filter-control="true" 
+                             data-show-export="true"
+                             data-click-to-select="true"
+                             data-toolbar="#toolbar">
+                    <thead>
+                        <tr>
+                            <th data-field="state" data-checkbox="true"></th>
+                            <th data-field="prenom" data-filter-control="input" data-sortable="true">Prénom</th>
+                            <th data-field="date" data-filter-control="select" data-sortable="true">Date</th>
+                            <th data-field="examen" data-filter-control="select" data-sortable="true">Examen</th>
+                            <th data-field="note" data-sortable="true">Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+                            <td>Valérie</td>
+                            <td>01/09/2015</td>
+                            <td>Français</td>
+                            <td>12/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="1" name="btSelectItem" type="checkbox"></td>
+                            <td>Eric</td>
+                            <td>05/09/2015</td>
+                            <td>Philosophie</td>
+                            <td>8/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="2" name="btSelectItem" type="checkbox"></td>
+                            <td>Valentin</td>
+                            <td>05/09/2015</td>
+                            <td>Philosophie</td>
+                            <td>4/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="3" name="btSelectItem" type="checkbox"></td>
+                            <td>Valérie</td>
+                            <td>05/09/2015</td>
+                            <td>Philosophie</td>
+                            <td>10/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="4" name="btSelectItem" type="checkbox"></td>
+                            <td>Eric</td>
+                            <td>01/09/2015</td>
+                            <td>Français</td>
+                            <td>14/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="5" name="btSelectItem" type="checkbox"></td>
+                            <td>Valérie</td>
+                            <td>07/09/2015</td>
+                            <td>Mathématiques</td>
+                            <td>19/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="6" name="btSelectItem" type="checkbox"></td>
+                            <td>Valentin</td>
+                            <td>01/09/2015</td>
+                            <td>Français</td>
+                            <td>11/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="7" name="btSelectItem" type="checkbox"></td>
+                            <td>Eric</td>
+                            <td>01/10/2015</td>
+                            <td>Philosophie</td>
+                            <td>8/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="8" name="btSelectItem" type="checkbox"></td>
+                            <td>Valentin</td>
+                            <td>07/09/2015</td>
+                            <td>Mathématiques</td>
+                            <td>14/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="9" name="btSelectItem" type="checkbox"></td>
+                            <td>Valérie</td>
+                            <td>01/10/2015</td>
+                            <td>Philosophie</td>
+                            <td>12/20</td>
+                        </tr>
+                        <tr>
+                            <td class="bs-checkbox "><input data-index="10" name="btSelectItem" type="checkbox"></td>
+                            <td>Eric</td>
+                            <td>07/09/2015</td>
+                            <td>Mathématiques</td>
+                            <td>14/20</td>
+                        </tr>
+                        <tr>
+                        <td class="bs-checkbox "><input data-index="11" name="btSelectItem" type="checkbox"></td>
+                            <td>Valentin</td>
+                            <td>01/10/2015</td>
+                            <td>Philosophie</td>
+                            <td>10/20</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+        </div>
+
+    </section>
+
+
+    </main>
+
+    <!-- footer -->
+    <footer id="footer"></footer>
+  </body>
+</html>
