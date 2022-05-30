@@ -15,6 +15,7 @@ async function getDataFromApi() {
 
 /**************여기 밑에 함수(function)을 입력해주세요***************/
 function insertHTMLToList(product) {
+  let price = (product.price).toLocaleString('en');
   list.insertAdjacentHTML(
     'beforeend',
     `
@@ -24,7 +25,7 @@ function insertHTMLToList(product) {
         </div>
         <div class="content">
           <h2 class="name" id="pname">${product.name}</h2>
-          <p class="price" id="pprice">${product.price}원</p>
+          <p class="price" id="pprice">${price}원</p>
         </div>
       </div>
     `
