@@ -6,7 +6,7 @@
     outline: none
 }
 body{
-    background-color: #F5F5F5;
+    /* background-color: #F5F5F5; */
 }
 
 /* 상품 상세 */
@@ -19,22 +19,29 @@ body{
 
 /* 좌측 이미지 */
 .product-image{
-    flex-basis: 50%;
+    /* flex-basis: 60%; */
+    order: 1;
+    flex: 0 60%;
 }
 .product-image img{
     border: 1px solid #eee;
     border-radius: 15px;
     text-align: center;
-    width: 500px;
+    width: 700px;
 }
 
 /* 우측 설명 */
 .product-detail-contents{
-    flex-basis: 50%;
-    background-color: #eee;
+    order:2;
+    flex: 0 40%;
+    flex-direction: column;
+    /* flex-basis: 40%;
+    order:2; */
+    /* background-color: #eee; */
 }
 .product-detail-contents .info{
-    padding: 50px 50px 0 50px;
+    flex-grow: 8;
+    padding: 0px 50px 0 50px;
 }
 .product-detail-contents .info .name{
     font-size: 25px;
@@ -44,12 +51,21 @@ body{
     font-size: 30px;
     font-weight: bold;
     padding-top: 30px;
+    padding-bottom: 100px;
 }
-.product-detail-contents .info .description{
+
+.product-detail-contents .info .briefDesc{
+    font-weight: bold;
     font-size: 20px;
-    padding-top: 100px;
-    padding-bottom: 130px;
+    padding-bottom: 20px;
 }
+
+.product-detail-contents .info .fullDesc{
+    font-size: 20px;
+    padding-bottom: 20px;
+    line-height: 150%;
+}
+
 .product-detail-contents .info .selected{
     border-radius: 5px;
     background-color: #F5F5F5;
@@ -58,16 +74,9 @@ body{
     align-items: center;
     padding: 0 20px;
     margin-bottom: 20px;
+    margin-top: 70px;
 }
-.product-detail-contents .info .buttons-container{
-    border-radius: 5px;
-    background-color: #F5F5F5;
-    height: 100px;
-    justify-content: center;
-    align-items: center;
-    padding: 0 20px;
-    margin-bottom: 20px;
-}
+
 .product-detail-contents .info .select-qty{
     font-size: 20px;
     float: left; /* 나중에 clear해주기 */
@@ -88,17 +97,21 @@ body{
 }
 
 /* 장바구니 / 바로구매 버튼 */
-.buttons-container {
-    /* flex-grow: 0;  */
-    display: flex; 
+.product-detail .buttons-container{
+    flex-grow: 1;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
     height: 100px;
-}  
-.buttons-container .buttons {
-    margin: 0 50px;
-    width: 100%;
-    height: 100px;
+    padding: 50px 50px 0 50px;
+    /* padding: 0 20px; */
+    /* margin-bottom: 20px; */
 }
-.buttons-container button {
+.product-detail .buttons-container .buttons {
+    width: 100%;
+    height: 100%;
+}
+.product-detail .buttons-container button {
     border-radius: 5px;
     border: 1px solid #eee;
     background-color: #F5F5F5;
@@ -109,10 +122,12 @@ body{
     font-weight: 200;
     cursor: pointer;
 }
-.buttons-container button:hover {
+.product-detail .buttons-container button:hover {
     border: 1px solid rgb(203, 196, 196);
     background-color: rgb(204, 198, 198);
 }
+
+
 
 @media only screen and (max-width: 500px) {
     .product-detail .buttons-container button {

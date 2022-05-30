@@ -36,24 +36,27 @@
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
 }
-.product img{
-    height: 300px;
-    width: 450px;
+
+.content {
+    display: flex;
+    flex-direction: column;
 }
-.name{
+#pname{
+    font-size: 15px;
       font-weight: bold;
       text-align: center;
       margin-top: 20px;
 }
-.name:hover{
+#pname:hover{
     opacity: .8;
 }
-.price{
+#pprice{
+  
     font-weight: bold;
     text-align: center;
     margin-top: 8px;
 }
-.price span{
+#pprice span{
      font-weight: bold; 
     color:crimson;
     text-align: center;

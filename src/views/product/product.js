@@ -5,66 +5,75 @@ import * as Api from '../api.js'; //api.js에서 쉽게 Post, Get을 가져올 �
 // const landingDiv = document.querySelector('#landingDiv');
 // const greetingDiv = document.querySelector('#greetingDiv');
 const list = document.querySelector(".product-list");
+
 // addAllElements(); //addAllElements 실행한데요
 // addAllEvents(); //addAllEvents 도 실행합니다.
 getDataFromApi();
-
 async function getDataFromApi() {
   // 예시 URI입니다. 현재 주어진 프로젝트 코드에는 없는 URI입니다.
-  
   const data = await Api.get('/api/products');
   const arr = data.products;
   console.log(data.products);
+  console.log(data.products[0]._id);
 
   arr.map((a)=>{
-      list.insertAdjacentHTML('beforeend',
-        `<div class="product">
-          <div class="img">
-          <img src="${a.image}" alt="상품이미지">
-          </div>
-          <div class="content">
-            <h2 class="name">${a.name}</h2>
-            <p class="price">${a.price}원</p>
-          </div></div>
-        `
-      )  
+      insertHTMLToList(a);
   });
+
+  // addAllEvents();
 }
+addAllEvents();
 // html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllElements() {
 //   insertTextToLanding();
 //   insertTextToGreeting();
 }
-
+// const child = document.querySelector(".product-list").children[0];
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 // 더 설명드리면 addEventListener 를 쓰는 문법? 문장 들을 넣어주면 될꺼에요
 function addAllEvents() {
-//   landingDiv.addEventListener('click', alertLandingText);
-//   greetingDiv.addEventListener('click', alertGreetingText);
 }
 
 
 /**************여기 밑에 함수(function)을 입력해주세요***************/
-function insertName(){
-  
-}
-function insertTextToLanding() {
-  landingDiv.insertAdjacentHTML(
+function insertHTMLToList(a){
+  list.insertAdjacentHTML(
     'beforeend',
     `
-      <h2>n팀 쇼핑몰의 랜딩 페이지입니다. 자바스크립트 파일에서 삽입되었습니다.</h2>
+      <div class="product" id="${a._id}">
+        <div class="img">
+          <img src="${a.image}" alt="상품이미지">
+        </div>
+        <div class="content">
+          <h2 class="name" id="pname">${a.name}</h2>
+          <p class="price" id="pprice">${a.price}원</p>
+        </div>
+      </div>
     `
   );
+
+  var url;
+  const id = document.getElementById(a._id);
+  // (url= `/detail?id=${a._id}`
+ 
+ 
+  id.querySelector('div').addEventListener('click',(url= `/detail?id=${a._id}` ,
+  function(){
+    // alert(a._id); //해당 id를 url에 붙여서 넘겨주고, 이를 받아오기...
+    window.location.href = url;
+  }
+  ))
+ 
 }
 
-function insertTextToGreeting() {
-  greetingDiv.insertAdjacentHTML(
-    'beforeend',
-    `
-      <h1>반갑습니다! 자바스크립트 파일에서 삽입되었습니다.</h1>
-    `
-  );
-}
+// function serialize(obj) {
+//   var str = [];
+//   for (var p in obj)
+//     if (obj.hasOwnProperty(p)) {
+//       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+//     }
+//   return str.join("&");
+// }
 
 function alertLandingText() {
   alert('n팀 쇼핑몰입니다. 안녕하세요.');
@@ -73,10 +82,3 @@ function alertLandingText() {
 function alertGreetingText() {
   alert('n팀 쇼핑몰에 오신 것을 환영합니다');
 }
-//일단 시작으로는
-//Api.get('/api/products') 를 통해 들어오는 데이터를 확인해보세요
-// console.log(data); 를 입력하면 확인할 수 있어요.
-
-//지금 프로젝트는 sessionStorage를 사용해요
-
-//정말정말 모르시겠다면 1. front-merge 구동시키고 2. 로그인하고  3. 크롬 F12 => console 에서  sessionStorage를 입력해보세요 그럼 값이 보일겁니다.
