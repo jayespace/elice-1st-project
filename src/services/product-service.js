@@ -183,6 +183,10 @@ class ProductService {
     return products;
   }
 
+  async getProductByName(name) {
+    const product = await this.productModel.findByName(name);
+    return product;
+  }
 
   //// 상품 추가
   async addProduct(productInfo) {

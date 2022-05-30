@@ -10,7 +10,7 @@ class CategoryService {
     const total = await this.categoryModel.countCategories();
 
     if (total < 1) {
-        throw new Error('카테고리가 없습니다.');
+      throw new Error('카테고리가 없습니다.');
     }
     return total;
   }
@@ -33,6 +33,11 @@ class CategoryService {
       throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
 
+    return category;
+  }
+
+  async getCategoryByName(name) {
+    const category = await this.categoryModel.findByName(name);
     return category;
   }
 
@@ -67,7 +72,7 @@ class CategoryService {
 
     const isExist = await this.categoryModel.findByName(name);
     if (isExist) {
-        throw new Error('이 이름으로 생성된 카테고리가 있습니다. 다른 이름을 지어주세요.');
+      throw new Error('이 이름으로 생성된 카테고리가 있습니다. 다른 이름을 지어주세요.');
     }
     const newCategoryInfo = { name, desc };
     // db에 저장
@@ -80,7 +85,7 @@ class CategoryService {
     let category = await this.categoryModel.findById(categoryId);
 
     if (!category) {
-        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     
     category = await this.categoryModel.update({
@@ -96,7 +101,7 @@ class CategoryService {
     let category = await this.categoryModel.findById(categoryId);
 
     if (!category) {
-        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     await this.categoryModel.delete(categoryId);
     return '삭제가 완료되었습니다';

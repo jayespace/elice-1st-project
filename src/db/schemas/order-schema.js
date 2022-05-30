@@ -1,48 +1,62 @@
 import { Schema } from 'mongoose';
 
-const OrderSchema = new Schema({
+const OrderSchema = new Schema(
+  {
     user_id: {
-        type: Schema.Types.ObjectId,
-        ref: "users",
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true
     },
-    delivery_fullName: {
-        type: String,
-        required: true
+    fullNameTo: {
+      type: String,
+      required: true
     },
-    delivery_phoneNumber: {
-        type: String,
-        required: true
+    phoneNumberTo: {
+      type: String,
+      required: true
     },
-    delivery_address: {
-        type: new Schema(
-          {
-            postalCode: String,
-            address1: String,
-            address2: String,
-          },
-          {
-            _id: false,
-          }
-        ),
-        required: false,
+    addressTo: {
+      type: new Schema(
+        {
+          postalCode: String,
+          address1: String,
+          address2: String,
+        },
+        {
+          _id: false,
+        }
+      ),
+      required: false,
     },
-    delivery_message: {
-        type: String,
-        required: true
+    messageTo: {
+      type: String,
+      required: false,
+      default: "배송메세지"
     },
     orderedProducts: {
-        type: [String],
-        requred: true
+      type: [String],
+      requred: true
     },
     paymentMethod: {
-        type: String,
-        required: false
-    }
-}, {
+      type: String,
+      required: false
+    },
+    orderStatus: {
+      type: Schema.Types.ObjectId,
+      ref: 'orderStatus',
+      required: false,
+      default: "62934a2d1b49d68d742a7dca"
+    },
+    csStatus: {
+      type: Schema.Types.ObjectId,
+      ref: 'csStatus',
+      required: false,
+    },
+  },
+  {
     collection: 'orders',
     timestamps: true,
-}
+  }
 );
 
 export { OrderSchema };
