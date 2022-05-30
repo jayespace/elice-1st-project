@@ -1,5 +1,3 @@
-import * as Api from '/api.js';
-
 const $ = (selector) => document.querySelector(selector);
 
 // 스토리지
@@ -32,6 +30,7 @@ function App() {
         return `
           <li data-item-id="${index}" class="cart-list-item">
             ${item.name}
+            <input type="checkbox" name="" id="${index}" />
             <button class="decrease-item"> - </button>
             <span class="menu-count">${item.count}</span>
             <button class="increase-item"> + </button>
