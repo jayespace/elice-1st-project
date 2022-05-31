@@ -96,7 +96,7 @@ class CsStatusService {
   }
 
   // *** CS Status와 Order Status 체크하여 ID 반환 ****
-  async checkCsStatus(csStatusId, orderStatusId) {
+  async adjustStatus(csStatusId, orderStatusId) {
 
     let currentCsStatusId = csStatusId;
     let currentOrderStatusId = orderStatusId;
@@ -113,7 +113,7 @@ class CsStatusService {
 
     if (csStatusName === ("교환요청" || "반품요청")) {
       if(orderStatusName !== ("배송중" || "배송완료")) {
-        throw new Error ('현재 주문 상태를 확인해주세요');
+        throw new Error ('현재 주문 상태를 다시 한번 확인해 주세요.'); 
       }
     }
     //// Cs Status가 "정상"인 cs status id 값
@@ -122,12 +122,20 @@ class CsStatusService {
     const cancelconfirmedorderStatusId = "629590e888e88a5137884dd8"
 
     /// 유저는 결제완료일때만 취소요청 할 시 order Status를 취소완료로 변경할 수 있음
-    if (csStatusName === "취소요청" || orderStatusName === '결제완료') {
+    if (csStatusName === "취소요청" ){
+      if (orderStatusName === '결제완료') {
       currentCsStatusId = defaultCsStatusId;
       currentOrderStatusId = cancelconfirmedorderStatusId;
-    }
+      } else if (orderStatusName !== '상품준비중'){
+          throw new Error ('현재 주문 상태에서는 주문을 취소할 수 없습니다.')
+      }
+    } 
     
-    return ([currentCsStatusId, currentOrderStatusId]);
+    const statusinfo = {
+      orderStatus: currentOrderStatusId,
+      csStatus: currentCsStatusId
+    }
+    return statusinfo;
   };
 
 };

@@ -347,10 +347,75 @@ class OrderService {
       }
     );
 
-    return order;
-  }
+    //// cs status & order status 이름 반환 작업
+    const order_csStatus_id = order.orderStatus.valueOf();
+    const cs_csStatus_id = order.csStatus.valueOf();
+    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
+    const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
 
-  /// 7. order id로 검색하여 orderStatus 이름 찾기
+    const statusInfo = {
+      orderStatus: orderStatusName,
+      csStatus: csStatusName
+    };
+    ///////****** status 가공 끝 */
+
+    /// db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
+    const order_user_id = order.user_id.valueOf();
+    const user = await this.userService.getUser(order_user_id);
+    const {
+      fullName,
+      phoneNumber,
+      email } = user;
+
+    const userInfo = {
+      fullName,
+      phoneNumber,
+      email
+    }
+
+    /// orderedProducts의 정보로 제품 정보 가공
+    const orderedProducts = order.products;
+    let productInfo = [];
+    for(let i = 0; i < orderedProducts.length; i++) {
+      const order_product_id = orderedProducts[i].product_id.valueOf();
+      const orderQty = orderedProducts[i].qty
+
+      /// 만약 orderStatus가 취소완료일 경우 db의 재고 수정
+      if (orderStatusName === "취소완료") {
+        const modifyQty = -Math.abs(orderQty);
+        const stock = await this.productService.modifyStock(order_product_id, modifyQty);
+      }
+
+      // product_id로 product 정보를 가져와서 주문정보 array에 담음
+      const product = await this.productService.getDetail(order_product_id);
+      const {
+        name,
+        price
+      } = product;
+    
+      const modifiedProduct = {
+        name,
+        price,
+        qty: orderQty,
+        totalPrice: price * orderQty
+      }
+
+      productInfo.push(modifiedProduct);
+    }
+    // ***** 제품 가공 끝 *****************
+
+    /// 유저, 주문, 제품 정보 담아서 return
+    const returnOrder = {
+      orderInfo: order,
+      userInfo,
+      productInfo,
+      statusInfo
+    };
+
+    return returnOrder;
+  };
+
+  /// 7. order id로 검색하여 orderStatus id, name 찾기
   async getCurrentOrderStatus(orderId) {
     let order = await this.orderModel.findById(orderId);
 
@@ -360,10 +425,16 @@ class OrderService {
 
     const order_orderStatus_id = order.orderStatus.valueOf();
     const orderStatusName = await this.orderStatusService.getOrderStatusName(order_orderStatus_id);
-    return orderStatusName;
+
+    const orderStatusinfo = {
+      id: order_orderStatus_id,
+      name: orderStatusName
+    }
+    return orderStatusinfo;
   }
 
-    /// 8. order id로 검색하여 csStatus 이름 찾기
+
+    /// 8. order id로 검색하여 csStatus orderStatus id, name 찾기
     async getCurrentCsStatus(orderId) {
       let order = await this.orderModel.findById(orderId);
   
@@ -373,7 +444,12 @@ class OrderService {
   
       const order_csStatus_id = order.csStatus.valueOf();
       const csStatusName = await this.csStatusService.getCsStatusName(order_csStatus_id);
-      return csStatusName;
+
+      const csStatusinfo = {
+        id: order_csStatus_id,
+        name: csStatusName
+      }
+      return csStatusinfo;
     }
 
     //// 9. 특정 주문의 userId 반환
@@ -387,7 +463,6 @@ class OrderService {
       const order_user_id = order.user_id.valueOf();
       return order_user_id;
     }
-
 
 };
 
