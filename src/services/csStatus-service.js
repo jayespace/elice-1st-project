@@ -37,7 +37,7 @@ class CsStatusService {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
 
-    const csStatusId = csStatus._id;
+    const csStatusId = csStatus._id.valueOf();
     return csStatusId;
   }
 

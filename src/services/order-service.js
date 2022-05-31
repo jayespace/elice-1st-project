@@ -75,8 +75,25 @@ class OrderService {
       }
       // ***** 제품 가공 끝 ************
 
+      //// cs status & order status 이름 반환 작업
+      const order_csStatus_id = orders[i].orderStatus.valueOf();
+      const cs_csStatus_id = orders[i].csStatus.valueOf();
+      const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
+      const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
 
-      returnOrders.push([userInfo, productInfo, orders[i]])
+      const statusInfo = {
+        orderStatus: orderStatusName,
+        csStatus: csStatusName
+      };
+      ///////****** status 가공 끝 */
+      const returnOrder = {
+        orderInfo: orders[i],
+        userInfo,
+        productInfo,
+        statusInfo
+      };
+
+      returnOrders.push(returnOrder)
     }
 
     return returnOrders;
@@ -133,8 +150,26 @@ class OrderService {
       }
       // ***** 제품 가공 끝 *****************
 
+      //// cs status & order status 이름 반환 작업
+      const order_csStatus_id = orders[i].orderStatus.valueOf();
+      const cs_csStatus_id = orders[i].csStatus.valueOf();
+      const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
+      const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
+
+      const statusInfo = {
+        orderStatus: orderStatusName,
+        csStatus: csStatusName
+      };
+      ///////****** status 가공 끝 */
+      const returnOrder = {
+        orderInfo: orders[i],
+        userInfo,
+        productInfo,
+        statusInfo
+      };
+
       /// 가공된 데이터 반환
-      returnOrders.push(userInfo, productInfo, orders[i]);
+      returnOrders.push(returnOrder);
     }
 
     return returnOrders;
@@ -188,8 +223,8 @@ class OrderService {
     // ***** 제품 가공 끝 *****************
 
     //// cs status & order status 이름 반환 작업
-    const order_csStatus_id = order.orderStatus_id.valueOf();
-    const cs_csStatus_id = order.csStatus_id.valueOf();
+    const order_csStatus_id = order.orderStatus.valueOf();
+    const cs_csStatus_id = order.csStatus.valueOf();
     const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
     const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
 
@@ -275,8 +310,8 @@ class OrderService {
     // ***** 제품 가공 끝 *****************
 
     //// cs status & order status 이름 반환 작업
-    const order_csStatus_id = newOrder.orderStatus_id.valueOf();
-    const cs_csStatus_id = newOrder.csStatus_id.valueOf();
+    const order_csStatus_id = newOrder.orderStatus.valueOf();
+    const cs_csStatus_id = newOrder.csStatus.valueOf();
     const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
     const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
 
@@ -298,22 +333,50 @@ class OrderService {
   }
 
   // // 6. 주문 정보 수정
-  // async setOrder(orderId, toUpdate) {
-  //   let order = await this.orderModel.findById(orderId);
+  async setOrder(orderId, toUpdate) {
+    let order = await this.orderModel.findById(orderId);
 
-  //   if (!order) {
-  //     throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
-  //   }
-    
-  //   order = await this.orderModel.update(
-  //     {
-  //       orderId,
-  //       update: toUpdate,
-  //     }
-  //   );
+    if (!order) {
+      throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
 
-  //   return order;
-  // }
+    order = await this.orderModel.update(
+      {
+        orderId,
+        update: toUpdate,
+      }
+    );
+
+    return order;
+  }
+
+  /// 7. order id로 검색하여 orderStatus 이름 찾기
+  async getCurrentOrderStatus(orderId) {
+    let order = await this.orderModel.findById(orderId);
+
+    if (!order) {
+      throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
+    const order_orderStatus_id = order.orderStatus.valueOf();
+    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_orderStatus_id);
+    return orderStatusName;
+  }
+
+    /// 8. order id로 검색하여 csStatus 이름 찾기
+    async getCurrentCsStatus(orderId) {
+      let order = await this.orderModel.findById(orderId);
+  
+      if (!order) {
+        throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      }
+  
+      const order_csStatus_id = order.csStatus.valueOf();
+      const csStatusName = await this.csStatusService.getCsStatusName(order_csStatus_id);
+      return csStatusName;
+    }
+
+
 };
 
 
