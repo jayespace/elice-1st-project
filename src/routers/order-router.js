@@ -112,15 +112,19 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
   } = req.body;
 
   const currentOrderStatus = await orderService.getCurrentOrderStatus(orderId);
-  // const currentCsStatus = await orderService.getCurrentCsStatus(orderId);
+  const currentCsStatus = await orderService.getCurrentCsStatus(orderId);
 
   ///initialize status
   let toUpdate;
 
-  if (!csStatus && !orderStatus) {  
+  if (!csStatus && !orderStatus) {
+
     if (currentOrderStatus.name !== "결제완료") {
       throw new Error('현재 주문 상태에서는 배송 정보를 변경할 수 없습니다. 관리자에게 문의하세요.')
+
     } else {
+
+      /// 업데이트용 객체에 삽입함.
       toUpdate = {
         ...(fullNameTo && { fullNameTo }),
         ...(phoneNumberTo && { phoneNumberTo }),
@@ -128,27 +132,30 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
         ...(messageTo && { messageTo }),
       };
     }
+
   } else {  
+
     let requestOrderStatusId;
     let requestCsStatusId;
     let adjusted;
 
     if (orderStatus) {
       requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
+      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
+      csStatus = adjusted.csStatus
 
-    } else if(csStatus) {
+    } else if (csStatus) {
       requestCsStatusId = await csStatusService.getCsStatusId(csStatus);
       adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentOrderStatus.id);
       orderStatus = adjusted.orderStatus
     }
 
-      /// 업데이트용 객체에 삽입함.
+    /// 업데이트용 객체에 삽입함.
     toUpdate = {
       ...(orderStatus && { orderStatus: adjusted.orderStatus }),
       ...(csStatus && { csStatus : adjusted.csStatus })
     }
   };
-
 
   // 상품 정보를 업데이트함.
   const updatedorderInfo = await orderService.setOrder(orderId, toUpdate);

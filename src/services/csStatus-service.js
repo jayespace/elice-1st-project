@@ -1,5 +1,5 @@
 import { csStatusModel } from '../db';
-import { orderStatusService} from './orderStatus-service';
+import { orderStatusService } from './orderStatus-service';
 
 class CsStatusService {
 
@@ -43,13 +43,16 @@ class CsStatusService {
 
     // CS Status id로 이름 찾기
   async getCsStatusName(csStatusId) {
+    console.log(csStatusId)
     const csStatus = await this.csStatusModel.findById(csStatusId);
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
+    console.log(csStatus)
 
     const csStatusName = csStatus.name;
+    console.log(csStatusName)
     return csStatusName;
   }
 

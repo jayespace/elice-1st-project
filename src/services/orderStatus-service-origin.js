@@ -3,7 +3,7 @@ import { csStatusService } from './csStatus-service';
 
 class OrderStatusService {
 
-  constructor(orderStatusModel, csStatusService) {
+  constructor(orderStatusModel, csStatusService, orderService) {
     this.orderStatusModel = orderStatusModel;
     this.csStatusService = csStatusService;
   }
@@ -100,6 +100,7 @@ class OrderStatusService {
 
     let currentOrderStatusId = orderStatusId;
     let currentCsStatusId = csStatusId;
+    console.log(csStatusId)
     
     const orderStatus = await this.orderStatusModel.findById(orderStatusId);
 
@@ -108,9 +109,9 @@ class OrderStatusService {
     }
     //// 현재 Order STATUS 확인
     const orderStatusName = orderStatus.name;
-    // /// 현재 CS Status 확인
+    /// 현재 CS Status 확인
     const csStatusName = await this.csStatusService.getCsStatusName(csStatusId);
-    console.log(csStatusName)
+
     //// 변경할 Cs Status default"정상" id 값 
     const csStatusDefaultId = "S62958fdb0408c67d1e8d3653"
 
