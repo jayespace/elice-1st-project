@@ -30,7 +30,7 @@ class CategoryService {
     const category = await this.categoryModel.findById(categoryId);
 
     if (!category) {
-      throw new Error('카테고리가 없습니다.');
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
 
     return category;
@@ -39,6 +39,11 @@ class CategoryService {
   // 카테고리 이름으로 id 찾기
   async getCategoryId(name) {
     const category = await this.categoryModel.findByName(name);
+
+    if (!category) {
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
     const categoryId = category._id;
     return categoryId;
   }
@@ -46,6 +51,11 @@ class CategoryService {
     // 카테고리 id로 이름 찾기
   async getCategoryName(categoryId) {
     const category = await this.categoryModel.findById(categoryId);
+
+    if (!category) {
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
     const categoryName = category.name;
     return categoryName;
   }
