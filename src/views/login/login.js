@@ -5,6 +5,7 @@ import { validateEmail } from '/useful-functions.js';
 const emailInput = document.querySelector('#emailInput');
 const passwordInput = document.querySelector('#passwordInput');
 const submitButton = document.querySelector('#submitButton');
+const kakaoLoginButton = document.getElementById('kakaoLoginButton');
 
 addAllElements();
 addAllEvents();
@@ -16,8 +17,7 @@ async function addAllElements() {}
 function addAllEvents() {
   submitButton.addEventListener('click', handleSubmit);
 }
-
-// 로그인 진행
+// /api/auth/kakao
 async function handleSubmit(e) {
   e.preventDefault();
 

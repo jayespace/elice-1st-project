@@ -7,6 +7,32 @@ async function get(endpoint, params = '') {
     // JWT 토큰을 헤더에 담아 백엔드 서버에 보냄.
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      mode:"no-core",
+    },
+  });
+
+  // 응답 코드가 4XX 계열일 때 (400, 403 등)
+  if (!res.ok) {
+    const errorContent = await res.json();
+    const { reason } = errorContent;
+
+    throw new Error(reason);
+  }
+
+  const result = await res.json();
+
+  return result;
+}
+
+async function getStrict(endpoint, params = '') {
+  const apiUrl = `${endpoint}/${params}`;
+  console.log(`%cGET 요청: ${apiUrl} `, 'color: #a25cd1;');
+
+  const res = await fetch(apiUrl, {
+    // JWT 토큰을 헤더에 담아 백엔드 서버에 보냄.
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      mode:"no-core",
     },
   });
 
@@ -151,4 +177,4 @@ async function del(endpoint, params = '', data = {}) {
 }
 
 // 아래처럼 export하면, import * as Api 로 할 시 Api.get, Api.post 등으로 쓸 수 있음.
-export { get, post, patch, del as delete ,postMulti};
+export { get, post, patch, del as delete ,postMulti, getStrict};

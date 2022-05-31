@@ -5,13 +5,14 @@ import { viewsRouter, userRouter, productRouter, categoryRouter,systemCodeRouter
 import { errorHandler } from './middlewares';
 require('./passport')();
 const passport = require('passport'); 
-
+const cookieParser = require("cookie-parser");
 const app = express();
 
 
 // CORS 에러 방지
 app.use(cors());
 
+app.use(cookieParser());
 // Content-Type: application/json 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.json());
 

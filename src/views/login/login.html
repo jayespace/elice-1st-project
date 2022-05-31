@@ -22,6 +22,8 @@
       src="https://kit.fontawesome.com/7630448495.js"
       crossorigin="anonymous"
     ></script>
+    <!-- 카카오 SDK -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <!-- 커스텀 css, js -->
     <link rel="stylesheet" href="login.css" />
     <script src="login.js" type="module" defer></script>
@@ -108,7 +110,10 @@
         
              <!-- 카카오 OAuth -->
              <div class="oauth-kakao" id="kakaoLoginButton">
-               <a href="/api/auth/kakao"><img src="https://i.ibb.co/1qLp06t/image.png" width="200"  height="40" alt="카카오 로그인 버튼"/></a>
+               <!-- href="/api/auth/kakao"  target='_blank'-->
+               <!-- <a><img src="//k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="150"  alt="카카오 로그인 버튼"/></a> -->
+
+               <a href="/api/auth/kakao"><img src="//k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="150"  alt="카카오 로그인 버튼"/></a>
              </div>
         </div>
       </form>
