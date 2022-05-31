@@ -1,5 +1,5 @@
-import { headerTemplate } from './header.js';
-import { footerTemplate } from './footer.js';
+import { headerTemplate } from './header/header.js';
+import { footerTemplate } from './footer/footer.js';
 const $ = (selector) => document.querySelector(selector);
 
 // header, footer 요소
@@ -17,12 +17,13 @@ async function addAllElements() {
   insertFooterEl();
 }
 function insertHeaderEl() {
-  // headEl.insertAdjacentHTML(
-  //   'beforeend',
-  //   `<link rel="stylesheet" href="../common/common.css"/>
-  //   <script src="../common/common.js" defer></script>
-  //   `
-  // );
+  headEl.insertAdjacentHTML(
+    'beforeend',
+    `
+    <link rel="stylesheet" href="../common/header/header.css" />
+    <script defer type="text/javascript" src="../common/header/navbar.js"></script>
+    `
+  );
   headerEl.insertAdjacentHTML('afterbegin', headerTemplate());
 }
 function insertFooterEl() {

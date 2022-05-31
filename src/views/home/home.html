@@ -4,13 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>쇼핑-n팀</title>
-    <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/elice-rabbit-favicon.png"
-    />
     <!-- bulma css -->
     <link
       rel="stylesheet"
@@ -23,7 +16,6 @@
       crossorigin="anonymous"
     ></script>
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="home.css" />
     <script src="../common/landing.js" type="module" defer></script>
   </head>
   <body>
@@ -31,9 +23,72 @@
     <header id="header"></header>
 
     <!-- contents -->
-    <main id="main" role="main"></main>
+    <main id="main" role="main">
+      <section class="hero is-info is-medium is-bold">
+        <div class="hero-body">
+          <div class="container has-text-centered">
+            <h1 class="title">안녕하세요. <br />12팀 입니다.</h1>
+          </div>
+        </div>
+      </section>
+
+      <div class="container">
+        <!-- START ARTICLE FEED -->
+        <section class="articles">
+          <div class="column is-12">
+            <!-- START ARTICLE -->
+            <div class="card article">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content has-text-centered">
+                    <p class="title article-title">프로젝트 소개</p>
+                  </div>
+                </div>
+                <div class="content article-body">
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut
+                    et voluptatibus maiores praesentium, molestias omnis
+                    voluptates facere culpa at, ad iste consequuntur explicabo!
+                    Mollitia atque nemo totam illo tempore minus?
+                  </p>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Culpa ad ex tenetur sunt sint laborum itaque aliquam nobis
+                    similique perferendis quaerat consequatur voluptate, cumque
+                    odio pariatur doloremque voluptas in quo?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- END ARTICLE -->
+            <!-- START ARTICLE -->
+            <div class="card article">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content has-text-centered">
+                    <p class="title article-title">
+                      프로젝트 이슈 및 해결 방법
+                    </p>
+                  </div>
+                </div>
+                <div class="content article-body">
+                  <p>Non</p>
+                  <p>Metus</p>
+                  <h3 class="has-text-centered">
+                    How to properly center tags in bulma?
+                  </h3>
+                  <p>Proper</p>
+                </div>
+              </div>
+            </div>
+            <!-- END ARTICLE -->
+          </div>
+        </section>
+        <!-- END ARTICLE FEED -->
+      </div>
+    </main>
 
     <!-- footer -->
-    <footer id="footer"></footer>
+    <footer id="footer" class="section"></footer>
   </body>
 </html>
