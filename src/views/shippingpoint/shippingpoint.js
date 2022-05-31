@@ -78,6 +78,9 @@ function changeRequestBox(e){
   if(selectedItem === "6"){
     customRequestInput.classList.remove('is-hidden');
   }
+  else{
+    customRequestInput.classList.add('is-hidden');
+  }
 }
 
 
@@ -144,13 +147,55 @@ async function sendOrderInfoByPost(e) {
   const address1 = address1Input.value;
   const address2  = address2Input.value;
   const requestSelect = requestSelectBox.value;
+  let requestComment ='';
 
-  const data = globalThis.products;
-  console.log(requestSelect, data);
 
-  // const OrderInfo = {
+  const receiverNameValid = receiverName.length >2;
+  const receiverPhoneNumberValid = receiverPhoneNumber.length >8;
+  const addressValid = postalCode && address1 && address2;
 
-  // }
+  if(!receiverNameValid){
+    return alert("받는 분 이름을 입력해주세요.");
+  }
+  if(!receiverPhoneNumberValid){
+    return alert("받는 분 연락처를 적어주세요.")
+  }
+  if(!addressValid){
+    return alert("배송지를 입력해주세요.")
+  }
+
+  switch(requestSelect){
+    case "0": return alert('요청 사항을 선택해주세요');
+    case "1": requestComment = '직접 수령하겠습니다.'; break;
+    case "2": requestComment = '배송 전 연락바랍니다.'; break;
+    case "3": requestComment = '부재 시 경비실에 맡겨주세요.'; break;
+    case "4": requestComment = '부재 시 문 앞에 놓아주세요.'; break;
+    case "5": requestComment = '부재 시 택배함에 넣어주세요'; break;
+    case "6": requestComment = customRequestInput.value; break;
+  }
+  
+  
+  const products = [];
+  globalThis.products.forEach(
+    ({_id, count, totalPrice}) => products.push({
+      product_id: _id,
+      qty : count,
+      totalPrice
+    }))
+  const order = {
+    fullNameTo: receiverName,
+    phoneNumberTo: receiverPhoneNumber,
+    addressTo:{
+      postalCode,
+      address1,
+      address2
+    },
+    messageTo: requestComment,
+    products
+  } 
+  console.log(order);
+
+  
 
   // try {
   //   const result = Api.postMulti('/api/order~~~', OrderInfo);
