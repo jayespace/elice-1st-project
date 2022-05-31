@@ -34,6 +34,14 @@ const sessionStore =
   }
 ]
 
+/***
+ * 
+ * Author: 박상준
+ * date : 2022-05-31
+ * Todo:
+ * LocalSession 장바구니데이터 가져오는 기능 구현해야됨
+ * insertOrderSummary 메소드의 sessionStore 을 대신 적용하면 됩니다.
+ */
 
 import * as Api from "/api.js";
 import { addCommas } from "/useful-functions.js";
