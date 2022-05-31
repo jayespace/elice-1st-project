@@ -103,12 +103,12 @@ class CategoryService {
     if (!category) {
       throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
-    await this.categoryModel.delete(categoryId);
-    return '삭제가 완료되었습니다';
+
+    const del = await this.categoryModel.delete(categoryId);
+    return del;
   }
 
 };
-
 
 const categoryService = new CategoryService(categoryModel);
 

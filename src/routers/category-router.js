@@ -3,7 +3,7 @@ import is from '@sindresorhus/is';
 import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
-import { categoryService } from '../services';
+import { categoryService, productService } from '../services';
 
 const categoryRouter = Router();
 
@@ -41,25 +41,16 @@ categoryRouter.post('/categories',
   res.status(201).json(newCategory);
 }));
 
-// 로그인 후 admin일 경우 카테고리 삭제
-categoryRouter.delete('/categories/:categoryId',
-  loginRequired, adminRequired, asyncHandler(async (req, res) => {
-  const { categoryId } = req.params;
 
-  const del = await categoryService.deleteCategory(categoryId)
-  res.status(200).json(del);
-
-}));
 
 // 로그인 후 admin일 경우 카테고리 정보 수정
-categoryRouter.patch('/categories/:categoryId',
-  loginRequired, adminRequired, asyncHandler(async (req, res) => {
+categoryRouter.patch('/categories/:categoryId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
 
   // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
   if (is.emptyObject(req.body)) {
-      throw new Error(
-      'headers의 Content-Type을 application/json으로 설정해주세요'
-      );
+    throw new Error(
+    'headers의 Content-Type을 application/json으로 설정해주세요'
+    );
   }
 
   const { categoryId } = req.params;
@@ -74,14 +65,29 @@ categoryRouter.patch('/categories/:categoryId',
   // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
   // 보내주었다면, 업데이트용 객체에 삽입함.
   const toUpdate = {
-      ...(name && { name }),
-      ...(desc && { desc })
+    ...(name && { name }),
+    ...(desc && { desc })
   };
   // 상품 정보를 업데이트함.
   const updatedCategoryInfo = await categoryService.setCategory(categoryId, toUpdate);
 
   // 업데이트 이후의 데이터를 프론트에 보내 줌
   res.status(200).json(updatedCategoryInfo);
+
+}));
+
+// 로그인 후 admin일 경우 카테고리 삭제
+categoryRouter.delete('/categories/:categoryId',
+  loginRequired, adminRequired, asyncHandler(async (req, res) => {
+  const { categoryId } = req.params;
+
+  const isCategoryExistinProduct = await productService.isExist(categoryId);
+  if (isCategoryExistinProduct.length >= 1) {
+    throw new Error('해당 카테고리에 속해 있는 제품이 있어 삭제 할 수 없습니다.');
+  }
+
+  const del = await categoryService.deleteCategory(categoryId)
+  res.status(200).json(del);
 
 }));
 

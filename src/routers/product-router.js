@@ -160,7 +160,7 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired,
     ...(keyword && { keyword }),
     ...(image && { image }),
   };
- 
+
   // 상품 정보를 업데이트함.
   const updatedProductInfo = await productService.setProduct(productId, toUpdate);
 

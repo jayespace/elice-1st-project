@@ -238,8 +238,7 @@ class ProductService {
     return deletedProduct;
   }
 
-
-  //// 상품 정보 수정
+  //// 상품 정보 수정 ***************
   async setProduct(productId, toUpdate) {
     let product = await this.productModel.findById(productId);
 
@@ -250,7 +249,7 @@ class ProductService {
     // 변경할 카테고리가 있을 경우 카테고리 이름으로 objectId 검색하여 db 카테고리 필드에 id 저장
     if (toUpdate.category) {
 
-      let categoryName = toUpdate.category;
+      const categoryName = toUpdate.category;
 
       const categoryId = await this.categoryService.getCategoryId(categoryName);
       const product_category_id = categoryId.valueOf();
@@ -264,6 +263,14 @@ class ProductService {
     });
     
     return product;
+  };
+
+//************** */
+
+  /// 카테고리 id로 정보조회
+  async isExist(categoryId) {
+    const products = await this.productModel.findByCategoryId(categoryId);
+    return products;
   }
 
   /// id로 정보조회
