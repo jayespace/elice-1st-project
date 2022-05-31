@@ -23,8 +23,8 @@
 
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <!-- 커스텀 css, js -->
-        <link rel="stylesheet" href="admin-userlist.css"/>
-        <script src="admin-userlist.js" type="module" defer></script>
+        <link rel="stylesheet" href="admin-categories.css"/>
+        <script src="admin-categories.js" type="module" defer></script>
         <script src="../common/landing.js" type="module" defer></script>
     </head>
     <body>
@@ -41,11 +41,16 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h2>Manage
-                                            <b>UserInfo</b>
+                                            <b>Category</b>
                                         </h2>
                                     </div>
                                     <div class="col-sm-6 d-flex is-justify-content-end">
-                                        <a href="#deleteUserInfoModal" class="btn btn-danger" data-toggle="modal">
+                                        <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">
+                                            <i class="material-icons">&#xE147;</i>
+                                            <span>Add New Category</span>
+                                        </a>
+
+                                        <a href="#deleteCategoryModal" class="btn btn-danger" data-toggle="modal">
                                             <i class="material-icons">&#xE15C;</i>
                                             <span>Delete</span>
                                         </a>
@@ -61,38 +66,55 @@
                                                 <label for="selectAll"></label>
                                             </span>
                                         </th>
-                                        <th>이름</th>
-                                        <th>이메일</th>
-                                        <th>주소</th>
-                                        <th>번호</th>
-                                        <th>role</th>
+                                        <th>카테고리 명</th>
+                                        <th>설명</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
                                         <th>추가/삭제</th>
                                     </tr>
                                 </thead>
-                                <tbody id="userInfo-table"></tbody>
+                                <tbody id="category-table"></tbody>
                             </table>
                             <div class="clearfix">
-                                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                                <div class="hint-text">Showing
+                                    <b>5</b>
+                                    out of
+                                    <b>25</b>
+                                    entries</div>
                                 <ul class="pagination">
-                                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                                    <li class="page-item disabled">
+                                        <a href="#">Previous</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">2</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a href="#" class="page-link">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">4</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">5</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">Next</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Edit Modal HTML -->
-                <div id="addUserInfoModal" class="modal fade">
+                <div id="addCategoryModal" class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form>
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Add UserInfo</h4>
+                                    <h4 class="modal-title">Add Category</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">
@@ -121,48 +143,60 @@
                         </div>
                     </div>
                 </div>
-                <!-- Edit Modal HTML -->
-                <div id="editUserInfoModal" class="modal fade">
+                <div id="addEmployeeModal" class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form>
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Edit UserProfile</h4>
+                                    <h4 class="modal-title">Add Employee</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="EditFullNameInput" required>
+                                        <input type="text" class="form-control" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="email" class="form-control" id="EditEmailInput" required>
+                                        <input type="email" class="form-control" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>address</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="EditPostalCodeInput" readonly/>
-                                            <p class="btn btn-outline-info input-group-addon ml-2" id="EditSearchAddressButton">주소찾기</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="EditAddress1Input" readonly/>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="EditAddress2Input"/>
+                                        <label>Address</label>
+                                        <textarea class="form-control" required></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Phone</label>
-                                        <input type="text" class="form-control" id="EditPhoneNumberInput">
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Modal HTML -->
+                <div id="editCategoryModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Edit Category</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" id="EditNameInput" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Role</label>
-                                        <select class="form-select" aria-label="form-select-lg" id="EditRoleSelectBox">
-                                            <option value="admin">admin</option>
-                                            <option value="basic-user">basic-user</option>
-                                        </select>
+                                        <label>Desc</label>
+                                        <textarea class="form-control" id="EditDescInput" row="10"></textarea>
                                     </div>
+                                   
                                     <div class="modal-footer">
                                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
                                         <input type="submit" class="btn btn-info" id="EditSubmitButton" value="Save">
@@ -173,12 +207,12 @@
                     </div>
                 </div>
                 <!-- Delete Modal HTML -->
-                <div id="deleteUserInfoModal" class="modal fade">
+                <div id="deleteCategoryModal" class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form>
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Delete UserInfo</h4>
+                                    <h4 class="modal-title">Delete Category</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">

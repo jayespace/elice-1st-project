@@ -86,13 +86,17 @@ async function addAllElements() {
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
   EditSearchAddressButton.addEventListener('click',insertAddressInputsByDumPost);
+  EditSubmitButton.addEventListener('click', updateUserInfo);
 }
 
 async function updateUserInfo(){
   const id = globalThis.userId
-  
-  Api.patch
-  
+  console.log(id);
+}
+
+async function deleteUserInfo(){
+  const id = globalThis.userId
+  console.log(id);
 }
 
 async function insertAddressInputsByDumPost(){
@@ -136,10 +140,10 @@ async function createUserInfoToTable() {
               <td class="tb_phonenumber">${phoneNumber}</td>
               <td class="tb_role">${role}</td>
               <td>
-                  <a href="#editEmployeeModal" class="td_edit" data-toggle="modal" >
-                      <i class="material-icons" data-delay='{"show":"5000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
+                  <a href="#editUserInfoModal" class="td_edit" data-toggle="modal" >
+                      <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
                   </a>
-                  <a href="#deleteEmployeeModal" class="td_delete" data-toggle="modal">
+                  <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal">
                       <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}">&#xE872;</i>
                   </a>
               </td>
@@ -149,7 +153,6 @@ async function createUserInfoToTable() {
     }
     async function setUserInfoToEditModal(e){
       const id = e.target.dataset.id;
-      console.log("iddddddd",id);
       globalThis.userId = id;
       const userInfo = await Api.get('/api/admin/users',id);
       const {email, fullName, address, phoneNumber, role} = userInfo;
