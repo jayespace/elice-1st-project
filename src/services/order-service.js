@@ -1,13 +1,17 @@
 import { orderModel } from '../db';
 import { userService } from './user-service';
 import { productService } from './product-service';
+import { csStatusService } from './csStatus-service';
+import { orderStatusService } from './orderStatus-service';
 
 class OrderService {
 
-  constructor(orderModel) {
+  constructor(orderModel, userService, productService, csStatusService, orderStatusService) {
     this.orderModel = orderModel;
     this.userService = userService;
     this.productService = productService;
+    this.csStatusService = csStatusService;
+    this.orderStatusService = orderStatusService;
   }
 
   // 1. 전체 주문 갯수 확인
@@ -183,8 +187,26 @@ class OrderService {
     }
     // ***** 제품 가공 끝 *****************
 
+    //// cs status & order status 이름 반환 작업
+    const order_csStatus_id = order.orderStatus_id.valueOf();
+    const cs_csStatus_id = order.csStatus_id.valueOf();
+    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
+    const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
+
+    const statusInfo = {
+      orderStatus: orderStatusName,
+      csStatus: csStatusName
+    };
+    ///////****** status 가공 끝 */
+
     /// 유저, 주문, 제품 정보 담아서 return
-    const returnOrder = [userInfo, productInfo, order]
+    const returnOrder = {
+      orderInfo: order,
+      userInfo,
+      productInfo,
+      statusInfo
+    };
+
     return returnOrder;
   }
 
@@ -252,8 +274,26 @@ class OrderService {
     }
     // ***** 제품 가공 끝 *****************
 
+    //// cs status & order status 이름 반환 작업
+    const order_csStatus_id = newOrder.orderStatus_id.valueOf();
+    const cs_csStatus_id = newOrder.csStatus_id.valueOf();
+    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
+    const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
+
+    const statusInfo = {
+      orderStatus: orderStatusName,
+      csStatus: csStatusName
+    };
+    ///////****** status 가공 끝 */
+
     /// 유저, 주문, 제품 정보 담아서 return
-    const returnOrder = [userInfo, productInfo, newOrder,]
+    const returnOrder = {
+      orderInfo: newOrder,
+      userInfo,
+      productInfo,
+      statusInfo
+    };
+    
     return returnOrder;
   }
 
@@ -277,6 +317,12 @@ class OrderService {
 };
 
 
-const orderService = new OrderService(orderModel, userService, productService);
+const orderService = new OrderService(
+  orderModel,
+  userService,
+  productService,
+  csStatusService, 
+  orderStatusService
+);
 
 export { orderService };

@@ -111,6 +111,11 @@ class CsStatusService {
     /// 현재 Order Status 확인
     const orderStatusName = await this.orderStatusService.getOrderStatusName(orderStatusId);
 
+    if (csStatusName === ("교환요청" || "반품요청")) {
+      if(orderStatusName !== ("배송중" || "배송완료")) {
+        throw new Error ('현재 주문 상태를 확인해주세요');
+      }
+    }
     //// Cs Status가 "정상"인 cs status id 값
     const defaultCsStatusId = "62958fdb0408c67d1e8d3653";
     // Order Status "취소완료" 

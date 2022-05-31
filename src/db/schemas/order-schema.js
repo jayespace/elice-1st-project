@@ -60,13 +60,13 @@ const OrderSchema = new Schema(
       type: String,
       required: false
     },
-    orderStatus: {
+    orderStatus_id: {
       type: Schema.Types.ObjectId,
       ref: 'orderStatus',
       required: false,
       default: "629590bf88e88a5137884dd5"
     },
-    csStatus: {
+    csStatus_id: {
       type: Schema.Types.ObjectId,
       ref: 'csStatus',
       required: false,
