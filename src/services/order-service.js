@@ -29,7 +29,7 @@ class OrderService {
     const orders = await this.orderModel.findAll();
 
     if (orders.length < 1) {
-      throw new Error('주문이 없습니다.');
+      throw new Error('주문 내역이 없습니다.');
     }
 
     /// db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
@@ -104,7 +104,7 @@ class OrderService {
     const orders = await this.orderModel.findByUser(userId);
 
     if (orders.length < 1) {
-      throw new Error('주문이 없습니다.');
+      throw new Error('해당 사용자의 주문이 없습니다.');
     }
 
     /// ** db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결 **
@@ -375,6 +375,19 @@ class OrderService {
       const csStatusName = await this.csStatusService.getCsStatusName(order_csStatus_id);
       return csStatusName;
     }
+
+    //// 9. 특정 주문의 userId 반환
+    async getOrderUserId(orderId) {
+      let order = await this.orderModel.findById(orderId);
+  
+      if (!order) {
+        throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      }
+      
+      const order_user_id = order.user_id.valueOf();
+      return order_user_id;
+    }
+
 
 };
 

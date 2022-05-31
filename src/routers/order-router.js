@@ -1,28 +1,45 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired } from '../middlewares';
-import { adminRequired } from '../middlewares';
 import { asyncHandler } from '../middlewares';
 import { orderService, csStatusService, orderStatusService } from '../services';
 
 const orderRouter = Router();
 
-// admin 확인 후 모든 주문 정보를 가져옴
-orderRouter.get('/orders/admin', loginRequired, adminRequired, asyncHandler(async (req, res) => {
-  const orders = await orderService.getOrders();
-  res.status(200).json(orders);
-}));
-
-// 로그인 한 User의 주문 정보를 가져옴
+// admin은 모든 주문 정보를, 로그인 한 User는 본인의 주문 정보를 가져옴
 orderRouter.get('/orders', loginRequired, asyncHandler(async (req, res) => {
-  const userId = req.currentUserId;
-  const orders = await orderService.getOrdersByUser(userId);
+
+  /// 현재 로그인 된 사람이 admin인지 확인
+  const role = req.currentUserRole;
+  const currentUserId = req.currentUserId;
+
+  let orders;
+
+  if (role === "admin") {
+    orders = await orderService.getOrders();
+  } else {  
+    orders = await orderService.getOrdersByUser(currentUserId);
+  }
   res.status(200).json(orders);
 }));
 
 // 주문 id로 검색 후 상세 정보 가져옴
 orderRouter.get('/orders/:orderId', loginRequired, asyncHandler(async (req, res) => {
+
   const { orderId } = req.params;
+
+  /// 현재 로그인 된 사람이 admin인지 확인
+  const role = req.currentUserRole;
+  const currentUserId = req.currentUserId;
+
+  /// admin이 아닐경우, 현재 로그인된 user id와 주문정보의 user id가 다르다면 에러 메세지
+  if(role === 'basic-user') {
+    const orderUserId = await orderService.getOrderUserId(orderId);
+    if (orderUserId !== currentUserId) {
+      throw new Error('현재 로그인 된 사용자의 주문 정보가 아닙니다.')
+    }
+  }
+
   const order = await orderService.getOrder(orderId);
   res.status(200).json(order);
 }));
@@ -37,7 +54,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     );
   }
 
-  const userId = req.currentUserId;
+  const currentUserId = req.currentUserId;
 
   const {
     fullNameTo,
@@ -49,7 +66,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
 
   const newOrder = await orderService.addOrder(
     {
-      user_id: userId,
+      user_id: currentUserId,
       fullNameTo,
       phoneNumberTo,
       addressTo,
@@ -69,6 +86,18 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
     throw new Error(
     'headers의 Content-Type을 application/json으로 설정해주세요'
     );
+  }
+
+  /// 현재 로그인 된 사람이 admin인지 확인
+  const role = req.currentUserRole;
+  const currentUserId = req.currentUserId;
+
+  /// admin이 아닐경우, 현재 로그인된 user id와 주문정보의 user id가 다르다면 에러 메세지
+  if(role === 'basic-user') {
+    const orderUserId = await orderService.getOrderUserId(orderId);
+    if (orderUserId !== currentUserId) {
+      throw new Error('현재 로그인 된 사용자의 주문 정보가 아닙니다.')
+    }
   }
 
   const { orderId } = req.params;
