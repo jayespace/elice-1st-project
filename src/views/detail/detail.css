@@ -53,13 +53,17 @@ body{
 
 .product-detail-contents .info .briefDesc{
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
     padding-bottom: 20px;
     text-align: justify;
+    text-decoration: line-through; 
+    text-decoration-color:#ec994b33;
+    text-decoration-thickness: 10px;
+    line-height: 150%;
 }
 
 .product-detail-contents .info .fullDesc{
-    font-size: 20px;
+    font-size: 18px;
     padding-bottom: 18px;
     line-height: 150%;
     text-align: justify;
