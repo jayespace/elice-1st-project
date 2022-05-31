@@ -41,10 +41,12 @@ body{
     padding: 0px 50px 0 50px;
 }
 .product-detail-contents .info .name{
+    color: black;
     font-size: 25px;
     font-weight: 200%;
 }
 .product-detail-contents .info .price{
+    color: black;
     font-size: 30px;
     font-weight: bold;
     padding-top: 30px;
@@ -52,6 +54,7 @@ body{
 }
 
 .product-detail-contents .info .briefDesc{
+    color: black;
     font-weight: bold;
     font-size: 20px;
     padding-bottom: 20px;
@@ -82,6 +85,7 @@ body{
 }
 
 .product-detail-contents .info .select-qty{
+    color: black;
     font-size: 20px;
     border: solid 1px #d8d3d3;
     float: left; /* 나중에 clear해주기 */
@@ -94,6 +98,7 @@ body{
     display: flex;
 }
 #minus{
+    font-size: 20px;
     flex-grow: 1;
     background-color: #F5F5F5;
     border: none;
@@ -103,11 +108,13 @@ body{
     cursor: pointer;
 }
 #qty{
+    font-size: 20px;
     flex-grow: 1;
     background-color: white;
     margin: 0 auto;
 }
 #plus{
+    font-size: 15px;
     flex-grow: 1;
     background-color: #F5F5F5;
     border: none;
@@ -117,6 +124,7 @@ body{
     cursor: pointer;
 }
 .product-detail-contents .info .total{
+    color: black;
     font-size: 20px;
     float: right;
     text-align: right;
@@ -140,15 +148,13 @@ body{
     width: 100%;
     height: 100%;
 }
-
-
 #addToCartButton {
     border-radius: 5px;
     height: 70px;
     width: 50%;
     margin: 0 auto;
     font-size: 20px;
-    font-weight: 200;
+    font-weight: bold;
     cursor: pointer;
     border: 1px solid #15133C;
     background-color: white;
@@ -166,7 +172,7 @@ body{
     width: 50%;
     margin: 0 auto;
     font-size: 20px;
-    font-weight: 200;
+    font-weight: bold;
     cursor: pointer;
     background-color: #15133C;
     border: 1px solid #15133C;

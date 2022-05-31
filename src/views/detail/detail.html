@@ -1,104 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>쇼핑-데모</title>
-    <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/elice-rabbit-favicon.png"
-    />
-    <!-- bulma css 관련 -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
-    <!-- 폰트 어썸: 아이콘 -->
-    <script
-      defer
-      src="https://kit.fontawesome.com/7630448495.js"
-      crossorigin="anonymous"
-    ></script>
 
-    <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="detail.css" />
-    <script src="detail.js" type="module" defer></script>
-  </head>
-  <body>
-    <!-- 헤더 -->
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="container mt-3">
-        <div class="navbar-brand">
-          <a class="navbar-item" href="/">
-            <img src="/elice-rabbit.png" width="30" height="30" />
-            <span class="has-text-link">쇼핑-데모</span>
-          </a>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>쇼핑-데모</title>
+  <!-- 아이콘 -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/elice-rabbit-favicon.png" />
+  <!-- bulma css 관련 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+  <!-- 폰트 어썸: 아이콘 -->
+  <script defer src="https://kit.fontawesome.com/7630448495.js" crossorigin="anonymous"></script>
 
-          <a
-            role="button"
-            class="navbar-burger"
-            aria-label="menu"
-            aria-expanded="false"
-            data-target="navbarBasicExample"
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-        </div>
+  <!-- 커스텀 css, js -->
+  <link rel="stylesheet" href="detail.css" />
+  <script src="detail.js" type="module" defer></script>
+</head>
 
-          <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
-            <ul id="navbar">
-              <li>
-                <a href="/cart" aria-current="page">
-                  <span class="icon">
-                    <i class="fas fa-cart-shopping"></i>
-                  </span>
-                  <span>카트</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </nav>
+<body>
+  <!-- 헤더 -->
+  <header id="header">
+  </header>
 
+  <main id="main" role="main">
     <!-- 제품 상세 설명 카드 -->
     <section class="section">
       <div class="container">
-        <div class="product-detail">   
+        <div class="product-detail">
+          <!--좌측 이미지 삽입-->
+          <!--우측 상품 설명-->
           <div class="product-detail-contents">
             <div class="info">
-                <h1 class="name"></h1>
-                <h1 class="price"></h1>
-                <p class="briefDesc"></p>
-                <p class="fullDesc"></p>
-                <div class="selected">
-                    <div class="select-qty" id = "selectQty">
-                      <button id="minus"> - </button>
-                      <div id="qty"> 1</div>
-                      <button id="plus">+</button>
-                    </div>
-                    <p class="total">total</p>
+              <h1 class="name"></h1>
+              <h1 class="price"></h1>
+              <p class="briefDesc"></p>
+              <p class="fullDesc"></p>
+              <div class="selected">
+                <div class="select-qty" id="selectQty">
+                  <button id="minus"> - </button>
+                  <div id="qty"> 1</div>
+                  <button id="plus">+</button>
                 </div>
+                <p class="total">total</p>
+              </div>
             </div>
+    
             <div class="buttons-container">
-                <div class="buttons">
-                    <button class="add-button" id="addToCartButton">
-                    장바구니
-                    </button>
-                    <button class="purchase-button" id="purchaseButton">
-                    바로구매
-                    </button>
-                </div>
-            </div> 
+              <div class="buttons">
+                <button class="add-button" id="addToCartButton">
+                  장바구니
+                </button>
+                <button class="purchase-button" id="purchaseButton">
+                  바로구매
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
-
       </div>
     </section>
-  </body>
+  </main>
+
+  <footer id="footer">
+  </footer>
+
+</body>
+
 </html>

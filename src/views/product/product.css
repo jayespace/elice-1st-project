@@ -4,17 +4,15 @@
 }
 .section .container{
     max-width: 960px;
-    margin:auto;
-    justify-content: space-between;
 }
 .section .container .product-list{
+    margin-left: 10px;
     display: flex;
     flex-wrap: wrap;
 }
 .section .container .product-list .product{
-    width: 300px;
-    height:450px;
-    padding: 5px;
+    width: 310px;
+    height:460px;
     margin: 0 10px 30px 10px;
     border: 1px solid #eee;
     border-radius: 5px;
