@@ -86,7 +86,7 @@ class OrderService {
       throw new Error('주문이 없습니다.');
     }
 
-    /// db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
+    /// ** db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결 **
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
 
@@ -102,9 +102,9 @@ class OrderService {
         phoneNumber,
         email
       }
-      ////*** 유저정보 가공 끝 ******
+      // *** 유저정보 가공 끝 ******
 
-      /// orderedProducts의 정보로 제품 정보 가공
+      /// ** orderedProducts의 정보로 제품 정보 가공 **
       let productInfo = [];
       const orderedProducts = orders[i].products;
 
@@ -197,7 +197,7 @@ class OrderService {
       phoneNumberTo,
       addressTo,
       messageTo,
-      products 
+      products
     } = orderInfo;
 
     const neworderInfo = {
@@ -206,7 +206,7 @@ class OrderService {
       phoneNumberTo,
       addressTo,
       messageTo,
-      products 
+      products
     };
     
     // db에 주문 정보 저장

@@ -1,9 +1,11 @@
 import { orderStatusModel } from '../db';
+import { csStatusService} from './csStatus-service';
 
 class OrderStatusService {
 
-  constructor(orderStatusModel) {
+  constructor(orderStatusModel, csStatusService) {
     this.orderStatusModel = orderStatusModel;
+    this.csStatusService = csStatusService;
   }
 
   // 전체 order Status 목록 확인
@@ -93,9 +95,56 @@ class OrderStatusService {
     return del;
   }
 
+    // // CS Status와 Order Status 체크하여 ID 반환
+    // async checkCsStatus(csStatusId, orderStatusId) {
+  
+    //   let currentCsStatusId = csStatusId;
+    //   let currentOrderStatusId = orderStatusId;
+  
+    //   const csStatus = await this.csStatusModel.findById(csStatusId);
+  
+    //   if (!csStatus) {
+    //       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    //   }
+    //   //// 현재 CS STATUS 확인
+    //   const csStatusName = csStatus.name;
+    //   /// 현재 Order Status 확인
+    //   const orderStatusName = await this.orderStatusService.getOrderStatusName(orderStatusId);
+  
+    //   //// Cs Status가 "정상"인 cs status id 값
+    //   const defaultCsStatusId = "62958fdb0408c67d1e8d3653";
+  
+  
+    //   if (csStatusName === "정상") {
+  
+    //   } else if (csStatusName === "취소요청") {
+  
+    //     if (orderStatusName === '결제완료') {
+    //       currentCsStatusId = defaultCsStatusId;
+    //     }
+  
+    //   } else if (csStatusName === "교환요청") {
+  
+    //     if (orderStatusName === '교환완료') {
+    //       currentCsStatusId = defaultCsStatusId;
+    //     }
+  
+  
+    //   } else if (csStatusName === "반품요청") {
+  
+    //     if (orderStatusName === '반품완료') {
+    //       currentCsStatusId = defaultCsStatusId;
+    //     }
+  
+    //   }
+  
+    //   return ([currentCsStatusId, currentOrderStatusId]);
+    // };
+
+
 };
 
 
-const orderStatusService = new OrderStatusService(orderStatusModel);
+const orderStatusService = new OrderStatusService(orderStatusModel, csStatusService);
 
 export { orderStatusService };

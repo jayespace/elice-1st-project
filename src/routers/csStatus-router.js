@@ -73,7 +73,6 @@ csStatusRouter.patch('/csStatus/:csStatusId', loginRequired, adminRequired,
 
     // 업데이트 이후의 데이터를 프론트에 보내 줌
     res.status(200).json(updatedCsStatus);
-
 }));
 
 export { csStatusRouter };

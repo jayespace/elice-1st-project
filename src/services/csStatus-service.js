@@ -1,9 +1,11 @@
 import { csStatusModel } from '../db';
+import { orderStatusService} from './orderStatus-service';
 
 class CsStatusService {
 
-  constructor(csStatusModel) {
+  constructor(csStatusModel, orderStatusService) {
     this.csStatusModel = csStatusModel;
+    this.orderStatusService = orderStatusService;
   }
 
   // 전체 CS Status 목록 확인
@@ -93,9 +95,39 @@ class CsStatusService {
     return del;
   }
 
+  // *** CS Status와 Order Status 체크하여 ID 반환 ****
+  async checkCsStatus(csStatusId, orderStatusId) {
+
+    let currentCsStatusId = csStatusId;
+    let currentOrderStatusId = orderStatusId;
+
+    const csStatus = await this.csStatusModel.findById(csStatusId);
+
+    if (!csStatus) {
+        throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+    //// 현재 CS STATUS 확인
+    const csStatusName = csStatus.name;
+    /// 현재 Order Status 확인
+    const orderStatusName = await this.orderStatusService.getOrderStatusName(orderStatusId);
+
+    //// Cs Status가 "정상"인 cs status id 값
+    const defaultCsStatusId = "62958fdb0408c67d1e8d3653";
+    // Order Status "취소완료" 
+    const cancelconfirmedorderStatusId = "629590e888e88a5137884dd8"
+
+    /// 유저는 결제완료일때만 취소요청 할 시 order Status를 취소완료로 변경할 수 있음
+    if (csStatusName === "취소요청" || orderStatusName === '결제완료') {
+      currentCsStatusId = defaultCsStatusId;
+      currentOrderStatusId = cancelconfirmedorderStatusId;
+    }
+    
+    return ([currentCsStatusId, currentOrderStatusId]);
+  };
+
 };
 
 
-const csStatusService = new CsStatusService(csStatusModel);
+const csStatusService = new CsStatusService(csStatusModel, orderStatusService);
 
 export { csStatusService };
