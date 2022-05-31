@@ -380,8 +380,8 @@ class OrderService {
       const order_product_id = orderedProducts[i].product_id.valueOf();
       const orderQty = orderedProducts[i].qty
 
-      /// 만약 orderStatus가 취소완료일 경우 db의 재고 수정
-      if (orderStatusName === "취소완료") {
+      /// 만약 orderStatus가 취소/교환/반품 완료일 경우 db에 재고 돌려놈
+      if (orderStatusName === ("취소완료" || "교환완료" || "반품완료")) {
         const modifyQty = -Math.abs(orderQty);
         const stock = await this.productService.modifyStock(order_product_id, modifyQty);
       }
