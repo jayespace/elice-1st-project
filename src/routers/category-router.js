@@ -38,7 +38,7 @@ categoryRouter.post('/categories',
         name,
         desc
     });
-    res.status(200).json(newCategory);
+    res.status(201).json(newCategory);
 }));
 
 // 로그인 후 admin일 경우 카테고리 삭제
