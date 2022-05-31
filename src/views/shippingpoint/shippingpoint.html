@@ -13,6 +13,8 @@
         rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/>
         <!-- 폰트 어썸: 아이콘 -->
         <script defer src="https://kit.fontawesome.com/7630448495.js" crossorigin="anonymous"></script>
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
         <!-- 커스텀 css, js -->
         <link rel="stylesheet" href="shippingpoint.css"/>
         <script src="shippingpoint.js" type="module" defer></script>
@@ -39,36 +41,36 @@
                             <p class="subtitle is-4">배송지정보</p>
                             <div class="field is-horizontal">
                                 <div class="field-label is-half-widescreen">
-                                    <label class="label" for="receiverName">이름</label>
+                                    <label class="label" for="receiverNameInput">이름</label>
                                 </div>
                                 <div class="field-body">
                                     <div class="field">
                                         <p class="control">
-                                            <input class="input" id="receiverName" type="text" placeholder="받는 분 이름을 입력해 주세요." autocomplete="on">
+                                            <input class="input" id="receiverNameInput" type="text" placeholder="받는 분 이름을 입력해 주세요." autocomplete="on">
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="field is-horizontal">
                                 <div class="field-label is-normal">
-                                    <label class="label" for="receiverPhoneNumber">연락처</label>
+                                    <label class="label" for="receiverPhoneNumberInput">연락처</label>
                                 </div>
                                 <div class="field-body">
                                     <div class="field">
                                         <p class="control">
-                                            <input class="input" id="receiverPhoneNumber" type="number" placeholder="- 없이 입력해 주세요." autocomplete="on">
+                                            <input class="input" id="receiverPhoneNumberInput" type="number" placeholder="- 없이 입력해 주세요." autocomplete="on">
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="field is-horizontal">
                                 <div class="field-label is-normal">
-                                    <label class="label" for="address2">주소</label>
+                                    <label class="label" for="address">주소</label>
                                 </div>
                                 <div class="field-body search">
                                     <div class="field">
                                         <p class="control">
-                                            <input class="input" id="postalCode" type="text" placeholder="주소찾기를 클릭해 주세요." readonly="">
+                                            <input class="input" id="postalCodeInput" type="text" placeholder="주소찾기를 클릭해 주세요." readonly="">
                                         </p>
                                     </div>
                                     <div>
@@ -84,7 +86,7 @@
                                 <div class="field-body">
                                     <div class="field">
                                         <p class="control">
-                                            <input class="input" id="address1" type="text" placeholder="" autocomplete="on" readonly="">
+                                            <input class="input" id="address1Input" type="text" placeholder="" autocomplete="on" readonly="">
                                         </p>
                                     </div>
                                 </div>
@@ -94,7 +96,7 @@
                                 <div class="field-body">
                                     <div class="field">
                                         <p class="control">
-                                            <input class="input" id="address2" type="text" placeholder="" autocomplete="on">
+                                            <input class="input" id="address2Input" type="text" placeholder="" autocomplete="on">
                                         </p>
                                     </div>
                                 </div>
@@ -127,12 +129,23 @@
                                             <option value="6" class="select-option">직접 입력</option>
                                         </select>
                                     </div>
+
+                                </div>
+                                
+                            </div>
+                            <div class="field is-horizontal ">
+                                <div class="field-label is-normal no-label"></div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control">
+                                            <input class="input is-hidden" id="customRequestInput" type="text" maxlength="50" placeholder="최대 50자 입력이 가능합니다." autocomplete="on">
+                                          </p>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                         <!---최근 입력한 배송지 -->
-                        <a class="box">
+                        <!-- <a class="box">
                             <p class="subtitle is-5">최근 배송지정보</p>
                             <div class="field is-horizontal">
                                 <p class="pl-6">
@@ -153,31 +166,31 @@
                                 </p>
                             </div>
 
-                        </a>
+                        </a> -->
                     </div>
                     <div class="block"></div>
                     <div class="is-flex-direction-column">
-                        <div class="box order-box">
+                        <div class="box order-box has-background-info-light">
                             <div class="header">
                                 <p>결제정보</p>
                             </div>
                             <div class="order-info">
                                 <div class="info">
                                     <p>주문상품</p>
-                                    <p class="products-title" id="productsTitle">아이보리 니트 / 2개<br>남성 정장 / 1개</p>
+                                    <p class="products-title" id="productsTitle"></p>
                                 </div>
                                 <div class="info">
                                     <p>상품총액</p>
-                                    <p id="productsTotal">227,000원</p>
+                                    <p id="productsTotal"></p>
                                 </div>
                                 <div class="info">
                                     <p>배송비</p>
-                                    <p id="deliveryFee">3,000원</p>
+                                    <p id="deliveryFee"></p>
                                 </div>
                             </div>
                             <div class="total">
                                 <p class="total-label">총 결제금액</p>
-                                <p class="total-price" id="orderTotal">230,000원</p>
+                                <p class="total-price" id="orderTotal"></p>
                             </div>
                             <div class="purchase">
                                 <button class="button is-info" id="checkoutButton">
