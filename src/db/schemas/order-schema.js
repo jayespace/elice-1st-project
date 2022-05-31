@@ -38,9 +38,17 @@ const OrderSchema = new Schema(
         {
           product_id: {
             type: Schema.Types.ObjectId,
-            ref: 'products'
+            ref: 'products',
+            required: true
           },
-          qty: Number
+          qty: {
+            type: Number,
+            required: true
+          },
+          totalPrice: {
+            type: Number,
+            required: false
+          },
         },
         {
           _id: false,
@@ -56,13 +64,13 @@ const OrderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'orderStatus',
       required: false,
-      default: "62934a2d1b49d68d742a7dca"
+      default: "629590bf88e88a5137884dd5"
     },
     csStatus: {
       type: Schema.Types.ObjectId,
       ref: 'csStatus',
       required: false,
-      default: "6294c4d492ea8f2aaccafad1"
+      default: "62958fdb0408c67d1e8d3653"
     },
   },
   {

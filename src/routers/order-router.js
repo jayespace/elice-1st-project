@@ -56,6 +56,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
       messageTo,
       products
     });
+    
   res.status(201).json(newOrder);
 }));
 

@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
-import { loginRequired } from '../../middlewares';
-import { adminRequired } from '../../middlewares';
-import { asyncHandler } from '../../middlewares';
-import { orderStatusService } from '../../services';
+import { loginRequired } from '../middlewares';
+import { adminRequired } from '../middlewares';
+import { asyncHandler } from '../middlewares';
+import { orderStatusService } from '../services';
 
 const orderStatusRouter = Router();
 

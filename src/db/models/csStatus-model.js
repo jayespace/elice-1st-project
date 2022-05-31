@@ -1,5 +1,5 @@
 import { model } from 'mongoose';
-import { CsStatusSchema } from '../../schemas/order/csStatus-schema';
+import { CsStatusSchema } from '../schemas/csStatus-schema';
 
 const CsStatus = model('csStatus', CsStatusSchema);
 

@@ -1,4 +1,4 @@
-import { orderStatusModel } from '../../db';
+import { orderStatusModel } from '../db';
 
 class OrderStatusService {
 

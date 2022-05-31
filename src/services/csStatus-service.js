@@ -1,4 +1,4 @@
-import { csStatusModel } from '../../db';
+import { csStatusModel } from '../db';
 
 class CsStatusService {
 
