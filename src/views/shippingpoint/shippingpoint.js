@@ -194,7 +194,15 @@ async function sendOrderInfoByPost(e) {
     products
   } 
   console.log(order);
+  try{
+    const result = await Api.post('/api/orders', order);
+    if(result){
+      return alert("성공적으로 주문했습니다.")
+    }
+  }catch(err){
+        alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
 
+  }
   
 
   // try {
