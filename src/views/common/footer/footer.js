@@ -17,12 +17,12 @@ export const footerTemplate = `
         class="is-flex is-flex-wrap-wrap is-align-items-center is-justify-content-center"
       >
         <li class="mr-4">
-          <a class="button is-white" href="#">모든 상품</a>
+          <a class="button is-white" href="/products">모든 상품</a>
         </li>
         <li class="mr-4">
-          <a class="button is-white" href="#">프로젝트 소개</a>
+          <a class="button is-white" href="/">프로젝트 소개</a>
         </li>
-        <li><a class="button is-white" href="#">NULL</a></li>
+        <li><a class="button is-white" href="https://kdt-gitlab.elice.io/sw_track/class_02_seoul/web_project/team12/shopping-mall" target="_blank">GitLab</a></li>
       </ul>
     </div>
   </div>

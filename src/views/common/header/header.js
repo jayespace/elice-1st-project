@@ -34,15 +34,13 @@ export const headerTemplate = () => {
           <a class="navbar-item" href="../">
             <img src="../common/header/elice-rabbit.png" alt="Logo" />
           </a>
-          <span class="navbar-burger burger" data-target="navbarMenu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
+          <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
         </div>
-
-        <!-- NAVBAR -->
-        <div id="navbarMenu" class="navbar-menu">
+        <div id="navMenu" class="navbar-menu">
           <!-- 좌측 메뉴바 -->
           <div class="navbar-start">
             <div class="navbar-item has-dropdown is-hoverable">
