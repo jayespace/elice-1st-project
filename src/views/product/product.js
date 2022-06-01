@@ -45,7 +45,7 @@ function setMoreImage(page, totalPage){
 
 async function getDataFromApi(category, page, perPage) {
   console.log('category',category);
-  const query =(category? `category='${category}'`:'')+
+  const query =(category? `?category='${category}'`:'?')+
   `&page=${page}&perPage=${perPage}`
   try{  
   const data = await Api.get("/api/products",query);

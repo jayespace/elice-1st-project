@@ -4,8 +4,8 @@ const getCategoryList = async () => {
   // 카테고리 분류
   try{
   const categories = await Api.get(`/api/categories`);
-  console.log(categories);
-  return categories.map(({_id,name}) => `<a href='?category=${name}'class="navbar-item"> ${name} </a>`)
+  // console.log(categories);
+  return categories.map(({_id,name}) => `<a href='http://${location.host}/products?category=${name}'class="navbar-item"> ${name} </a>`)
   }catch(e){
     console.error('카테고리 Nav 목록 :', e.message)
   }
