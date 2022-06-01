@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
-import { loginRequired } from '../middlewares';
-import { asyncHandler } from '../middlewares';
+import { loginRequired, asyncHandler } from '../middlewares';
 import { orderService, csStatusService, orderStatusService } from '../services';
 
 const orderRouter = Router();
@@ -14,12 +13,12 @@ orderRouter.get('/orders', loginRequired, asyncHandler(async (req, res) => {
   const currentUserId = req.currentUserId;
 
   let orders;
-
   if (role === "admin") {
     orders = await orderService.getOrders();
   } else {  
     orders = await orderService.getOrdersByUser(currentUserId);
   }
+  
   res.status(200).json(orders);
 }));
 
@@ -120,10 +119,9 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
   if (!csStatus && !orderStatus) {
 
     if (currentOrderStatus.name !== "결제완료") {
-      throw new Error('현재 주문 상태에서는 배송 정보를 변경할 수 없습니다. 관리자에게 문의하세요.')
+      throw new Error('현재 주문 상태에서는 배송 정보를 변경할 수 없습니다.')
 
     } else {
-
       /// 업데이트용 객체에 삽입함.
       toUpdate = {
         ...(fullNameTo && { fullNameTo }),
@@ -140,9 +138,10 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
     let adjusted;
 
     if (orderStatus) {
-        requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
-        adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
-        csStatus = adjusted.csStatus
+      requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
+      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
+      csStatus = adjusted.csStatus
+
     } else if (csStatus) {
       requestCsStatusId = await csStatusService.getCsStatusId(csStatus);
       adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentOrderStatus.id);
@@ -151,16 +150,17 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
 
     /// 업데이트용 객체에 삽입함.
     toUpdate = {
-      ...(orderStatus && { orderStatus: adjusted.orderStatus }),
+      ...(orderStatus && { orderStatus : adjusted.orderStatus }),
       ...(csStatus && { csStatus : adjusted.csStatus })
     }
   };
 
   // 상품 정보를 업데이트함.
   const updatedorderInfo = await orderService.setOrder(orderId, toUpdate);
-
+  
   // 업데이트 이후의 데이터를 프론트에 보내 줌
   res.status(200).json(updatedorderInfo);
+
 }));
 
 
