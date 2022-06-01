@@ -9,10 +9,18 @@
 .orders-top {
     border-top: 1px solid #15133C;
     border-bottom: 1px solid #15133C;
+    /*
     border-radius: 0;
     text-align: center;
     font-size: 20px;
-    color: black;
+    color: black; */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    /* width: 100%; */
+    /* background-color: #F1EEE9; */
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 /* .background{
@@ -32,12 +40,53 @@
     height : 200px;
     width: 100%;
     background-color: #F1EEE9;
+    flex-wrap: wrap;
 }
-.order-cancle {
-   border-radius: 0;
-   padding: 10px 5px 5px 10px;
+.date{
+    flex-grow: 2;
+}
+.info{
+    flex-grow: 4;
+}
+.qty{
+    flex-grow: 1;
+}
+.price{
+    flex-grow: 1;
+}
+.status{
+    flex-grow: 2;
+}
+.cancle{
+    flex-grow: 1;
+}
+.buttons{
+    display: flex;
+    flex-direction: column;
+    margin: 0 30px;
+    align-items: center;
+    text-align: center;
+}
+.order-detail{
+    border-radius: 5px;
+    padding: 10px 15px 10px 15px;
+    border: 1px solid #EC994B;
+    background-color: white;
+    color: 15133C;
+    cursor: pointer;
+    margin-bottom: 5px;
+    /* width: 50px; */
+   
 }
 
+.order-cancle {
+    border-radius: 5px;
+    padding: 10px 15px 10px 15px;
+   background-color: #EC994B;
+    border: 1px solid #EC994B;
+    color: white;
+    cursor: pointer;
+}
 
 .order-summary {
     white-space: pre-line
