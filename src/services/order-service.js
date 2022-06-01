@@ -3,15 +3,17 @@ import { userService } from './user-service';
 import { productService } from './product-service';
 import { csStatusService } from './csStatus-service';
 import { orderStatusService } from './orderStatus-service';
+import { orderServiceModule } from './module/order-service-module';
 
 class OrderService {
 
-  constructor(orderModel, userService, productService, csStatusService, orderStatusService) {
+  constructor(orderModel, userService, productService, csStatusService, orderStatusService, orderServiceModule) {
     this.orderModel = orderModel;
     this.userService = userService;
     this.productService = productService;
     this.csStatusService = csStatusService;
     this.orderStatusService = orderStatusService;
+    this.orderServiceModule = orderServiceModule;
   }
 
   // 1. 전체 주문 갯수 확인
@@ -223,10 +225,10 @@ class OrderService {
     // ***** 제품 가공 끝 *****************
 
     //// cs status & order status 이름 반환 작업
-    const order_csStatus_id = order.orderStatus.valueOf();
-    const cs_csStatus_id = order.csStatus.valueOf();
-    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
-    const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
+    const order_orderStatus_id = order.orderStatus.valueOf();
+    const order_csStatus_id = order.csStatus.valueOf();
+    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_orderStatus_id);
+    const csStatusName = await this.csStatusService.getCsStatusName(order_csStatus_id);
 
     const statusInfo = {
       orderStatus: orderStatusName,
@@ -472,7 +474,8 @@ const orderService = new OrderService(
   userService,
   productService,
   csStatusService, 
-  orderStatusService
+  orderStatusService,
+  orderServiceModule
 );
 
 export { orderService };

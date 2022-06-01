@@ -110,11 +110,11 @@ class OrderStatusService {
     const orderStatusName = orderStatus.name;
     // /// 현재 CS Status 확인
     const csStatusName = await this.csStatusService.getCsStatusName(csStatusId);
-    console.log(csStatusName)
+    
     //// 변경할 Cs Status default"정상" id 값 
     const csStatusDefaultId = "S62958fdb0408c67d1e8d3653"
 
-    /// 관리자 로직 구현 필요
+    /// 관리자 로직
     if (orderStatusName === "배송중") {
       if (csStatusName === '취소') {
           throw new Error ('구매자의 요청사항을 확인해 주세요.')

@@ -140,10 +140,9 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
     let adjusted;
 
     if (orderStatus) {
-      requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
-      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
-      csStatus = adjusted.csStatus
-
+        requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
+        adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
+        csStatus = adjusted.csStatus
     } else if (csStatus) {
       requestCsStatusId = await csStatusService.getCsStatusId(csStatus);
       adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentOrderStatus.id);

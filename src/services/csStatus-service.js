@@ -41,7 +41,7 @@ class CsStatusService {
     return csStatusId;
   }
 
-    // CS Status id로 이름 찾기
+  // CS Status id로 이름 찾기
   async getCsStatusName(csStatusId) {
     console.log(csStatusId)
     const csStatus = await this.csStatusModel.findById(csStatusId);
