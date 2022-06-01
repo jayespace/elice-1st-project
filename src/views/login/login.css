@@ -16,3 +16,18 @@
 .login-form-box .button {
   font-weight: bold;
 }
+
+.oauth-container {
+  align-items:center;
+  display:flex;
+  justify-content:center;
+  margin-top:1rem
+}
+
+.oauth-kakao { 
+  padding-top:.3rem
+}
+
+.oauth-kakao:hover {
+  opacity:.8
+}
