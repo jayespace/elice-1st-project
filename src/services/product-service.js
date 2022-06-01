@@ -48,6 +48,7 @@ class ProductService {
       const categoryName = await this.categoryService.getCategoryName(product_category_id);
 
       let modified = { 
+        _id,
         name,
         price,
         category: categoryName,
@@ -127,6 +128,7 @@ class ProductService {
       const categoryName = await this.categoryService.getCategoryName(product_category_id);
 
       let modified = { 
+        _id,
         name,
         price,
         category: categoryName,
@@ -147,7 +149,8 @@ class ProductService {
   async getProductDetail(productId) {
     const detail = await this.productModel.findById(productId);
 
-    const { 
+    const {
+      _id,
       name,
       price,
       category,
@@ -162,6 +165,7 @@ class ProductService {
       const categoryName = await this.categoryService.getCategoryName(product_category_id);
 
       const newProductInfo = {
+        _id,
         name,
         price,
         category: categoryName,
@@ -176,16 +180,16 @@ class ProductService {
   }
 
   ///// 가격으로 상품 검색
-  async getProductsByPrice(from, to) {
-    const price = { $gte: from, $lte: to }
-    const products = await this.productModel.findByPrice(price);
-    return products;
-  }
+  // async getProductsByPrice(from, to) {
+  //   const price = { $gte: from, $lte: to }
+  //   const products = await this.productModel.findByPrice(price);
+  //   return products;
+  // }
 
-  async getProductByName(name) {
-    const product = await this.productModel.findByName(name);
-    return product;
-  }
+  // async getProductByName(name) {
+  //   const product = await this.productModel.findByName(name);
+  //   return product;
+  // }
 
   //// 상품 추가
   async addProduct(productInfo) {

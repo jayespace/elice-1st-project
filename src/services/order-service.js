@@ -1,19 +1,22 @@
-import { orderModel } from '../db';
+import { orderModel, userModel, productModel, csStatusModel, orderStatusModel } from '../db';
 import { userService } from './user-service';
 import { productService } from './product-service';
 import { csStatusService } from './csStatus-service';
 import { orderStatusService } from './orderStatus-service';
-import { orderServiceModule } from './module/order-service-module';
+
 
 class OrderService {
 
-  constructor(orderModel, userService, productService, csStatusService, orderStatusService, orderServiceModule) {
+  constructor(orderModel, userService, productService, csStatusService, orderStatusService, userModel, productModel, csStatusModel, orderStatusModel) {
     this.orderModel = orderModel;
     this.userService = userService;
     this.productService = productService;
     this.csStatusService = csStatusService;
     this.orderStatusService = orderStatusService;
-    this.orderServiceModule = orderServiceModule;
+    this.userModel = userModel;
+    this.productModel = productModel;
+    this.csStatusModel = csStatusModel;
+    this.orderStatusModel = orderStatusModel;
   }
 
   // 1. 전체 주문 갯수 확인
@@ -187,7 +190,15 @@ class OrderService {
 
     /// db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
     const order_user_id = order.user_id.valueOf();
-    const user = await this.userService.getUser(order_user_id);
+    // const user = await this.userService.getUser(order_user_id);
+
+    let user = await this.userModel.findById(order_user_id);
+
+    // db에서 찾지 못한 경우, 에러 메시지 반환
+    if (!user) {
+      throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
     const {
       fullName,
       phoneNumber,
@@ -207,7 +218,8 @@ class OrderService {
       const orderQty = orderedProducts[i].qty
 
       // product_id로 product 정보를 가져와서 주문정보 array에 담음
-      const product = await this.productService.getDetail(order_product_id);
+      const product = await this.productModel.findById(order_product_id);
+
       const {
         name,
         price
@@ -224,11 +236,26 @@ class OrderService {
     }
     // ***** 제품 가공 끝 *****************
 
-    //// cs status & order status 이름 반환 작업
+    //// ******* cs status & order status 이름 반환 작업
+    ///// order status id로 이름 반환
     const order_orderStatus_id = order.orderStatus.valueOf();
+    const orderStatus = await this.orderStatusModel.findById(order_orderStatus_id);
+
+    if (!orderStatus) {
+      throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
+    const orderStatusName = orderStatus.name;
+
+    ///// cs status id로 이름 반환
     const order_csStatus_id = order.csStatus.valueOf();
-    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_orderStatus_id);
-    const csStatusName = await this.csStatusService.getCsStatusName(order_csStatus_id);
+    const csStatus = await this.csStatusModel.findById(order_csStatus_id);
+
+    if (!csStatus) {
+      throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
+    const csStatusName = csStatus.name;
 
     const statusInfo = {
       orderStatus: orderStatusName,
@@ -271,8 +298,14 @@ class OrderService {
     // db에 주문 정보 저장
     const newOrder = await this.orderModel.create(neworderInfo);
 
-    // user_id로 user 정보를 가져와서 가공
-    const user = await this.userService.getUser(user_id);
+    /// **** db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
+    const order_user_id = newOrder.user_id.valueOf();
+    let user = await this.userModel.findById(order_user_id);
+
+    // db에서 찾지 못한 경우, 에러 메시지 반환
+    if (!user) {
+      throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
     const {
       fullName,
       phoneNumber,
@@ -283,6 +316,7 @@ class OrderService {
       phoneNumber,
       email
     }
+    /// ** user 가공 끝
 
     /// 주문한 제품의 id로 제품 정보 가공
     let productInfo = [];
@@ -290,11 +324,30 @@ class OrderService {
       const product_id = products[i].product_id
       const orderQty = products[i].qty
 
-      /// db의 재고 수정
-      const stock = await this.productService.modifyStock(product_id, orderQty);
+      /// db의 재고 수정 *****
+      // const stock = await this.productService.modifyStock(product_id, orderQty);
+      console.log(product_id)
+      let productforQty = await this.productModel.findById(product_id);
+      console.log(productforQty)
+      const { stock } = productforQty;
+      const qty = orderQty
+      const toUpdate = {
+        stock: stock-qty
+      }
+  
+      productforQty = await this.productModel.update({
+        product: product_id,
+        update: toUpdate,
+      });
+
+      console.log(productforQty)
+      ///// 재고수정 끝 *****
+
+
 
       // product_id로 product 정보를 가져와서 주문정보 array에 담음
-      const product = await this.productService.getDetail(product_id);
+      const product = await this.productModel.findById(product_id);
+
       const {
         name,
         price
@@ -311,11 +364,26 @@ class OrderService {
     }
     // ***** 제품 가공 끝 *****************
 
-    //// cs status & order status 이름 반환 작업
-    const order_csStatus_id = newOrder.orderStatus.valueOf();
-    const cs_csStatus_id = newOrder.csStatus.valueOf();
-    const orderStatusName = await this.orderStatusService.getOrderStatusName(order_csStatus_id);
-    const csStatusName = await this.csStatusService.getCsStatusName(cs_csStatus_id);
+    //// ******* cs status & order status 이름 반환 작업
+    ///// order status id로 이름 반환
+    const order_orderStatus_id = newOrder.orderStatus.valueOf();
+    const orderStatus = await this.orderStatusModel.findById(order_orderStatus_id);
+
+    if (!orderStatus) {
+      throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
+    const orderStatusName = orderStatus.name;
+
+    ///// cs status id로 이름 반환
+    const order_csStatus_id = newOrder.csStatus.valueOf();
+    const csStatus = await this.csStatusModel.findById(order_csStatus_id);
+
+    if (!csStatus) {
+      throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
+    const csStatusName = csStatus.name;
 
     const statusInfo = {
       orderStatus: orderStatusName,
@@ -475,7 +543,7 @@ const orderService = new OrderService(
   productService,
   csStatusService, 
   orderStatusService,
-  orderServiceModule
+  userModel, productModel, csStatusModel, orderStatusModel
 );
 
 export { orderService };
