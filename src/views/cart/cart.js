@@ -1,5 +1,3 @@
-import * as Api from '/api.js';
-
 const $ = (selector) => document.querySelector(selector);
 
 // 스토리지
@@ -25,20 +23,34 @@ function App() {
   };
 
   // 카트 리스트 목록
-  const counts = $('#item-counts');
-  const prices = $('#item-prices');
+  const counts = $('#productsTitle');
+  const prices = $('#productsTotal');
+  const orderTotal = $('#orderTotal');
   const render = () => {
     const cartLists = this.cart
       .map((item, index) => {
         return `
-          <li data-item-id="${index}" class="cart-list-item">
-            <input type="checkbox" class="cart-item" ${item.cart}>
-            ${item.name}
-            <button class="decrease-item"> - </button>
-            <span class="menu-count">${item.count}</span>
-            <button class="increase-item"> + </button>
-            <button class="delete-item"> 삭제 </button>
-          </li>
+          <div class="box">
+            <li data-item-id="${index}" class="cart-list-item media">
+              <div class="media-left">
+              <input type="checkbox" class="cart-item" ${item.cart}>
+                <figure class="image is-64x64"><img alt="Image" src="${item.image}" /></figure>
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <strong> ${item.name} </strong> <small> ${item.price} 원 </small>
+                  </p>
+                </div>
+                <nav class="level">
+                <button class="decrease-item"> - </button>
+                <span class="menu-count">${item.count}</span>
+                <button class="increase-item"> + </button>
+                <button class="delete-item"> 삭제 </button>
+                </nav>
+              </div>
+            </li>
+          </div>
         `;
       })
       .join('');
@@ -52,7 +64,8 @@ function App() {
         itemPrices += item.price * item.count;
       }
       counts.innerText = `상품수: ${itemCounts} 개`;
-      prices.innerText = `총금액: ${itemPrices} 원`;
+      prices.innerText = `${itemPrices} 원`;
+      orderTotal.innerText = `${itemPrices + 3000} 원`;
     });
   };
 
@@ -99,6 +112,15 @@ function App() {
       store.setLocalStorage(this.cart);
       render();
     }
+
+    // 상품 전체 선택
+    const selectAll = $('#select-all');
+    const handleSelectAll = (e) => {
+      // console.log(e.target);
+      if (selectAll.checked) {
+      }
+    };
+    selectAll.addEventListener('click', handleSelectAll());
   });
 }
 

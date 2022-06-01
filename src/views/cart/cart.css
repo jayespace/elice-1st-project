@@ -1,0 +1,139 @@
+.shipping-box {
+  width: 35rem;
+}
+.order-box {
+  width: 30rem;
+}
+@media screen and (max-width: 1190px) {
+  .order-box {
+    margin-left: 0;
+    margin-top: 2rem;
+    width: 40rem;
+  }
+}
+.delivery-info {
+  width: 100%;
+}
+
+.delivery-info .subtitle {
+  padding-left: 0.4rem;
+}
+
+.delivery-info .field-label {
+  flex-basis: 7rem;
+  flex-grow: 0;
+  height: 3rem;
+  line-height: 2rem;
+  padding-left: 0.5rem;
+  text-align: left;
+}
+
+.delivery-info .field-body,
+.delivery-info .select {
+  flex-basis: 35rem;
+  flex-grow: 0;
+  height: 3rem;
+}
+
+.select select {
+  color: rgba(0, 0, 0, 0.3);
+  height: 100%;
+  width: 100%;
+}
+
+.select .select-option {
+  color: #000;
+  font-size: 1.1rem;
+}
+
+.delivery-info .button {
+  height: 3rem;
+}
+
+.delivery-info .field-body .control,
+.delivery-info .field-body .input {
+  height: 100%;
+}
+
+.delivery-info .custom-request {
+  display: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.tile-order-summary {
+  height: 100%;
+  position: sticky;
+  top: 0.5rem;
+}
+
+.order-box .header {
+  font-size: 1.4rem;
+}
+
+.order-info,
+.order-box .header {
+  border-bottom: 1px solid #555;
+}
+
+.order-info .info {
+  display: flex;
+  font-size: 1.1rem;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+}
+
+.order-info .info:first-child {
+  margin-top: 1.2rem;
+}
+
+.order-info .info:last-child {
+  margin-bottom: 1.2rem;
+}
+
+.order-info .info p {
+  display: block;
+  max-width: 70%;
+}
+
+.order-info .products-title {
+  text-align: right;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+}
+
+.total P {
+  display: block;
+}
+
+.total .total-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.total .total-price {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.purchase {
+  margin-top: 3rem;
+  padding: 0.2rem 0;
+}
+
+.purchase button {
+  font-size: 1.4rem;
+  font-weight: 800;
+  height: 4rem;
+  width: 100%;
+}
