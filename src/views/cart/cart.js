@@ -1,3 +1,5 @@
+import * as Api from '/api.js';
+
 const $ = (selector) => document.querySelector(selector);
 
 // 스토리지
@@ -16,7 +18,7 @@ function App() {
 
   // 스토리지에서 카트 리스트 불러오기
   this.init = () => {
-    if (store.getLocalStorage().length > 0) {
+    if (store.getLocalStorage().length > 1) {
       this.cart = store.getLocalStorage();
     }
     render();
@@ -24,12 +26,17 @@ function App() {
 
   // 카트 리스트 목록
   const render = () => {
-    const lists = this.cart
+    const cartLists = this.cart
       .map((item, index) => {
+        if (item.cart === true) {
+          const checked = 'checked';
+        }
         return `
           <li data-item-id="${index}" class="cart-list-item">
+            <label class="checkbox">
+              <input type="checkbox" class="cart-item" ${item.cart}>
+            </label>
             ${item.name}
-            <input type="checkbox" name="" id="${index}" />
             <button class="decrease-item"> - </button>
             <span class="menu-count">${item.count}</span>
             <button class="increase-item"> + </button>
@@ -38,7 +45,20 @@ function App() {
         `;
       })
       .join('');
-    $('#cart-list').innerHTML = lists;
+    $('#cart-list').innerHTML = cartLists;
+
+    const counts = $('#item-counts');
+    const prices = $('#item-prices');
+    let itemCounts = 0;
+    let itemPrices = 0;
+    this.cart.map((item) => {
+      if ((item.cart = 'checked')) {
+        itemCounts += item.count;
+        itemPrices += item.price * item.count;
+      }
+      counts.innerText = `상품수: ${itemCounts} 개`;
+      prices.innerText = `총금액: ${itemPrices} 원`;
+    });
   };
 
   // 상품 개수 수정
@@ -52,7 +72,11 @@ function App() {
     }
     // 상품 개수 감소
     if (e.target.classList.contains('decrease-item')) {
-      this.cart[itemId].count > 1 ? this.cart[itemId].count-- : 0;
+      if (this.cart[itemId].count > 2) {
+        this.cart[itemId].count--;
+      } else {
+        this.cart[itemId].count = 1;
+      }
       store.setLocalStorage(this.cart);
       render();
     }
@@ -65,6 +89,14 @@ function App() {
         render();
       }
     }
+    // // 상품 선택
+    // if (e.target.classList.contains('cart-item')) {
+    //   console.log(this.cart[itemId].cart);
+    //   this.cart[itemId].cart =
+    //     this.cart[itemId].cart === 'checked' ? '' : 'checked';
+    //   store.setLocalStorage(this.cart);
+    //   render();
+    // }
   });
 }
 
