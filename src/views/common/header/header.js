@@ -1,25 +1,31 @@
+import * as Api from '/api.js';
+
+const getCategoryList = async () => {
+  // 카테고리 분류
+  const category = await Api.get(`/api/products`);
+};
+
 export const headerTemplate = () => {
   // 토큰의 유무로 유저 로그인 판별
   const isLogIn = sessionStorage.getItem('token') ? true : false;
-
-  // 유저 권한 판별
-  const idAdmin = sessionStorage.getItem('role') === 'admin' ? true : false;
+  const username = sessionStorage.getItem('username');
 
   let loginTemplate = '';
   if (isLogIn) {
-    loginTemplate =
-      '<li><a href="/">계정관리</a></li><li><a href="/api/logout">로그아웃</a></li>';
+    loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
+                      <a class="navbar-link"> ${username} </a>
+                      <div class="navbar-dropdown">
+                        <a class="navbar-item"> 주문조회 </a>
+                        <hr class="navbar-divider" />
+                        <a class="navbar-item"> 회원정보관리 </a>
+                        <hr class="navbar-divider admin" />
+                        <a class="navbar-item logout">로그아웃</a>
+                      </div>
+                    </div>`;
   } else {
-    loginTemplate =
-      '<li><a href="/login">로그인</a></li><li><a href="/register">회원가입</a></li>';
+    loginTemplate = `<a href="/login" class="navbar-item"> 로그인 </a>
+                    <a href="/register" class="navbar-item"> 회원가입 </a>`;
   }
-
-  // let adminTemplate = '';
-
-  // if (isAdmin) {
-  //   adminTemplate = `
-  //   `;
-  // }
 
   return `
     <nav class="navbar is-fixed-top">
@@ -51,20 +57,8 @@ export const headerTemplate = () => {
 
           <!-- 우측 메뉴바 -->
           <div class="navbar-end">
-            <a href="/login" class="navbar-item"> 로그인 </a>
-            <a href="/register" class="navbar-item"> 회원가입 </a>
-            <a class="navbar-item"> 장바구니 </a>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link"> 사용자 </a>
-              <div class="navbar-dropdown">
-                <a class="navbar-item"> 주문조회 </a>
-                <hr class="navbar-divider" />
-                <a class="navbar-item"> 회원정보관리 </a>
-                <a class="navbar-item"> 관리자페이지 </a>
-                <hr class="navbar-divider" />
-                <a class="navbar-item">로그아웃</a>
-              </div>
-            </div>
+          ${loginTemplate}
+            <a href="/cart" class="navbar-item"> 장바구니 </a>
           </div>
         </div>
       </div>
