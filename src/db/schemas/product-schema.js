@@ -10,18 +10,35 @@ const ProductSchema = new Schema({
         required: true
     },
     category: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'categories',
         required: true
     },
     image: {
         type: String,
-        data: Buffer,
         required: false
     },
-    desc: {
+    briefDesc: {
         type: String,
         required: true
     },
+    fullDesc: {
+        type: String,
+        required: true
+    },
+    manufacturer: {
+        type: String,
+        required: true
+    },
+    stock: {
+        type: Number,
+        required: false,
+        default: 50
+    },
+    keyword: {
+        type: [String],
+        required: true
+    }
 }, {
     collection: 'products',
     timestamps: true,
