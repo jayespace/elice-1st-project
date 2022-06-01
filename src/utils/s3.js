@@ -28,7 +28,8 @@ const upload = multer({
       acl: 'public-read', // 클라이언트에서 자유롭게 가용하기 위함
       key: (req, file, cb) => {
           let extension = path.extname(file.originalname);
-          cb(null, 'test/'+Date.now().toString()+extension);
+          cb(null, 'product_dummy/'+Date.now().toString()+extension);
+          // cb(null, file.originalname)
       },
   }),
   limits: { fileSize: 5 * 1024 * 1024 }, // 용량 제한
