@@ -75,12 +75,18 @@ function addToCart() {
     getItem = [getItem];
   }
   
+  var check = true;
   getItem = getItem.filter(function(a){
-    if(a._id === objectId) alert('이미 장바구니에 담겨있어요!');
+    if(a._id === objectId) {
+      check = false;
+      alert('이미 장바구니에 담겨있어요!');
+    }
     return a._id !== objectId;
   });
 
   getItem.push(product);
+  if(check) alert('장바구니에 상품을 담았어요!');
+
 
   window.localStorage.setItem("cart", JSON.stringify(getItem));
 
