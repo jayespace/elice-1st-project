@@ -13,19 +13,9 @@ let product = new Array(); //상품정보
 
 addAllElements();
 addAllEvents();
-getDataFromApi();
-
-async function getDataFromApi() {
-  const data = await Api.get('/api/products');
-  const arr = data.products;
-  product = arr.find(a => a._id === id);
-
-  insertHTMLToDetail(product);
-  insertValue();
-}
 
 async function addAllElements() {
-  
+  getDataFromApi();
 }
 function addAllEvents() {
   addBtn.addEventListener("click", addToCart);
@@ -43,6 +33,14 @@ function insertHTMLToDetail(product) {
     </div>
     `
   );
+}
+async function getDataFromApi() {
+  const data = await Api.get("/api/products");
+  const arr = data.products;
+  product = arr.find((a) => a._id === id);
+
+  insertHTMLToDetail(product);
+  insertValue();
 }
 
 function insertValue(){
