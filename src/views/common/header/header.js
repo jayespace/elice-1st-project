@@ -44,7 +44,7 @@ export const headerTemplate = () => {
           <!-- 좌측 메뉴바 -->
           <div class="navbar-start">
             <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link"> 모든 상품 </a>
+              <a href="/products" class="navbar-link"> 모든 상품 </a>
               <div class="navbar-dropdown">
                 <a class="navbar-item"> 카테고리1 </a>
                 <a class="navbar-item"> 카테고리2 </a>
