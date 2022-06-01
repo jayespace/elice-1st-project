@@ -33,6 +33,7 @@ class ProductService {
       const product = products[i];
 
       const { 
+        _id,
         name,
         price,
         category,
@@ -48,6 +49,7 @@ class ProductService {
       const categoryName = await this.categoryService.getCategoryName(product_category_id);
 
       let modified = { 
+        _id,
         name,
         price,
         category: categoryName,

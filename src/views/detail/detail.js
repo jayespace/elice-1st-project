@@ -4,6 +4,7 @@ const url = new URL(window.location.href);
 const id = url.searchParams.get("id");
 const detail = document.querySelector(".product-detail");
 const addBtn = document.querySelector('.add-button');
+const purchaseBtn = document.querySelector('.purchase-button');
 const minusBtn = document.getElementById("minus");
 const plusBtn = document.getElementById("plus");
 const total = document.querySelector(".total");
@@ -29,6 +30,7 @@ async function addAllElements() {
 }
 function addAllEvents() {
   addBtn.addEventListener("click", addToCart);
+  purchaseBtn.addEventListener("click",purchaseProduct);
   minusBtn.addEventListener("click",minusQty);
   plusBtn.addEventListener("click",plusQty);
 }
@@ -60,7 +62,7 @@ function insertValue(){
 
 function addToCart() {
   product.count = Number(qty.innerText); //상품 수량 추가
-  product.cart = true;
+  product.cart = 'checked';
 
   let getItem = JSON.parse(window.localStorage.getItem("cart"));
   let objectId = product._id;
@@ -83,6 +85,10 @@ function addToCart() {
   window.localStorage.setItem("cart", JSON.stringify(getItem));
 
   console.log(getItem);
+}
+
+function purchaseProduct() {
+  window.location.href='../shippingpoint/shippingpoint.html';
 }
 
 function minusQty() {

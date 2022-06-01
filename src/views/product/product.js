@@ -1,42 +1,42 @@
-import * as Api from '../api.js';
-
+import * as Api from "../api.js";
+import { addCommas } from "/useful-functions.js";
 const list = document.querySelector(".product-list");
 
 getDataFromApi();
 
 async function getDataFromApi() {
-  const data = await Api.get('/api/products');
+  const data = await Api.get("/api/products");
+
+  console.log(data);
   const arr = data.products;
 
-  arr.map((product)=>{
-      insertHTMLToList(product);
+  arr.map((product) => {
+    insertHTMLToList(product);
   });
 }
 
-/**************여기 밑에 함수(function)을 입력해주세요***************/
 function insertHTMLToList(product) {
-  let price = (product.price).toLocaleString('en');
+  const { _id, image, name, price } = product;
   list.insertAdjacentHTML(
-    'beforeend',
+    "beforeend",
     `
-      <div class="product" id="${product._id}">
+      <div class="product" id="${_id}">
         <div class="img">
-          <img src="${product.image}" alt="상품이미지">
+          <img src="${image}" alt="상품이미지">
         </div>
         <div class="content">
-          <h2 class="name" id="pname">${product.name}</h2>
-          <p class="price" id="pprice">${price}원</p>
+          <h2 class="name" id="pname">${name}</h2>
+          <p class="price" id="pprice">${addCommas(price)}원</p>
         </div>
       </div>
     `
   );
 
-  let url;
-  const id = document.getElementById(product._id);
-
-  id.querySelector('div').addEventListener('click', (url = `/detail?id=${product._id}`,
-    function () {
-      window.location.href = url;
-    }
-  ))
+  const id = document.getElementById(_id);
+  function redirectProductDetail(e) {
+    const url = `/detail?id=${_id}`;
+    console.log(url);
+    location.href = url;
+  }
+  id.addEventListener("click", redirectProductDetail);
 }
