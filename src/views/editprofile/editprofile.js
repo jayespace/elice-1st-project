@@ -1,70 +1,91 @@
-if (sessionStorage.length < 1) {
-  const e = window.location.pathname,
-    t = window.location.search;
-  window.location.replace(`/login?previouspage=${e + t}`);
+//토큰이 없다면 로그인 페이지로 이동
+if (!sessionStorage.getItem("token")) {
+  const { pathname, search } = window.location;
+  window.location.replace(`/login?previouspage=${pathname + search}`);
 }
 
 import * as Api from "/api.js";
-import { activeModalFunction, insertImageFile } from "/useful-functions.js";
+import {
+  activeModalFunction,
+  searchAddressByDaumPost,
+  insertImageFile
+} from "/useful-functions.js";
 
 const profileHeadLabel = document.querySelector(".profile-header h1");
 
-const fullNameInput = document.querySelector("#fullNameInput");
-const currentPasswordInput = document.querySelector("#currentPasswordInput");
-const reenPasswordInput = document.querySelector("#reenPasswordInput");
-const reenPasswordConfirmInput = document.querySelector(
-  "#reenPasswordConfirmInput"
+const fullNameInput = document.getElementById("fullNameInput");
+const currentPasswordInput = document.getElementById("currentPasswordInput");
+//비밀번호 재생성 Inputs
+const reenPasswordInput = document.getElementById("reenPasswordInput");
+const reenPasswordConfirmInput = document.getElementById(
+  "reenPasswordConfirmInput"
 );
-const postalCodeInput = document.querySelector("#postalCodeInput");
-const address1Input = document.querySelector("#address1Input");
-const address2Input = document.querySelector("#address2Input");
-const phoneNumberInput = document.querySelector("#phoneNumberInput");
+const postalCodeInput = document.getElementById("postalCodeInput");
+const address1Input = document.getElementById("address1Input");
+const address2Input = document.getElementById("address2Input");
+const phoneNumberInput = document.getElementById("phoneNumberInput");
 
-const imageInput = document.querySelector("#imageInput");
-const searchAddressButton = document.querySelector("#searchAddressButton");
-const saveButton = document.querySelector("#saveButton");
-const deleteCompleteButton = document.querySelector("#deleteCompleteButton");
-
+const searchAddressButton = document.getElementById("searchAddressButton");
+const saveButton = document.getElementById("saveButton");
+const deleteCompleteButton = document.getElementById("deleteCompleteButton");
+const imageInput = document.getElementById("imageInput");
 const image = document.querySelector("#profile-image");
+let imagedata = '';
+
 const userInfoObject = {};
 
+activeModalFunction();
 addAllElements();
 addAllEvents();
 
-// 파일 업로드 함수 입니다.
-async function insertImageSrc(file) {
-  let {files} = file.target;
-  if(files){
-      try{
-      const ImageSrc = await insertImageFile(files[0]);
-      globalThis.image = files[0];
-      image.src = ImageSrc;
-      image.style.width = "100%"
-      image.style.height = "100%"
-      }catch(e){
-        console.error("이미지 :",e.message);
-      }
+//이미지 관련기능
+async function changeImageFile(file) {
+  if (file.target.files[0]) {
+    imagedata = file.target.files[0];
+    try {
+      const imgSrc = await insertImageFile(file.target.files[0]);
+      image.src = imgSrc;
+      image.style.width = "100%";
+      image.style.height = "100%";
+    } catch (e) {
+      console.error("이미지 관련 오류", e.massage);
+    }
   }
 }
 
+
 async function addAllElements() {
   setUserInfoToInputs();
-  activeModalFunction();
 }
 
-function addAllEvents() {
-  imageInput.addEventListener("change", insertImageSrc);
-  searchAddressButton.addEventListener(
-    "click",
-    DaumJibunAPI(postalCodeInput, address1Input, address2Input)
-  );
+async function addAllEvents() {
+  imageInput.addEventListener("change", changeImageFile);
+  searchAddressButton.addEventListener("click", insertAddressToAddrInputs);
   saveButton.addEventListener("click", handlePatch);
   deleteCompleteButton.addEventListener("click", deleteAccount);
 }
+
+async function insertAddressToAddrInputs() {
+  const { zonecode, address } = await searchAddressByDaumPost();
+  postalCodeInput.value = zonecode;
+  address1Input.value = address;
+  address2Input.focus();
+}
+//계정삭제 관련
 async function deleteAccount() {
-  alert("execute");
+  const userid = sessionStorage.getItem("userid");
+  const currentPassword = currentPasswordInput.value;
+  const isCurrentPasswordValid = currentPassword.length > 1;
+
+  if (!isCurrentPasswordValid) {
+    return alert("정보 삭제 시 현재 비빌번호를 입력해주세요.");
+  }
+  const data = {
+    userid,
+    currentPassword,
+  };
   try {
-    const result = await Api.delete(`/api/users/${userid}`);
+    const result = await Api.delete(`/api/users`, userid, data);
     if (result) {
       location.href = "/login";
     }
@@ -73,35 +94,33 @@ async function deleteAccount() {
 
 //회원정보 셋팅
 async function setUserInfoToInputs() {
-  const userid = sessionStorage.userid;
+  const userid = sessionStorage.getItem("userid");
   const data = await Api.get(`/api/users/${userid}`);
-  console.log(data);
   const { fullName, email, password, address, phoneNumber } = data;
 
-  console.log(
-    fullName,
-    password,
-    address.postalCode,
-    address.address1,
-    address.address2,
-    phoneNumber
-  );
+  //가져온 불확실한 정보 유효성 검사
+  const postalCode = address ? address.postalCode : "";
+  const address1 = address ? address.address1 : "";
+  const address2 = address ? address.address2 : "";
 
-  userInfoObject = {
-    fullName,
-    password,
-    postalCode: address.postalCode,
-    address1: address.address1,
-    address2: address.address2,
-    phoneNumber,
-  };
+  //userInfo 저장
+  userInfoObject.fullName = fullName;
+  userInfoObject.password = password;
+  userInfoObject.postalCode = postalCode;
+  userInfoObject.address1 = address1;
+  userInfoObject.address2 = address2;
+  userInfoObject.phoneNumber = phoneNumber ?? '';
+
+  //input에 셋팅
   profileHeadLabel.insertAdjacentText("beforeend", `(${email})`);
   fullNameInput.value = fullName;
-  postalCodeInput.value = address.postalCode ?? "";
+  currentPasswordInput.value = "";
   reenPasswordInput.value = "";
-  address1Input.value = address.address1 ?? "";
-  address2Input.value = address.address2 ?? "";
-  phoneNumberInput.value = phoneNumber ?? "";
+  reenPasswordConfirmInput.value = "";
+  postalCodeInput.value = postalCode;
+  address1Input.value = address1;
+  address2Input.value = address2;
+  phoneNumberInput.value = phoneNumber ?? '';
 }
 //회원정보 수정 진행
 async function handlePatch(e) {
@@ -117,61 +136,53 @@ async function handlePatch(e) {
   const phoneNumber = phoneNumberInput.value;
   // const image = imageInput.value;
 
-  //세션 확실한 값
   const isFullNameValidModify = fullName === userInfoObject.fullName;
+  const isCurrentPasswordValid = currentPassword.length > 1;
   const isReenPasswordValidModify = reenPassword.length < 1;
   const isReenPasswordSame = reenPassword === reenPasswordConfirm;
+  const isPostalCodeValidModify = postalCode === userInfoObject.postalCode;
+  const isAddress1CodeValidModify = address1 === userInfoObject.address2Code;
+  const isAddress2CodeValidModify = address2 === userInfoObject.address2Code;
+  const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
 
-  //세션 불확실 값
-  const isPostalCodeValidModify =
-    postalCode === (userInfoObject.postalCode ?? "");
-  const isAddress1CodeValidModify =
-    address1 === (userInfoObject.address2Code ?? "");
-  const isAddress2CodeValidModify =
-    address2 === (userInfoObject.address2Code ?? "");
-  const isPhoneNumberValidModify =
-    phoneNumber === (userInfoObject.phoneNumber ?? "");
+  if (!isCurrentPasswordValid) {
+    return alert("정보 수정 시 현재 비빌번호를 입력해주세요.");
+  }
 
   if (!isReenPasswordSame) {
     return alert("비밀번호가 일치하지 않습니다.");
   }
-
   if (
-    !isFullNameValidModify &&
-    !isReenPasswordValidModify &&
-    !isPostalCodeValidModify &&
-    !isAddress1CodeValidModify &&
-    !isAddress2CodeValidModify &&
+    !isFullNameValidModify ||
+    !isReenPasswordValidModify ||
+    !isPostalCodeValidModify ||
+    !isAddress1CodeValidModify ||
+    !isAddress2CodeValidModify ||
     !isPhoneNumberValidModify
   ) {
-    alert("데이터가 변경 됨.");
-  }
+    try {
+      const data = {
+        fullName,
+        password: reenPassword,
+        currentPassword: currentPassword,
+        address: {
+          postalCode: postalCode,
+          address1: address1,
+          address2: address2,
+        },
+        phoneNumber: phoneNumber,
+      };
 
-  try {
-    const data = {
-      fullName,
-      password: reenPassword,
-      currentPassword: currentPassword,
-      address: {
-        postalCode: postalCode,
-        address1: address1,
-        address2: address2,
-      },
-      phoneNumber: phoneNumber,
-    };
-
-    const result = await Api.patch(
-      `/api/users/${sessionStorage.userid}`,
-      "",
-      data
-    );
-    console.log(result, "color: #ff0000;");
-    if (result) {
-      reenPasswordInput.value = "";
-      reenPasswordConfirmInput.value = "";
-      location.href = "/";
+      const result = await Api.patch(
+        `/api/users/${sessionStorage.userid}`,
+        "",
+        data
+      );
+      if (result) {
+        location.href = "/";
+      }
+    } catch (e) {
+      e.message;
     }
-  } catch (e) {
-    e.message;
   }
 }

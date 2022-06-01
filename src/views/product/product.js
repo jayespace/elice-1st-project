@@ -1,17 +1,61 @@
+/**
+ * @todo
+ * window.location.search 에따라 보여지는 products
+ * 
+ */
+
 import * as Api from "../api.js";
 import { addCommas } from "/useful-functions.js";
+
+const moreImage = document.getElementById('moreImage');
 const list = document.querySelector(".product-list");
+globalThis.page = 1;
+globalThis.perPage = 8;
 
-getDataFromApi();
+//initial Create Products
+getDataFromApi('',globalThis.page++, globalThis.perPage);
 
-async function getDataFromApi() {
-  const data = await Api.get("/api/products");
+//infinity Scroll Function of Product Pagination
+//catch ScrollEvent
+const onScroll = e => {
+  const {scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement
+  if(scrollHeight === scrollTop + clientHeight &&globalThis.page <=globalThis.totalPage){
+    getDataFromApi('',globalThis.page++, globalThis.perPage);
+  }
+}
+//prevent repeating Call Function
+const debounce = (func, delay) => {
+  let timeoutId = null;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(func.bind(null, ...args ), delay);
+  }
+}
+
+document.addEventListener("scroll", debounce(onScroll, 150));
+
+function setMoreImage(page, totalPage){
+  console.log(page,totalPage);
+  if(page > totalPage){
+    moreImage.classList.add('is-hidden');
+  }else{
+    moreImage.classList.remove('is-hidden');
+  }
+}
+
+async function getDataFromApi(category, page, perPage) {
+  try{
+  const data = await Api.get("/api/products",`page=${page}&perPage=${perPage}`);
   console.log(data);
-  const arr = data.products;
+  const {totalPage, products} = data;
+  globalThis.totalPage = totalPage;
+  setMoreImage(globalThis.page, totalPage);
+  products.map(insertHTMLToList);
 
-  arr.map((product) => {
-    insertHTMLToList(product);
-  });
+  }catch(e){
+    console.error('페이지네이션 관련:',e);
+  }
+
 }
 
 function insertHTMLToList(product) {
