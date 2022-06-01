@@ -23,6 +23,7 @@
       crossorigin="anonymous"
     ></script>
     <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="./cart.css" />
     <script src="../common/landing.js" type="module" defer></script>
     <script src="cart.js" type="module" defer></script>
   </head>
@@ -45,65 +46,46 @@
         </nav>
         <hr />
 
-        <ul id="cart-list"></ul>
-        <ul>
-          <li id="item-counts">상품수</li>
-          <li id="item-prices">상품금액</li>
-          <li id="total-prices">총금액</li>
-        </ul>
-
-        <!-- 
+        <input type="checkbox" name="product" id="select-all" checked />
+        <br />
         <div class="columns">
           <div class="column">
-            <div class="card">
-              <header class="card-header">
-                <p class="card-header-title">Component</p>
-                <a class="card-header-icon">
-                  <span class="icon"> <i class="fa fa-angle-down"></i> </span>
-                </a>
-              </header>
-              <div class="card-content">
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                  <a>#css</a>
-                  <a>#responsive</a>
-                  <br />
-                  <small>11:09 PM - 1 Jan 2016</small>
+            <ul id="cart-list"></ul>
+          </div>
+          <div class="column is-5">
+            <div class="box order-box has-background-info-light">
+              <div class="header">
+                <p>결제정보</p>
+              </div>
+              <div class="order-info">
+                <div class="info">
+                  <p>주문상품</p>
+                  <p class="products-title" id="productsTitle">
+                    몽페레 몽마르뜨 원피스 로얄핑크 / 1개<br />
+                    펫츠앤미 아기곰모자 브라운 / 1개
+                  </p>
+                </div>
+                <div class="info">
+                  <p>상품총액</p>
+                  <p id="productsTotal"></p>
+                </div>
+                <div class="info">
+                  <p>배송비</p>
+                  <p id="deliveryFee">3,000원</p>
                 </div>
               </div>
-              <footer class="card-footer">
-                <a class="card-footer-item">Save</a>
-                <a class="card-footer-item">Edit</a>
-                <a class="card-footer-item">Delete</a>
-              </footer>
-            </div>
-          </div>
-          <div class="column">
-            <div class="card">
-              <div class="card-content">
-                <div class="media">
-                  <div class="media-left">
-                    <figure class="image" style="height: 40px; width: 40px">
-                      <img
-                        src="https://source.unsplash.com/random/96x96"
-                        alt="Image"
-                      />
-                    </figure>
-                  </div>
-                  <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
-                  </div>
-                </div>
-                <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris
-                </div>
+              <div class="total">
+                <p class="total-label">총 결제금액</p>
+                <p class="total-price" id="orderTotal">69,000원</p>
+              </div>
+              <div class="purchase">
+                <button class="button is-info" id="checkoutButton">
+                  <a href="/shippingpoint">구매하기</a>
+                </button>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </section>
     </main>
     <footer id="footer"></footer>
