@@ -1,5 +1,5 @@
 import * as Api from "/api.js";
-import { randomId } from "/useful-functions.js";
+import { randomId, insertImageFile } from "/useful-functions.js";
 
 const categorySelectBox = document.getElementById("categorySelectBox");
 
@@ -27,34 +27,32 @@ let imagedata = "";
 addAllElements();
 addAllEvents();
 
-// 파일 업로드 함수 입니다.
-function insertImageFile(file) {
-  let input = file.target;
-  //이미지 파일 유효성 검사
-  if (input.files && input.files[0]) {
-    const fileReader = new FileReader();
-    fileReader.onload = function (data) {
-      const uploadedImage = data.target.result;
-      console.log(image);
-      image.src = uploadedImage;
-      image.style.width = "128px";
-      image.style.height = "128px";
-    };
-    //readAsDataURL 데이터를 읽습니다. 그리고 fileReader.onload가 진행됩니다.
-    imagedata = input.files[0];
-    fileReader.readAsDataURL(input.files[0]);
-  }
-}
-
 async function addAllElements() {
   createCategoryToCategorySelectBox();
 }
 
 function addAllEvents() {
-  imageInput.addEventListener("change", insertImageFile);
+  imageInput.addEventListener("change", changeImageFile);
   addNewProductButton.addEventListener("click", handlePatch);
   addKeywordButton.addEventListener("click", addKeywordTag);
-  addKeywordInput.addEventListener("keypress", (e) => e.key === 'Enter'? addKeywordTag() : '');
+  addKeywordInput.addEventListener("keypress", (e) =>
+    e.key === "Enter" ? addKeywordTag() : ""
+  );
+}
+
+//이미지 업로드 관련
+async function changeImageFile(file) {
+  if (file.target.files[0]) {
+    imagedata = file.target.files[0];
+    try {
+      const imgSrc = await insertImageFile(file.target.files[0]);
+      image.src = imgSrc;
+      image.style.width = "128px";
+      image.style.height = "128px";
+    } catch (e) {
+      console.error("이미지 관련 오류", e.massage);
+    }
+  }
 }
 //카테고리 표시 기능
 async function createCategoryToCategorySelectBox() {
