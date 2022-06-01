@@ -2,10 +2,16 @@ import * as Api from '/api.js';
 
 const getCategoryList = async () => {
   // 카테고리 분류
-  const category = await Api.get(`/api/products`);
+  try{
+  const categories = await Api.get(`/api/categories`);
+  console.log(categories);
+  return categories.map(({_id,name}) => `<a href='?category=${name}'class="navbar-item"> ${name} </a>`)
+  }catch(e){
+    console.error('카테고리 Nav 목록 :', e.message)
+  }
 };
 
-export const headerTemplate = () => {
+export const headerTemplate = async() => {
   // 토큰의 유무로 유저 로그인 판별
   const isLogIn = sessionStorage.getItem('token') ? true : false;
   const username = sessionStorage.getItem('username');
@@ -46,9 +52,7 @@ export const headerTemplate = () => {
             <div class="navbar-item has-dropdown is-hoverable">
               <a href="/products" class="navbar-link"> 모든 상품 </a>
               <div class="navbar-dropdown">
-                <a class="navbar-item"> 카테고리1 </a>
-                <a class="navbar-item"> 카테고리2 </a>
-                <a class="navbar-item"> 카테고리3 </a>
+                ${await getCategoryList()}
               </div>
             </div>
           </div>

@@ -22,7 +22,7 @@ async function addAllElements() {
   insertFooterEl();
 }
 
-function insertHeaderEl() {
+async function insertHeaderEl() {
   headEl.insertAdjacentHTML(
     'beforeend',
     `
@@ -30,7 +30,7 @@ function insertHeaderEl() {
     <script defer type="text/javascript" src="../common/header/navbar.js"></script>
     `
   );
-  headerEl.insertAdjacentHTML('afterbegin', headerTemplate());
+  headerEl.insertAdjacentHTML('afterbegin', await headerTemplate());
 }
 
 function insertFooterEl() {

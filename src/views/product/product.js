@@ -11,16 +11,17 @@ const moreImage = document.getElementById('moreImage');
 const list = document.querySelector(".product-list");
 globalThis.page = 1;
 globalThis.perPage = 8;
-
+const queryCategory = new URLSearchParams(location.search).get('category');
+console.log(queryCategory);
 //initial Create Products
-getDataFromApi('',globalThis.page++, globalThis.perPage);
+getDataFromApi(queryCategory,globalThis.page++, globalThis.perPage);
 
 //infinity Scroll Function of Product Pagination
 //catch ScrollEvent
 const onScroll = e => {
   const {scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement
   if(scrollHeight === scrollTop + clientHeight &&globalThis.page <=globalThis.totalPage){
-    getDataFromApi('',globalThis.page++, globalThis.perPage);
+    getDataFromApi(queryCategory, globalThis.page++, globalThis.perPage);
   }
 }
 //prevent repeating Call Function
@@ -35,7 +36,6 @@ const debounce = (func, delay) => {
 document.addEventListener("scroll", debounce(onScroll, 150));
 
 function setMoreImage(page, totalPage){
-  console.log(page,totalPage);
   if(page > totalPage){
     moreImage.classList.add('is-hidden');
   }else{
@@ -44,8 +44,11 @@ function setMoreImage(page, totalPage){
 }
 
 async function getDataFromApi(category, page, perPage) {
-  try{
-  const data = await Api.get("/api/products",`page=${page}&perPage=${perPage}`);
+  console.log('category',category);
+  const query =(category? `category='${category}'`:'')+
+  `&page=${page}&perPage=${perPage}`
+  try{  
+  const data = await Api.get("/api/products",query);
   console.log(data);
   const {totalPage, products} = data;
   globalThis.totalPage = totalPage;
