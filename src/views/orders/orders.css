@@ -1,5 +1,4 @@
 .account-header {
-    /* border-bottom: 1px solid #ddd; */
     display: block;
     padding-bottom: 10px;
 }
@@ -31,12 +30,14 @@
     align-items: center;
     text-align: center;
     height : 200px;
+    width: 100%;
     background-color: #F1EEE9;
 }
-
-.orders-item:not(:last-child) {
-    border-bottom: 1px solid #bbb
+.order-cancle {
+   border-radius: 0;
+   padding: 10px 5px 5px 10px;
 }
+
 
 .order-summary {
     white-space: pre-line
