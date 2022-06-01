@@ -2,6 +2,7 @@
     padding-top: 70px;
     padding-bottom: 70px;
 }
+
 .section .container{
     max-width: 960px;
 }
@@ -15,6 +16,7 @@
     height:460px;
     margin: 0 10px 30px 10px;
     border: 1px solid #eee;
+    background-color: #F1EEE9;
     border-radius: 5px;
     overflow: hidden;
     cursor: pointer;
