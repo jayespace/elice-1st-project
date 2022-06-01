@@ -25,17 +25,14 @@ function App() {
   };
 
   // 카트 리스트 목록
+  const counts = $('#item-counts');
+  const prices = $('#item-prices');
   const render = () => {
     const cartLists = this.cart
       .map((item, index) => {
-        if (item.cart === true) {
-          const checked = 'checked';
-        }
         return `
           <li data-item-id="${index}" class="cart-list-item">
-            <label class="checkbox">
-              <input type="checkbox" class="cart-item" ${item.cart}>
-            </label>
+            <input type="checkbox" class="cart-item" ${item.cart}>
             ${item.name}
             <button class="decrease-item"> - </button>
             <span class="menu-count">${item.count}</span>
@@ -47,12 +44,10 @@ function App() {
       .join('');
     $('#cart-list').innerHTML = cartLists;
 
-    const counts = $('#item-counts');
-    const prices = $('#item-prices');
     let itemCounts = 0;
     let itemPrices = 0;
     this.cart.map((item) => {
-      if ((item.cart = 'checked')) {
+      if (item.cart === 'checked') {
         itemCounts += item.count;
         itemPrices += item.price * item.count;
       }
@@ -61,15 +56,17 @@ function App() {
     });
   };
 
-  // 상품 개수 수정
+  // 상품 상태 변경
   $('#cart-list').addEventListener('click', (e) => {
     const itemId = e.target.closest('li').dataset.itemId;
+
     // 상품 개수 증가
     if (e.target.classList.contains('increase-item')) {
       this.cart[itemId].count++;
       store.setLocalStorage(this.cart);
       render();
     }
+
     // 상품 개수 감소
     if (e.target.classList.contains('decrease-item')) {
       if (this.cart[itemId].count > 2) {
@@ -80,6 +77,7 @@ function App() {
       store.setLocalStorage(this.cart);
       render();
     }
+
     // 상품 삭제
     if (e.target.classList.contains('delete-item')) {
       if (confirm('삭제하시겠습니까?')) {
@@ -89,14 +87,18 @@ function App() {
         render();
       }
     }
-    // // 상품 선택
-    // if (e.target.classList.contains('cart-item')) {
-    //   console.log(this.cart[itemId].cart);
-    //   this.cart[itemId].cart =
-    //     this.cart[itemId].cart === 'checked' ? '' : 'checked';
-    //   store.setLocalStorage(this.cart);
-    //   render();
-    // }
+
+    // 상품 선택
+    console.log(this.cart[itemId].cart);
+    if (e.target.classList.contains('cart-item')) {
+      if (this.cart[itemId].cart === 'checked') {
+        this.cart[itemId].cart = '';
+      } else {
+        this.cart[itemId].cart = 'checked';
+      }
+      store.setLocalStorage(this.cart);
+      render();
+    }
   });
 }
 
