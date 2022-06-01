@@ -60,9 +60,11 @@ function insertValue(){
 
 function addToCart() {
   product.count = Number(qty.innerText); //상품 수량 추가
+  product.cart = true;
 
   let getItem = JSON.parse(window.localStorage.getItem("cart"));
   let objectId = product._id;
+
 
   if(getItem === null) { //localstorage에 아무것도 없을 때
     getItem = [];
