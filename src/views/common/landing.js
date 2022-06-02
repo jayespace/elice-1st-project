@@ -10,9 +10,6 @@ const footerEl = $('#footer');
 const headEl = $('head');
 
 addAllElements();
-if ($('.logout')) {
-  userLogout();
-}
 
 // header, footer 요소를 추가하는 함수
 async function addAllElements() {
@@ -34,8 +31,12 @@ function insertFooterEl() {
 }
 
 // 로그아웃
-
 const logoutEl = $('.logout');
+
+if ($('.logout')) {
+  userLogout();
+}
+
 function userLogout() {
   logoutEl.addEventListener('click', () => {
     alert('로그아웃 되었습니다. ');
