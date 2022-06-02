@@ -129,7 +129,7 @@ class CsStatusService {
     } 
 
     if (csStatusName === "정상") {
-      throw new Error ('요청사항이 아닙니다.'); 
+      throw new Error ('현재 주문 상태를 다시 한번 확인해 주세요'); 
     }
 
     // Order Status "취소완료" 

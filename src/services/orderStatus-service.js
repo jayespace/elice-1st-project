@@ -131,7 +131,7 @@ class OrderStatusService {
     } 
     
     if (orderStatusName === "배송완료") {
-      if (csStatusName === '교환' && csStatusName === "반품") {
+      if (csStatusName === '교환' && csStatusName === "반품" || csStatusName === "취소") {
         throw new Error ('구매자의 요청사항을 확인해 주세요.');
       }
     } 
