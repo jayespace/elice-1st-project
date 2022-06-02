@@ -4,7 +4,7 @@ const getCategoryList = async () => {
   // 카테고리 분류
   try {
     const categories = await Api.get(`/api/categories`);
-    console.log(categories);
+    // console.log(categories);
     return categories
       .map(
         ({ _id, name }) =>
@@ -20,7 +20,11 @@ export const headerTemplate = async () => {
   // 토큰의 유무로 유저 로그인 판별
   const isLogIn = sessionStorage.getItem('token') ? true : false;
   const username = sessionStorage.getItem('username');
-
+  const isAdmin = sessionStorage.getItem('role') === 'admin' ? true : false;
+  let adminTemplate = '';
+  if (isAdmin) {
+    adminTemplate = `<a href="/account" class="navbar-item"> 관리자페이지 </a>`;
+  }
   let loginTemplate = '';
   if (isLogIn) {
     loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
@@ -29,6 +33,7 @@ export const headerTemplate = async () => {
                         <a href="/#"class="navbar-item"> 주문조회 </a>
                         <hr class="navbar-divider" />
                         <a href="/editprofile" class="navbar-item"> 회원정보관리 </a>
+                        ${adminTemplate}
                         <hr class="navbar-divider admin" />
                         <a class="navbar-item logout">로그아웃</a>
                       </div>
