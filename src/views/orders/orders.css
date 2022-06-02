@@ -14,6 +14,18 @@
     padding: 0 20px;
 }
 
+.top-date{
+    flex-grow: 1;
+}
+.top-info{
+    flex-grow: 4;
+}
+.top-status{
+    flex-grow: 1;
+}
+.top-cancle{
+    flex-grow: 1;
+}
 .orders-item {
     display: flex;
     align-items: center;
@@ -21,37 +33,36 @@
     height: 200px;
     width: 100%;
     background-color: #F1EEE9;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
 .date {
-    flex-grow: 2;
+    flex-shrink: 0;
+    width: 250px;
 }
 
 .info {
-    flex-grow: 4;
-}
-
-.qty {
-    flex-grow: 1;
+    flex-shrink: 0;
+    width: 500px;
 }
 
 .price {
+    flex-shrink: 0;
     flex-grow: 1;
+    max-width:100%;
 }
 
 .status {
+    flex-shrink: 0;
     flex-grow: 2;
-}
-
-.cancle {
-    flex-grow: 1;
+    max-width:100%;
+  
 }
 
 .buttons {
     display: flex;
     flex-direction: column;
-    margin: 0 30px;
+    margin: 0 50px;
     align-items: center;
     text-align: center;
 }
@@ -101,9 +112,9 @@
     background-color: #EC994B;
 }
 
-.detail-modal {
+/* .detail-modal {
     display: none;
-}
+} */
 
 .detail-modal-content {
     width: 500px;
@@ -114,7 +125,9 @@
     margin: -350px 0 0 -250px;
     background: #eee;
     z-index: 2;
+    
 }
+
 
 .detail-modal .box {
     text-align: center;
@@ -155,9 +168,16 @@
 .detail-modal-content .box {
     padding: 40px 20px;
 }
-.a{
-    text-align: left;
+.label{
+    float: left;
+    font-weight: 500;
 }
-.bb:first-child{
+.value{
+    float:right;
+}
+span{
+    clear: both;
+}
+/* .bb{
    text-align: left;
-}
+} */

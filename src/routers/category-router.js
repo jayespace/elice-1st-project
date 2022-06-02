@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
-import { loginRequired } from '../middlewares';
-import { adminRequired } from '../middlewares';
-import { asyncHandler } from '../middlewares';
+import { loginRequired, adminRequired, asyncHandler } from '../middlewares';
 import { categoryService, productService } from '../services';
 
 const categoryRouter = Router();
@@ -10,12 +8,14 @@ const categoryRouter = Router();
 
 // 모든 카테고리 정보를 가져옴
 categoryRouter.get('/categories', asyncHandler(async (req, res) => {
+
   const categories = await categoryService.getCategories();
   res.status(200).json(categories);
 }));
 
 // 카테고리 id로 검색 후 상세 정보 가져옴
 categoryRouter.get('/categories/:categoryId', asyncHandler(async (req, res) => {
+
   const { categoryId } = req.params;
   const category = await categoryService.getCategory(categoryId);
   res.status(200).json(category);
@@ -42,9 +42,9 @@ categoryRouter.post('/categories',
 }));
 
 
-
 // 로그인 후 admin일 경우 카테고리 정보 수정
-categoryRouter.patch('/categories/:categoryId', loginRequired, adminRequired, asyncHandler(async (req, res) => {
+categoryRouter.patch('/categories/:categoryId',
+  loginRequired, adminRequired, asyncHandler(async (req, res) => {
 
   // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
   if (is.emptyObject(req.body)) {
@@ -73,12 +73,12 @@ categoryRouter.patch('/categories/:categoryId', loginRequired, adminRequired, as
 
   // 업데이트 이후의 데이터를 프론트에 보내 줌
   res.status(200).json(updatedCategoryInfo);
-
 }));
 
 // 로그인 후 admin일 경우 카테고리 삭제
 categoryRouter.delete('/categories/:categoryId',
   loginRequired, adminRequired, asyncHandler(async (req, res) => {
+
   const { categoryId } = req.params;
 
   const isCategoryExistinProduct = await productService.isExist(categoryId);
@@ -88,7 +88,6 @@ categoryRouter.delete('/categories/:categoryId',
 
   const del = await categoryService.deleteCategory(categoryId)
   res.status(200).json(del);
-
 }));
 
 export { categoryRouter };

@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
-import { loginRequired } from '../middlewares';
-import { adminRequired } from '../middlewares';
-import { asyncHandler } from '../middlewares';
+import { loginRequired, adminRequired, asyncHandler } from '../middlewares';
 import { csStatusService } from '../services';
 
 const csStatusRouter = Router();

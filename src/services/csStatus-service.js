@@ -1,11 +1,10 @@
-import { csStatusModel } from '../db';
-import { orderStatusService } from './orderStatus-service';
+import { csStatusModel, orderStatusModel } from '../db';
 
 class CsStatusService {
 
-  constructor(csStatusModel, orderStatusService) {
+  constructor(csStatusModel, orderStatusModel) {
     this.csStatusModel = csStatusModel;
-    this.orderStatusService = orderStatusService;
+    this.orderStatusModel = orderStatusModel;
   }
 
   // 전체 CS Status 목록 확인
@@ -43,16 +42,14 @@ class CsStatusService {
 
   // CS Status id로 이름 찾기
   async getCsStatusName(csStatusId) {
-    console.log(csStatusId)
+    
     const csStatus = await this.csStatusModel.findById(csStatusId);
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
-    console.log(csStatus)
-
     const csStatusName = csStatus.name;
-    console.log(csStatusName)
+
     return csStatusName;
   }
 
@@ -111,26 +108,34 @@ class CsStatusService {
     }
     //// 현재 CS STATUS 확인
     const csStatusName = csStatus.name;
-    /// 현재 Order Status 확인
-    const orderStatusName = await this.orderStatusService.getOrderStatusName(orderStatusId);
 
-    if (csStatusName === ("교환요청" || "반품요청")) {
-      if(orderStatusName !== ("배송중" || "배송완료")) {
+    /// 현재 Order Status 확인
+    const orderStatus = await this.orderStatusModel.findById(orderStatusId);
+
+    if (!orderStatus) {
+      throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+    const orderStatusName = orderStatus.name;
+    
+    if (csStatusName === "교환" || csStatusName === "반품") {
+      if(orderStatusName !== "배송중" && orderStatusName !== "배송완료") {
         throw new Error ('현재 주문 상태를 다시 한번 확인해 주세요.'); 
       }
+    } 
+
+    if (csStatusName === "정상") {
+      throw new Error ('요청사항이 아닙니다.'); 
     }
-    //// Cs Status가 "정상"인 cs status id 값
-    const defaultCsStatusId = "62958fdb0408c67d1e8d3653";
+
     // Order Status "취소완료" 
     const cancelconfirmedorderStatusId = "629590e888e88a5137884dd8"
 
     /// 유저는 결제완료일때만 취소요청 할 시 order Status를 취소완료로 변경할 수 있음
-    if (csStatusName === "취소요청" ){
+    if (csStatusName === "취소" ){
       if (orderStatusName === '결제완료') {
-      currentCsStatusId = defaultCsStatusId;
       currentOrderStatusId = cancelconfirmedorderStatusId;
       } else if (orderStatusName !== '상품준비중'){
-          throw new Error ('현재 주문 상태에서는 주문을 취소할 수 없습니다.')
+          throw new Error ('현재 주문 상태에서는 주문을 취소할 수 없습니다. 다시 한번 확인해 주세요.')
       }
     } 
     
@@ -144,6 +149,6 @@ class CsStatusService {
 };
 
 
-const csStatusService = new CsStatusService(csStatusModel, orderStatusService);
+const csStatusService = new CsStatusService(csStatusModel, orderStatusModel);
 
 export { csStatusService };

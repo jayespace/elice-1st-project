@@ -1,11 +1,32 @@
 import { Schema } from 'mongoose';
 
-const OrderSchema = new Schema(
-  {
-    user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "users",
-      required: true
+const OrderSchema = new Schema({
+    user: {
+      type: new Schema(
+        {
+          user_id: {
+            type: Schema.Types.ObjectId,
+            ref: 'users',
+            required: true
+          },
+          fullName: {
+            type: String,
+            required: true
+          },
+          email: {
+            type: String,
+            required: true
+          },
+          phoneNumber: {
+            type: String,
+            required: false
+          },
+        },
+        {
+          _id: false,
+        }
+      ),
+      requred: true
     },
     fullNameTo: {
       type: String,
@@ -40,6 +61,10 @@ const OrderSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'products',
             required: true
+          },
+          name: {
+            type: String,
+            required: false
           },
           qty: {
             type: Number,
