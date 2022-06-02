@@ -4,123 +4,127 @@ const ordersTop = document.querySelector('.orders-top');
 
 getDataFromApi();
 let data;
-
+let name = '';
+let price = 0;
+let shipFee = 3000;
+let totalFee = price + shipFee;
+let a = '';
 async function getDataFromApi() {
   data = await Api.get("/api/orders");
 
   insertHTMLToList(data, data.length);
 }
 
-function insertHTMLToList(orderList,length) {
-    for(let i=0; i<length; i++){
-        const {orderInfo, statusInfo} = orderList[i];
-        const {createdAt, products} = orderInfo;
+function insertHTMLToList(orderList, length) {
+  for (let i = 0; i < length; i++) {
+    const { orderInfo, statusInfo } = orderList[i];
+    const { createdAt, products } = orderInfo;
 
-        const date = createdAt.split("T")[0];
-        const time = createdAt.split("T")[1].split(".")[0];
-    
-        let name = '';
-        let price = 0;
-        for(let i=0; i< products.length; i++){
-          
-            if(i === products.length-1){
-              name += products[i].name;
-            }else {
-              name += products[i].name + `<br><br>`;
-            }
-            
-            price += products[i].totalPrice;
-        }
-        
-        ordersTop.insertAdjacentHTML(
-            "afterend",
-            `
+    const date = createdAt.split("T")[0];
+    const time = createdAt.split("T")[1].split(".")[0];
+
+
+    for (let i = 0; i < products.length; i++) {
+
+      if (i === products.length - 1) {
+        name += products[i].name;
+      } else {
+        name += products[i].name + `<br><br>`;
+      }
+
+      price += products[i].totalPrice;
+
+      a += `<div class="p-info">
+<img src="${products[i].image}"></img>
+<p class="pInfo">${products[i].name} <br><br> 총 ${products[i].qty}개</p>
+</div>`
+    }
+    if (price >= 50000) {
+      shipFee = 0;
+    }
+
+    totalFee = price + shipFee;
+    ordersTop.insertAdjacentHTML(
+      "afterend",
+      `
             <div class="box colums orders-item">
             <div class="date">${date} ${time}</div>
             <div class="info">${name}</div>
-            <div class="price">총 ${price.toLocaleString("en")}원</div>
+            <div class="price">총 ${totalFee.toLocaleString("en")}원</div>
             <div class="status">${statusInfo.orderStatus}</div>
             <div class="buttons">
               <button class="order-detail" id="detailBtn" data-columns=${i}>주문상세</button>
-              <button class="order-cancle" id="cancleBtn">주문취소</button>
+              <button class="order-cancle" id="cancleBtn" data-columns=${i}>주문취소</button>
             </div>
           </div>
             `
     )
     const detailBtn = document.getElementById("detailBtn");
-  detailBtn.addEventListener("click", e=>{
-    e.preventDefault();
-    showDetailModal(detailBtn.dataset.columns);
-  });
+    detailBtn.addEventListener("click", e => {
+      e.preventDefault();
+      showDetailModal(detailBtn.dataset.columns);
+    });
 
-  const cancleBtn = document.getElementById("cancleBtn");
-  cancleBtn.addEventListener("click", showCancleModal);
+    const cancleBtn = document.getElementById("cancleBtn");
+    cancleBtn.addEventListener("click", e => {
+      e.preventDefault();
+      showCancleModal(cancleBtn.dataset.columns);
+    });
   }
 }
 
-const delCompleteBtn = document.getElementById('deleteCompleteButton');
-delCompleteBtn.addEventListener("click", deleteOrder);
+
 
 const delCancelBtn = document.getElementById('deleteCancelButton');
 delCancelBtn.addEventListener("click", closeCancleModal);
 
 
 const modalCloseBtn = document.getElementById('modalCloseButton');
-modalCloseBtn.addEventListener("click",closeCancleModal);
+modalCloseBtn.addEventListener("click", closeCancleModal);
 
 
 
-function deleteOrder (){ //주문취소
+function deleteOrder(colNum) { //주문취소
+  const { statusInfo } = data[colNum];
+
+  console.log(data[colNum]);
+  statusInfo.orderStatus = "주문취소";
   alert('주문이 취소되었습니다');
   closeCancleModal();
   location.reload();
 }
 
 
-function showCancleModal(){
+function showCancleModal(colNum) {
   document.querySelector('.modal').style.display = 'block';
   document.querySelector('.modal-background').style.display = 'block';
+
+  const delCompleteBtn = document.getElementById('deleteCompleteButton');
+  delCompleteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    deleteOrder(colNum)
+  });
+
 }
 
-function closeCancleModal(){
+function closeCancleModal() {
   document.querySelector('.modal').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
 }
 
-function showDetailModal(colNum){
+function showDetailModal(colNum) {
   console.log(data[colNum]);
   document.querySelector('.detail-modal').style.display = 'block';
   document.querySelector('.modal-background').style.display = 'block';
-  console.log(colNum);
-  const content = document.querySelector('.detail-modal');
-  const {orderInfo, statusInfo} = data[colNum];
-  console.log(orderInfo);
-  const {addressTo , fullNameTo,messageTo, phoneNumberTo} = orderInfo;
-  const {products, user} = orderInfo;
-  const {email, fullName, phoneNumber} = user;
-  console.log(addressTo);
 
-  let name = '';
-  let price = 0;
-  let shipFee = 3000;
-  
-  for(let i=0; i< products.length; i++){
-          
-            if(i === products.length-1){
-              name += products[i].name;
-            }else {
-              name += products[i].name + `<br><br>`;
-            }
-            
-            price += products[i].totalPrice;
-        }
-  if(price >= 50000){
-    shipFee = 0;
-  }
-  let totalFee = price+shipFee;
-{/* <img src="${products[0].image}"></img> */}
+  const content = document.querySelector('.detail-modal');
+  const { orderInfo } = data[colNum];
+  const { addressTo, fullNameTo, messageTo, phoneNumberTo } = orderInfo;
+  const { products, user } = orderInfo;
+  const { email, fullName } = user;
+
   content.insertAdjacentHTML("afterbegin",
-  `
+    `
   <div id="detailModal" class="detail-modal">
   <div class="modal-background" id="modalBackground"></div>
   <div class="detail-modal-content">
@@ -128,7 +132,7 @@ function showDetailModal(colNum){
         <div class="box">
           <div class="product-info">
             <h1>주문상품정보</h1>
-            
+            ${a}
           </div>
 
           <div class="user-info">
@@ -140,10 +144,6 @@ function showDetailModal(colNum){
             <span>
               <p class="label">이메일주소</p>
               <p class="value">${email}</p>
-            </span>
-            <span>
-              <p class="label">휴대폰번호</p>
-              <p class="value">${phoneNumber}</p>
             </span>
           </div>
 
@@ -192,17 +192,15 @@ function showDetailModal(colNum){
       </div>
       </div>
       </div>
-
   `)
 
   const closeDetailBtn = document.getElementById('closeDetailModal');
-  closeDetailBtn.addEventListener("click",closeDetailModal);
+  closeDetailBtn.addEventListener("click", closeDetailModal);
 }
 
-function closeDetailModal(){
+function closeDetailModal() {
   document.querySelector('.detail-modal').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
 
-  setTimeout(()=>{location.reload();},1500);
-  // location.reload();
+  setTimeout(() => { location.reload(); }, 500); //0.5초 뒤 페이지 리로드
 }

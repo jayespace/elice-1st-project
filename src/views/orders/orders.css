@@ -146,6 +146,10 @@
 .product-info{
     height:fit-content;
 }
+.box h1{
+    text-align: left;
+    font-weight: bold;
+}
 .user-info{
     height:fit-content;
 }
@@ -178,6 +182,23 @@
 span{
     clear: both;
 }
+.p-info{
+    display: flex;
+    height: 100px;
+}
+.p-info img{
+   
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+.pInfo{
+    flex-grow: 1;
+    float: right;
+    text-align: right;
+    margin-bottom: 25px;
+}
+
 /* .bb{
    text-align: left;
 } */
