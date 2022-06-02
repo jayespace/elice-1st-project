@@ -98,7 +98,14 @@ class CsStatusService {
     }
     const del = await this.csStatusModel.delete(csStatusId);
     return del;
-  }
+  };
+
+    /// 카테고리 id로 정보 조회
+    async isExist(categoryId) {
+
+      const products = await this.productModel.findByCategoryId(categoryId);
+      return products;
+    }
 
   // *** CS Status와 Order Status 체크하여 ID 반환 ****
   async adjustStatus(csStatusId, orderStatusId) {
