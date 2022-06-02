@@ -29,6 +29,12 @@ class OrderStatusService {
     return orderStatus;
   }
 
+  // 이름으로 order Status 정보 확인
+  async getOrderStatusByName(name) {
+    const orderStatus = await this.orderStatusModel.findByName(name);
+    return orderStatus;
+  }
+
   // order Status 이름으로 id 찾기
   async getOrderStatusId(orderStatusName) {
     const orderStatus = await this.orderStatusModel.findByName(orderStatusName);

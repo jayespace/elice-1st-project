@@ -61,11 +61,20 @@ csStatusRouter.patch('/csStatus/:csStatusId', loginRequired, adminRequired,
     const { csStatusId } = req.params;
     const { name } = req.body;
 
+    // 이름이 있을 경우 에러 발생
+    const isExist = await csStatusService.getCsStatusByName(name);
+    if (isExist) {
+        throw new Error('이 이름으로 생성된 CS Status가 있습니다. 다른 이름을 지어주세요.');
+    }
+
+    console.log(name)
+
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
     const toUpdate = {
         ...(name && { name })
     };
+    
     // 상품 정보를 업데이트함.
     const updatedCsStatus = await csStatusService.setCsStatus(csStatusId, toUpdate);
 

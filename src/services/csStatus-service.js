@@ -28,6 +28,12 @@ class CsStatusService {
     return csStatus;
   }
 
+  // 이름으로 Cs Status 정보 확인
+  async getCsStatusByName(name) {
+    const csStatus = await this.csStatusModel.findByName(name);
+    return csStatus;
+  }
+
   // CS Status 이름으로 id 찾기
   async getCsStatusId(csStatusName) {
     const csStatus = await this.csStatusModel.findByName(csStatusName);
@@ -52,7 +58,6 @@ class CsStatusService {
 
     return csStatusName;
   }
-
 
   // CS Status 추가
   async addCsStatus(csStatusInfo) {
