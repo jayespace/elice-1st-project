@@ -22,51 +22,61 @@ class OrderService {
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
 
-      const order_user_id = orders[i].user_id.valueOf();
-      let user = await this.userModel.findById(order_user_id);
+      // const order_user_id = orders[i].user_id.valueOf();
+      // let user = await this.userModel.findById(order_user_id);
+      // let userInfo;
 
-      // db에서 찾지 못한 경우, 에러 메시지 반환
-      if (!user) {
-        throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
-      }
+      // db에서 찾지 못한 경우, unknown으로 정보 반환
+      // if (!user) {
+      //   userInfo = {
+      //     fullName: "탈퇴한 사용자",
+      //     phoneNumber: "unknown",
+      //     email: "unknown"
+      //   };
+      // } else {
+      //   const {
+      //     fullName,
+      //     phoneNumber,
+      //     email } = user;
 
-      const {
-        fullName,
-        phoneNumber,
-        email } = user;
-    
-      const userInfo = {
-        fullName,
-        phoneNumber,
-        email
-      }
-      // *** 유저정보 가공 끝 ******
+      //     userInfo = {
+      //       fullName,
+      //       phoneNumber,
+      //       email
+      //     }
+      // }
+
+      // // *** 유저정보 가공 끝 ******
 
       /// ** orderedProducts의 정보로 제품 정보 가공 **
-      let productInfo = [];
-      const orderedProducts = orders[i].products;
+      // let productInfo = [];
+      // const orderedProducts = orders[i].products;
 
-      for(let i = 0; i < orderedProducts.length; i++) {
-        const order_product_id = orderedProducts[i].product_id.valueOf();
-        const orderQty = orderedProducts[i].qty
+      // for(let i = 0; i < orderedProducts.length; i++) {
+      //   const order_product_id = orderedProducts[i].product_id.valueOf();
+      //   const orderQty = orderedProducts[i].qty
+      //   const orderPrice = orderedProducts[i].price
 
-        // product_id로 product 정보를 가져와서 주문정보 array에 담음
-        const product = await this.productModel.findById(order_product_id);
+      //   // product_id로 product 정보를 가져와서 주문정보 array에 담음
+      //   const product = await this.productModel.findById(order_product_id);
 
-        const {
-          name,
-          price
-        } = product;
-      
-        const modifiedProduct = {
-          name,
-          price,
-          qty: orderQty,
-          totalPrice: price * orderQty
-        }
+      //   let name;
 
-        productInfo.push(modifiedProduct)
-      }
+      //   if (!product) {
+      //     name = "삭제된 상품입니다"
+      //   } else {
+      //     name = product.name;
+      //   }
+
+      //   const modifiedProduct = {
+      //     name,
+      //     price,
+      //     qty: orderQty,
+      //     totalPrice: orderPrice
+      //   }
+
+      //   productInfo.push(modifiedProduct)
+      // }
       // ***** 제품 가공 끝 *****************
 
       //// ******* cs status & order status 이름 반환 작업
@@ -98,8 +108,8 @@ class OrderService {
 
       const returnOrder = {
         orderInfo: orders[i],
-        userInfo,
-        productInfo,
+        // userInfo,
+        // productInfo,
         statusInfo
       };
 
@@ -123,51 +133,46 @@ class OrderService {
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
 
-      const order_user_id = orders[i].user_id.valueOf();
-      let user = await this.userModel.findById(order_user_id);
+      // const order_user_id = orders[i].user_id.valueOf();
+      // let user = await this.userModel.findById(order_user_id);
 
-      // db에서 찾지 못한 경우, 에러 메시지 반환
-      if (!user) {
-        throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
-      }
-
-      const {
-        fullName,
-        phoneNumber,
-        email } = user;
+      // const {
+      //   fullName,
+      //   phoneNumber,
+      //   email } = user;
     
-      const userInfo = {
-        fullName,
-        phoneNumber,
-        email
-      }
-      // *** 유저정보 가공 끝 ******
+      // const userInfo = {
+      //   fullName,
+      //   phoneNumber,
+      //   email
+      // }
+      // // *** 유저정보 가공 끝 ******
 
-      /// ** orderedProducts의 정보로 제품 정보 가공 **
-      let productInfo = [];
-      const orderedProducts = orders[i].products;
+      // /// ** orderedProducts의 정보로 제품 정보 가공 **
+      // let productInfo = [];
+      // const orderedProducts = orders[i].products;
 
-      for(let i = 0; i < orderedProducts.length; i++) {
-        const order_product_id = orderedProducts[i].product_id.valueOf();
-        const orderQty = orderedProducts[i].qty
+      // for(let i = 0; i < orderedProducts.length; i++) {
+      //   const order_product_id = orderedProducts[i].product_id.valueOf();
+      //   const orderQty = orderedProducts[i].qty
 
-        // product_id로 product 정보를 가져와서 주문정보 array에 담음
-        const product = await this.productModel.findById(order_product_id);
+      //   // product_id로 product 정보를 가져와서 주문정보 array에 담음
+      //   const product = await this.productModel.findById(order_product_id);
 
-        const {
-          name,
-          price
-        } = product;
+      //   const {
+      //     name,
+      //     price
+      //   } = product;
       
-        const modifiedProduct = {
-          name,
-          price,
-          qty: orderQty,
-          totalPrice: price * orderQty
-        }
+      //   const modifiedProduct = {
+      //     name,
+      //     price,
+      //     qty: orderQty,
+      //     totalPrice: price * orderQty
+      //   }
 
-        productInfo.push(modifiedProduct)
-      }
+      //   productInfo.push(modifiedProduct)
+      // }
       // ***** 제품 가공 끝 *****************
 
       //// ******* cs status & order status 이름 반환 작업
@@ -199,8 +204,6 @@ class OrderService {
 
       const returnOrder = {
         orderInfo: orders[i],
-        userInfo,
-        productInfo,
         statusInfo
       };
 
@@ -218,52 +221,6 @@ class OrderService {
     if (!order) {
       throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
-
-    /// db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
-    const order_user_id = order.user_id.valueOf();
-    let user = await this.userModel.findById(order_user_id);
-
-    // db에서 찾지 못한 경우, 에러 메시지 반환
-    if (!user) {
-      throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
-
-    const {
-      fullName,
-      phoneNumber,
-      email } = user;
-  
-    const userInfo = {
-      fullName,
-      phoneNumber,
-      email
-    }
-
-    /// orderedProducts의 정보로 제품 정보 가공
-    const orderedProducts = order.products;
-    let productInfo = [];
-    for(let i = 0; i < orderedProducts.length; i++) {
-      const order_product_id = orderedProducts[i].product_id.valueOf();
-      const orderQty = orderedProducts[i].qty
-
-      // product_id로 product 정보를 가져와서 주문정보 array에 담음
-      const product = await this.productModel.findById(order_product_id);
-
-      const {
-        name,
-        price
-      } = product;
-    
-      const modifiedProduct = {
-        name,
-        price,
-        qty: orderQty,
-        totalPrice: price * orderQty
-      }
-
-      productInfo.push(modifiedProduct)
-    }
-    // ***** 제품 가공 끝 *****************
 
     //// ******* cs status & order status 이름 반환 작업
     ///// order status id로 이름 반환
@@ -295,8 +252,6 @@ class OrderService {
     /// 유저, 주문, 제품 정보 담아서 return
     const returnOrder = {
       orderInfo: order,
-      userInfo,
-      productInfo,
       statusInfo
     };
 
@@ -307,7 +262,7 @@ class OrderService {
   async addOrder(orderInfo) {
 
     let {
-      user_id,
+      user,
       fullNameTo,
       phoneNumberTo,
       addressTo,
@@ -315,50 +270,19 @@ class OrderService {
       products
     } = orderInfo;
 
-    const neworderInfo = {
-      user_id,
-      fullNameTo,
-      phoneNumberTo,
-      addressTo,
-      messageTo,
-      products
-    };
-    
-    // db에 주문 정보 저장
-    const newOrder = await this.orderModel.create(neworderInfo);
-
-    /// **** db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
-    const order_user_id = newOrder.user_id.valueOf();
-    let user = await this.userModel.findById(order_user_id);
-
-    // db에서 찾지 못한 경우, 에러 메시지 반환
-    if (!user) {
-      throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
-    const {
-      fullName,
-      phoneNumber,
-      email } = user;
-  
-    const userInfo = {
-      fullName,
-      phoneNumber,
-      email
-    }
-    /// ** user 가공 끝
-    
-    /// 주문한 제품의 id로 제품 정보 가공
     let productInfo = [];
     for(let i = 0; i < products.length; i++) {
       const product_id = products[i].product_id
-      const orderQty = products[i].qty
+      const qty = products[i].qty
+      const price = products[i].price
+      const totalPrice = products[i].totalPrice
 
       /// db의 재고 수정 *****
       let productForStock = await this.productModel.findById(product_id);
 
       const { stock } = productForStock;
-      const orderQtyNum = Number(orderQty);
-      const newStock = stock - orderQtyNum;
+      const numQty = Number(qty);
+      const newStock = stock - numQty;
       const toUpdate = {
         stock: newStock
       };
@@ -372,21 +296,30 @@ class OrderService {
       // product_id로 product 정보를 가져와서 주문정보 array에 담음
       const product = await this.productModel.findById(product_id);
 
-      const {
-        name,
-        price
-      } = product;
+      const { name } = product;
     
       const modifiedProduct = {
+        product_id,
         name,
-        price,
-        qty: orderQty,
-        totalPrice: price * orderQty
+        price: price,
+        qty: qty,
+        totalPrice: totalPrice
       }
-
+      
       productInfo.push(modifiedProduct)
     }
-    // ***** 제품 가공 끝 *****************
+
+    const neworderInfo = {
+      user,
+      fullNameTo,
+      phoneNumberTo,
+      addressTo,
+      messageTo,
+      products: productInfo 
+    };
+    
+    // db에 주문 정보 저장
+    const newOrder = await this.orderModel.create(neworderInfo);
 
     //// ******* cs status & order status 이름 반환 작업
     ///// order status id로 이름 반환
@@ -418,13 +351,13 @@ class OrderService {
     /// 유저, 주문, 제품 정보 담아서 return
     const returnOrder = {
       orderInfo: newOrder,
-      userInfo,
-      productInfo,
       statusInfo
     };
     
     return returnOrder;
   }
+
+
 
   //// [5] 주문 정보 수정
   async setOrder(orderId, toUpdate) {
@@ -468,35 +401,15 @@ class OrderService {
     };
     ///////****** status 가공 끝 */
 
-    /// **** db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결
-    const order_user_id = order.user_id.valueOf();
-    let user = await this.userModel.findById(order_user_id);
-
-    // db에서 찾지 못한 경우, 에러 메시지 반환
-    if (!user) {
-      throw new Error('가입 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
-    const {
-      fullName,
-      phoneNumber,
-      email } = user;
-  
-    const userInfo = {
-      fullName,
-      phoneNumber,
-      email
-    }
-    /// ** user 가공 끝
-
     /// orderedProducts의 정보로 제품 정보 가공
     const orderedProducts = order.products;
-    let productInfo = [];
+    // let productInfo = [];
     for(let i = 0; i < orderedProducts.length; i++) {
       const order_product_id = orderedProducts[i].product_id.valueOf();
       const orderQty = orderedProducts[i].qty
 
       /// 만약 orderStatus가 취소/교환/반품 완료일 경우 db에 재고 돌려놈
-      if (orderStatusName === ("취소" || "교환" || "반품")) {
+      if (orderStatusName === ("취소완료" || "교환완료" || "반품완료")) {
         const modifyQty = -Math.abs(orderQty);
         let productForStock = await this.productModel.findById(order_product_id);
 
@@ -510,36 +423,14 @@ class OrderService {
           productId: order_product_id,
           update: toUpdate,
         });
-      }
-      ///// 재고수정 끝 *****
-
-      // product_id로 product 정보를 가져와서 주문정보 array에 담음
-      const product = await this.productModel.findById(order_product_id);
-
-      const {
-        name,
-        price
-      } = product;
-    
-      const modifiedProduct = {
-        name,
-        price,
-        qty: orderQty,
-        totalPrice: price * orderQty
-      }
-
-      productInfo.push(modifiedProduct)
-    }
-    // ***** 제품 가공 끝 *****************
-
+      };
+    };
+  
     /// 유저, 주문, 제품 정보 담아서 return
     const returnOrder = {
       orderInfo: order,
-      userInfo,
-      productInfo,
       statusInfo
     };
-
     return returnOrder;
   };
 

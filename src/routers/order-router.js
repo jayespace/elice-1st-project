@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired, asyncHandler } from '../middlewares';
-import { orderService, csStatusService, orderStatusService } from '../services';
+import { userService, productService, orderService, csStatusService, orderStatusService } from '../services';
 
 const orderRouter = Router();
 
@@ -11,7 +11,7 @@ orderRouter.get('/orders', loginRequired, asyncHandler(async (req, res) => {
   /// 현재 로그인 된 사람이 admin인지 확인
   const role = req.currentUserRole;
   const currentUserId = req.currentUserId;
-
+  
   let orders;
   if (role === "admin") {
     orders = await orderService.getOrders();
@@ -55,6 +55,14 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
 
   const currentUserId = req.currentUserId;
 
+  const currentUserInfo = await userService.getUser(currentUserId);
+
+  const {
+    fullName,
+    phoneNumber,
+    email
+  } = currentUserInfo;
+
   const {
     fullNameTo,
     phoneNumberTo,
@@ -63,9 +71,18 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     products
   } = req.body;
 
+  const userInfo = {
+    user_id: currentUserId,
+    fullName,
+    phoneNumber,
+    email
+  }
+
+  const productInfo = await productService.getDetail(currentUserId);
+
   const newOrder = await orderService.addOrder(
     {
-      user_id: currentUserId,
+      user: userInfo,
       fullNameTo,
       phoneNumberTo,
       addressTo,
@@ -92,7 +109,7 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
   /// 현재 로그인 된 사람이 admin인지 확인
   const role = req.currentUserRole;
   const currentUserId = req.currentUserId;
-
+  
   /// admin이 아닐경우, 현재 로그인된 user id와 주문정보의 user id가 다르다면 에러 메세지
   if(role === 'basic-user') {
     const orderUserId = await orderService.getOrderUserId(orderId);
