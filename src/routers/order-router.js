@@ -11,11 +11,12 @@ orderRouter.get('/orders', loginRequired, asyncHandler(async (req, res) => {
   /// 현재 로그인 된 사람이 admin인지 확인
   const role = req.currentUserRole;
   const currentUserId = req.currentUserId;
-  
+
   let orders;
   if (role === "admin") {
     orders = await orderService.getOrders();
-  } else {  
+
+  } else { 
     orders = await orderService.getOrdersByUser(currentUserId);
   }
   
@@ -53,8 +54,8 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     );
   }
 
+  // 현재 로그인 된 유저의 아이디로 유저정보 조회해서 이름, 연락처, 이메일 정보 가져오기
   const currentUserId = req.currentUserId;
-
   const currentUserInfo = await userService.getUser(currentUserId);
 
   const {
@@ -78,8 +79,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     email
   }
 
-  const productInfo = await productService.getDetail(currentUserId);
-
+  // 유저의 정보와 함께 주문 정보 저장
   const newOrder = await orderService.addOrder(
     {
       user: userInfo,
