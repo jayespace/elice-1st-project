@@ -1,6 +1,6 @@
 /**
  * @todo
- * window.location.search 에따라 보여지는 products
+ *
  *
  */
 
