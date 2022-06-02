@@ -24,62 +24,121 @@
   </header>
 
   <main id="main" role="main">
-      <!-- <div class="background">
-                <i class="fas fa-clipboard-list fa-10x"></i>
-        </div> -->
-     <!-- 주문조회 -->
-     <section class="section">
-        <div class="container">
-            
-          <div class="block account-header">
-            <h1 class="subtitle is-4">주문내역</h1>
-          </div>
-          <div class="container orders-container" id="ordersContainer">
-            
-            <div class="columns orders-top">
-              <div class="column is-2">주문날짜</div>
-              <div class="column is-7">주문정보(전체 상품명 / 수량 / 금액)</div>
-              <div class="column is-1.5">상태</div>
-              <div class="column is-1.5">신청</div>
-            </div>
+    <!-- 주문조회 -->
+    <section class="section">
+      <div class="container">
+        <div class="block account-header">
+          <h1 class="subtitle is-4">주문내역</h1>
         </div>
-      </section>
-  
-      <!-- 주문을 정말 취소할 지 묻는 Modal 창 -->
-      <div id="modal" class="modal">
-        <div class="modal-background" id="modalBackground"></div>
-        <div class="modal-content">
-          <div class="box">
-            <p class="mb-3">
-              주문 취소 시 복구할 수 없습니다. 정말로 취소하시겠습니까?
-            </p>
-  
-            <div class="buttons">
-              <button
-                class="button mt-5"
-                id="deleteCompleteButton"
-                aria-label="close"
-              >
-                네
-              </button>
-              <button
-                class="button is-primary mt-5"
-                id="deleteCancelButton"
-                aria-label="close"
-              >
-                아니오
-              </button>
-            </div>
+        <div class="container orders-container" id="ordersContainer">
+          <div class="columns orders-top">
+            <div class="column is-2">주문날짜</div>
+            <div class="column is-7">주문정보(전체 상품명 / 수량 / 금액)</div>
+            <div class="column is-1.5">상태</div>
+            <div class="column is-1.5">신청</div>
           </div>
         </div>
-  
-        <button
-          class="modal-close is-large"
-          id="modalCloseButton"
-          aria-label="close"
-        ></button>
+    </section>
+
+    <!-- 주문 취소 확인 Modal 창 -->
+    <div id="modal" class="modal">
+      <div class="modal-background" id="modalBackground"></div>
+      <div class="modal-content">
+        <div class="box">
+          <p class="mb-3">
+            주문 취소 시 복구할 수 없습니다. 정말 취소하시겠습니까?
+          </p>
+          <div class="buttons">
+            <button class="button mt-5" id="deleteCompleteButton" aria-label="close">
+              네
+            </button>
+            <button class="button is-primary mt-5" id="deleteCancelButton" aria-label="close">
+              아니오
+            </button>
+          </div>
+        </div>
       </div>
-   
+
+      <button class="modal-close is-large" id="modalCloseButton" aria-label="close"></button>
+    </div>
+
+
+    <!-- 주문 상세보기 Modal 창 -->
+    <div id="detailModal" class="detail-modal">
+      <div class="modal-background" id="modalBackground"></div>
+      <div class="detail-modal-content">
+
+        <div class="box">
+          <div class="product-info">
+
+            <h1>주문상품정보</h1>
+
+          </div>
+          <div class="user-info">
+
+            <h1>구매자정보</h1>
+
+            <span class="bb">
+              <p class="a">주문자</p>
+              <p>엘리스</p>
+            </span>
+            <span>
+              <p class="a">이메일주소</p>
+              <p>ggg@ggg</p>
+            </span>
+            <span>
+              <p class="a">휴대폰번호</p>
+              <p>222222222</p>
+            </span>
+          </div>
+
+          <div class="address-info">
+
+            <h1>배송지정보</h1>
+
+            <span>
+              <p>받는사람</p>
+              <p>비타오백</p>
+            </span>
+            <span>
+              <p>휴대폰 번호</p>
+              <p>444444444</p>
+            </span>
+            <span>
+              <p>주소</p>
+              <p>서울시 강남구</p>
+            </span>
+            <span>
+              <p>배송요청사항</p>
+              <p>문앞에 두고가주세요</p>
+            </span>
+          </div>
+          <div class="payment-info">
+
+            <h1>결제정보</h1>
+
+            <span>
+              <p class="a">주문금액</p>
+              <p class="a">5000</p>
+            </span>
+            <span>
+              <p class="a">배송비</p>
+              <p class="a">3000</p>
+            </span>
+            <span>
+              <p class="a">결제금액</p>
+              <p class="a">20000</p>
+            </span>
+          </div>
+          <div class="buttons">
+            <button class="button is-primary mt-5" id="closeDetailModal" aria-label="closeDetailModal">
+              닫기
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </main>
 
   <footer id="footer">

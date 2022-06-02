@@ -54,4 +54,43 @@ function insertHTMLToList(orderList,length) {
             `
     )}
 
+    const detailBtn = document.querySelector(".order-detail");
+    detailBtn.addEventListener("click", showDetailModal);
+
+    const cancleBtn = document.querySelector(".order-cancle");
+    cancleBtn.addEventListener("click", showCancleModal);
+}
+
+
+
+const deleteCancelBtn = document.getElementById('deleteCancelButton');
+deleteCancelBtn.addEventListener("click", closeCancleModal);
+
+
+const modalCloseBtn = document.getElementById('modalCloseButton');
+modalCloseBtn.addEventListener("click",closeCancleModal);
+
+const closeDetailBtn = document.getElementById('closeDetailModal');
+closeDetailBtn.addEventListener("click",closeDetailModal);
+
+
+
+function showCancleModal(){
+  document.querySelector('.modal').style.display = 'block';
+  document.querySelector('.modal-background').style.display = 'block';
+}
+
+function closeCancleModal(){
+  document.querySelector('.modal').style.display = 'none';
+  document.querySelector('.modal-background').style.display = 'none';
+}
+
+function showDetailModal(){
+  document.querySelector('.detail-modal').style.display = 'block';
+  document.querySelector('.modal-background').style.display = 'block';
+}
+
+function closeDetailModal(){
+  document.querySelector('.detail-modal').style.display = 'none';
+  document.querySelector('.modal-background').style.display = 'none';
 }
