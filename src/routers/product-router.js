@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
-import { loginRequired } from '../middlewares';
-import { adminRequired } from '../middlewares';
-import { asyncHandler } from '../middlewares';
+import { loginRequired, adminRequired, asyncHandler } from '../middlewares';
 import { productService } from '../services';
 import { upload } from '../utils';
 
@@ -26,7 +24,8 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
 
   /// query가 어떤건지 확인
   const queries = Object.keys(req.query)
-  const field = queries.find(e => e == 'category' || e == 'manufacturer' || e == 'price' || e == 'keyword')
+  const field = queries.find(e => 
+    e == 'category' || e == 'manufacturer' || e == 'minPrice' || e == 'maxPrice' || e == 'keyword')
 
   //initialize keywords
   let totalProducts;
@@ -42,8 +41,10 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
       value = req.query.category;
     } else if (field == 'manufacturer') {
       value = req.query.manufacturer;
-    } else if (field == 'price') {
-      value = req.query.price;
+    } else if (field == 'minPrice') {
+      value = req.query.minPrice;
+    } else if (field == 'maxPrice') {
+      value = req.query.maxPrice;
     } else if (field == 'keyword') {
       value = req.query.keyword;
     }
@@ -68,8 +69,8 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
 
 
 // 로그인 후 admin일 경우 상품 추가
-productRouter.post('/products', loginRequired, adminRequired,
-  upload.single('image'), asyncHandler(async(req,res) => {
+productRouter.post('/products',
+  loginRequired, adminRequired, upload.single('image'), asyncHandler(async(req,res) => {
 
   // application/json 설정을 프론트에서 안 하면, body가 비어 있게 됨.
   if (is.emptyObject(req.body)) {
@@ -108,8 +109,8 @@ productRouter.post('/products', loginRequired, adminRequired,
 
 
 // 로그인 후 admin일 경우 상품 정보 수정
-productRouter.patch('/products/:productId', loginRequired, adminRequired,
-  upload.single('image'), asyncHandler(async (req, res) => {
+productRouter.patch('/products/:productId',
+  loginRequired, adminRequired, upload.single('image'), asyncHandler(async (req, res) => {
 
   const { productId } = req.params;
 
@@ -170,8 +171,8 @@ productRouter.patch('/products/:productId', loginRequired, adminRequired,
 }));
 
 // 로그인 후 admin일 경우 상품 삭제
-productRouter.delete('/products/:productId', loginRequired, adminRequired,
-  asyncHandler(async (req, res) => {
+productRouter.delete('/products/:productId',
+  loginRequired, adminRequired, asyncHandler(async (req, res) => {
   const { productId } = req.params;
 
   const del = await productService.deleteProduct(productId)

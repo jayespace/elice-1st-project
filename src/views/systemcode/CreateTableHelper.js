@@ -33,7 +33,9 @@ class CreateTableHelper {
   }
   static async createSysCodesButtonElement() {
     const sysCodes = await Api.get("/api/admin/systemCodes");
-
+    if(!sessionStorage.getItem('syscode')){
+        sessionStorage.setItem('syscode', sysCodes[0].name);
+    }
     function createButton(_id, name) {
       return `
         <button class="button m-1" data-id="${_id}" data-name="${name}">
@@ -49,14 +51,14 @@ class CreateTableHelper {
     const data = await fn();
     this.createTableHead(data);
     this.createTableBody(data);
-    this.createInsertModal(data);
-    this.createEditModal(data);
-    this.createDeleteModal(data);
+    this.createModal(data);
   }
  
 
-  createModal() {
-
+  async createModal(data) {
+    this.createInsertModal(data);
+    this.createEditModal(data);
+    this.createDeleteModal(data);
   }
 
   createTableHead(data) {
@@ -85,6 +87,7 @@ class CreateTableHelper {
             const result = await fnAPI(this.currentId, data);
             if(result){
                 alert("성공적 전송");
+                location.reload();
             }
         }catch(e){
             console.error(e)
@@ -118,6 +121,7 @@ class CreateTableHelper {
             const result = await fnAPI(data);
             if(result){
                 alert("성공적 전송");
+                location.reload();
             }
         }catch(e){
             console.error(e)
@@ -164,6 +168,7 @@ class CreateTableHelper {
         const result = fn(this.currentId);
         if(result){
             alert("성공적으로 삭제됨");
+            location.reload();
         }
         }catch(e){
             console.error(e);

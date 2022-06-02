@@ -1,11 +1,11 @@
-import { orderStatusModel } from '../db';
-import { csStatusService } from './csStatus-service';
+import { orderStatusModel, csStatusModel } from '../db';
+
 
 class OrderStatusService {
 
-  constructor(orderStatusModel, csStatusService) {
+  constructor(orderStatusModel, csStatusModel) {
     this.orderStatusModel = orderStatusModel;
-    this.csStatusService = csStatusService;
+    this.csStatusModel = csStatusModel;
   }
 
   // 전체 order Status 목록 확인
@@ -29,6 +29,12 @@ class OrderStatusService {
     return orderStatus;
   }
 
+  // 이름으로 order Status 정보 확인
+  async getOrderStatusByName(name) {
+    const orderStatus = await this.orderStatusModel.findByName(name);
+    return orderStatus;
+  }
+
   // order Status 이름으로 id 찾기
   async getOrderStatusId(orderStatusName) {
     const orderStatus = await this.orderStatusModel.findByName(orderStatusName);
@@ -41,7 +47,7 @@ class OrderStatusService {
     return orderStatusId;
   }
 
-    // order Status id로 이름 찾기
+  // order Status id로 이름 찾기
   async getOrderStatusName(orderStatusId) {
     const orderStatus = await this.orderStatusModel.findById(orderStatusId);
 
@@ -108,11 +114,14 @@ class OrderStatusService {
     }
     //// 현재 Order STATUS 확인
     const orderStatusName = orderStatus.name;
-    // /// 현재 CS Status 확인
-    const csStatusName = await this.csStatusService.getCsStatusName(csStatusId);
-    
-    //// 변경할 Cs Status default"정상" id 값 
-    const csStatusDefaultId = "S62958fdb0408c67d1e8d3653"
+
+    /// 현재 CS Status 확인
+    const csStatus = await this.csStatusModel.findById(csStatusId);
+
+    if (!csStatus) {
+      throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+    const csStatusName = csStatus.name;
 
     /// 관리자 로직
     if (orderStatusName === "배송중") {
@@ -122,13 +131,9 @@ class OrderStatusService {
     } 
     
     if (orderStatusName === "배송완료") {
-      if (csStatusName === '교환요청' || "반품요청") {
+      if (csStatusName === '교환' && csStatusName === "반품" || csStatusName === "취소") {
         throw new Error ('구매자의 요청사항을 확인해 주세요.');
       }
-    } 
-
-    if (orderStatusName === ('결제완료' ||'취소완료' || "교환완료"|| "반품완료")) {
-      currentCsStatusId = csStatusDefaultId
     } 
     
     const statusinfo = {
@@ -141,6 +146,6 @@ class OrderStatusService {
 };
 
 
-const orderStatusService = new OrderStatusService(orderStatusModel, csStatusService);
+const orderStatusService = new OrderStatusService(orderStatusModel, csStatusModel);
 
 export { orderStatusService };
