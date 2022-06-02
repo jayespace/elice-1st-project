@@ -8,10 +8,8 @@ const mdEdit = document.querySelector("#editModal");
 const mdAdd = document.querySelector("#addModal");
 const mdDel = document.querySelector("#deleteModal");
 
-const selectAll = document.getElementById('selectAll');
 const systemCodeList = document.getElementById('systemCodeList');
 
-const EditSubmitButton = document.getElementById('EditSubmitButton');
 
 addAllElements();
 addAllEvents();
@@ -27,7 +25,6 @@ async function addAllElements() {
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
-  selectAll.addEventListener('change', selectAllCheckBox);
 
 }
 function selectAllCheckBox(e){

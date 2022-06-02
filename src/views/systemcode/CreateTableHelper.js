@@ -68,7 +68,6 @@ class CreateTableHelper {
 
   createEditModal(data){
     const mdEdit_body = this.mdEdit.querySelector('.modal-body');
-    console.log(mdEdit_body);
     const {name, desc} = data[0];
     const inputData = desc? {name, desc} : {name};
     const fn = this.createHtmlHelper(this.ELE_EDIT);
@@ -82,11 +81,10 @@ class CreateTableHelper {
             data[`${key[i]}`] = document.getElementById(`Edit_${key[i]}`).value;
           }
         try{
-            console.log(data, typeof data);
             const fnAPI = await this.translateSysCodeToApi(this.sysCode, this.API_MODIFY);
             const result = await fnAPI(this.currentId, data);
             if(result){
-                alert("성공적 전송");
+                // alert("성공적 전송");
                 location.reload();
             }
         }catch(e){
@@ -100,7 +98,6 @@ class CreateTableHelper {
 
   createInsertModal(data){
     const mdAdd_body = this.mdAdd.querySelector('.modal-body');
-    const saveButton = this.mdAdd.querySelector('#EditSubmitButton');
     const {name, desc} = data[0];
     const inputData = desc? {name, desc} : {name};
     const fn = this.createHtmlHelper(this.ELE_ADD);
@@ -116,11 +113,10 @@ class CreateTableHelper {
             data[`${key[i]}`] = document.getElementById(`Add_${key[i]}`).value;
           }
         try{
-            console.log("input",key,data, typeof data);
             const fnAPI = await this.translateSysCodeToApi(this.sysCode, this.API_CREATE);
             const result = await fnAPI(data);
             if(result){
-                alert("성공적 전송");
+                // alert("성공적 전송");
                 location.reload();
             }
         }catch(e){
@@ -128,7 +124,8 @@ class CreateTableHelper {
         }
     }
 
-    saveButton.addEventListener('click', save);
+    this.mdAdd.querySelector('.md-ok').
+        addEventListener('click', save);
     
   }
 
@@ -167,7 +164,7 @@ class CreateTableHelper {
         const fn = await this.translateSysCodeToApi(this.sysCode ,this.API_DELETE)
         const result = fn(this.currentId);
         if(result){
-            alert("성공적으로 삭제됨");
+            // alert("성공적으로 삭제됨");
             location.reload();
         }
         }catch(e){
@@ -180,19 +177,11 @@ class CreateTableHelper {
 
   // Tag 생성기
   createHtmlHelper(Type) {
-    console.log("execute HTMLHelper", Type);
     switch (Type) {
       case this.ELE_HEAD:
         return function (keys) {
           keys = Object.keys(keys[0]);
-          let head = `
-            <th>
-              <span class="custom-checkbox">
-                  <input type="checkbox" id="selectAll">
-                  <label for="selectAll"></label>
-              </span>
-            </th>
-            `;
+          let head = '';
           keys.forEach((keys) => (head += `<th>${keys}</th>`));
           return head;
         };
@@ -204,13 +193,6 @@ class CreateTableHelper {
               return value.map((e) => `<td>${e}</td>`).join("");
             }
             let row = `
-              <tr>
-                <td>
-                    <span class="custom-checkbox">
-                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                        <label for="checkbox1"></label>
-                    </span>
-                </td>
                 ${createTabLeData(value)}
                 <td>
                     <a href="#editModal" class="td_edit" data-toggle="modal" data-do="Edit" data-id="${
