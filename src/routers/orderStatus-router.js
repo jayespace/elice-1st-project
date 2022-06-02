@@ -34,7 +34,7 @@ orderStatusRouter.post('/orderStatus', loginRequired, adminRequired,
     }
 
     const { name } = req.body;
-
+    console.log(name);
     const newOrderStatus = await orderStatusService.addOrderStatus({ name });
     res.status(201).json(newOrderStatus);
 }));
