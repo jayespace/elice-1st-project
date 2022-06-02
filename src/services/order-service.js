@@ -22,63 +22,6 @@ class OrderService {
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
 
-      // const order_user_id = orders[i].user_id.valueOf();
-      // let user = await this.userModel.findById(order_user_id);
-      // let userInfo;
-
-      // db에서 찾지 못한 경우, unknown으로 정보 반환
-      // if (!user) {
-      //   userInfo = {
-      //     fullName: "탈퇴한 사용자",
-      //     phoneNumber: "unknown",
-      //     email: "unknown"
-      //   };
-      // } else {
-      //   const {
-      //     fullName,
-      //     phoneNumber,
-      //     email } = user;
-
-      //     userInfo = {
-      //       fullName,
-      //       phoneNumber,
-      //       email
-      //     }
-      // }
-
-      // // *** 유저정보 가공 끝 ******
-
-      /// ** orderedProducts의 정보로 제품 정보 가공 **
-      // let productInfo = [];
-      // const orderedProducts = orders[i].products;
-
-      // for(let i = 0; i < orderedProducts.length; i++) {
-      //   const order_product_id = orderedProducts[i].product_id.valueOf();
-      //   const orderQty = orderedProducts[i].qty
-      //   const orderPrice = orderedProducts[i].price
-
-      //   // product_id로 product 정보를 가져와서 주문정보 array에 담음
-      //   const product = await this.productModel.findById(order_product_id);
-
-      //   let name;
-
-      //   if (!product) {
-      //     name = "삭제된 상품입니다"
-      //   } else {
-      //     name = product.name;
-      //   }
-
-      //   const modifiedProduct = {
-      //     name,
-      //     price,
-      //     qty: orderQty,
-      //     totalPrice: orderPrice
-      //   }
-
-      //   productInfo.push(modifiedProduct)
-      // }
-      // ***** 제품 가공 끝 *****************
-
       //// ******* cs status & order status 이름 반환 작업
       ///// order status id로 이름 반환
       const order_orderStatus_id = orders[i].orderStatus.valueOf();
@@ -108,8 +51,6 @@ class OrderService {
 
       const returnOrder = {
         orderInfo: orders[i],
-        // userInfo,
-        // productInfo,
         statusInfo
       };
 
@@ -132,48 +73,6 @@ class OrderService {
     /// ** db 목록에 있는 user_id로 user 정보를 가져와서 주문정보와 연결 **
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
-
-      // const order_user_id = orders[i].user_id.valueOf();
-      // let user = await this.userModel.findById(order_user_id);
-
-      // const {
-      //   fullName,
-      //   phoneNumber,
-      //   email } = user;
-    
-      // const userInfo = {
-      //   fullName,
-      //   phoneNumber,
-      //   email
-      // }
-      // // *** 유저정보 가공 끝 ******
-
-      // /// ** orderedProducts의 정보로 제품 정보 가공 **
-      // let productInfo = [];
-      // const orderedProducts = orders[i].products;
-
-      // for(let i = 0; i < orderedProducts.length; i++) {
-      //   const order_product_id = orderedProducts[i].product_id.valueOf();
-      //   const orderQty = orderedProducts[i].qty
-
-      //   // product_id로 product 정보를 가져와서 주문정보 array에 담음
-      //   const product = await this.productModel.findById(order_product_id);
-
-      //   const {
-      //     name,
-      //     price
-      //   } = product;
-      
-      //   const modifiedProduct = {
-      //     name,
-      //     price,
-      //     qty: orderQty,
-      //     totalPrice: price * orderQty
-      //   }
-
-      //   productInfo.push(modifiedProduct)
-      // }
-      // ***** 제품 가공 끝 *****************
 
       //// ******* cs status & order status 이름 반환 작업
       ///// order status id로 이름 반환
@@ -491,7 +390,7 @@ class OrderService {
       throw new Error('해당 주문 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     
-    const order_user_id = order.user_id.valueOf();
+    const order_user_id = order.user.user_id.valueOf();
     return order_user_id;
   }
 };
