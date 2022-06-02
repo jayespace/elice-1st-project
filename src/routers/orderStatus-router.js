@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired, adminRequired, asyncHandler } from '../middlewares';
-import { orderStatusService } from '../services';
+import { orderStatusService, orderService } from '../services';
 
 const orderStatusRouter = Router();
 
@@ -41,6 +41,11 @@ orderStatusRouter.post('/orderStatus', loginRequired, adminRequired,
 orderStatusRouter.delete('/orderStatus/:orderStatusId', loginRequired, adminRequired,
      asyncHandler(async (req, res) => {
     const { orderStatusId } = req.params;
+
+    const isExistInOrders = await orderService.isExistOrderStatus(orderStatusId);
+    if (isExistInOrders.length >= 1) {
+      throw new Error('해당 status에 속해 있는 주문이 있어 삭제 할 수 없습니다.');
+    };
 
     const del = await orderStatusService.deleteOrderStatus(orderStatusId)
     res.status(200).json(del);
