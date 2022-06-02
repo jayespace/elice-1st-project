@@ -53,12 +53,40 @@ class CreateTableHelper{
 
     tbHead.innerHTML = this.createHtmlHelper('HEAD')(data);
     tbBody.innerHTML = this.createHtmlHelper('BODY')(data);
+
     tbBody.querySelectorAll('a').forEach(e=>
-    e.addEventListener('click',async(e)=>{this.currentId = e.target.dataset.id
-      await this.insertInfoToEditModal(mdEdit);
+    e.addEventListener('click',async(e)=>{
+      this.currentId = e.target.dataset.id;
+      
+      console.log(e.target.dataset.do);
+      if(e.target.dataset.do == 'Edit'){
+        const {name, desc} = await translateSysCodeToApi(
+          this.name,
+          "search"
+        )(this.currentId);
+        /**
+         * Tags Pattern
+         * "Edit_${attr}
+         */
+        const key = Object.keys(desc?{name, desc}:{name});
+        const value = Object.values(desc?{name, desc}:{name});
+        for(let i = 0; i < key.length; i++){
+          document.getElementById(`Edit_${key[i]}`).value = value[i];
+        }
+        console.log(info);
+      }
     }));
     mdEdit.innerHTML = this.createHtmlHelper("EDIT")(data);
-    mdAdd.innerHTML = this.createHtmlHelper("EDIT")(data);
+    mdAdd.innerHTML = this.createHtmlHelper("ADD")(data);
+    mdAdd.parentElement.querySelector('#EditSubmitButton')
+      .addEventListener('click', (e)=>{
+        e.preventDefault();
+          const {name, desc}=data[0];
+          const key = Object.keys(desc?{name, desc}:{name});
+          const result = key.map(key => document.getElementById(`Add_${key}`).value);
+          console.log(result);
+        
+      })
     mdDel.parentElement
       .querySelector(".md-ok")
       .addEventListener("click", async(e) => {
@@ -68,15 +96,6 @@ class CreateTableHelper{
       });
   };
 
-  async insertInfoToEditModal(mdEdit){
-    const info = await translateSysCodeToApi(
-      this.name,
-      "search"
-    )(this.currentId);
-    console.log(info);
-  }
-  
-  
   // setElementName(...labelElement){
   //   [...labelElement].forEach((e) => (
   //     e.textContent = `${e.textContent??''} ${this.name}`
@@ -118,13 +137,11 @@ class CreateTableHelper{
             </td>
             ${createTabLeData(value)}
             <td>
-                <a href="#editModal" class="td_edit" data-toggle="modal" >
-                    <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${
-                      value[0]
-                    }">&#xE254;</i>
+                <a href="#editModal" class="td_edit" data-toggle="modal" data-do="Edit" data-id="${value[0]}">
+                    <i class="material-icons" data-toggle="tooltip" title="Edit" data-do="Edit" data-id="${value[0]}">&#xE254;</i>
                 </a>
-                <a href="#deleteModal" class="td_delete" data-toggle="modal">
-                    <i class="material-icons" data-toggle="tooltip" title="Delete_Category"  data-id="${
+                <a href="#deleteModal" class="td_delete" data-toggle="modal" data-do="Del" data-id="${value[0]}">
+                    <i class="material-icons" data-toggle="tooltip" title="delete" data-do="DEL" data-id="${
                       value[0]
                     }">&#xE872;</i>
                 </a>
@@ -136,17 +153,31 @@ class CreateTableHelper{
         return data.map(createTableRow).join('');
       }
       case 'EDIT':return function(record){
-        record = Object.keys(record[0])
+        // record = Object.keys(record[0])
+        const {name, desc} = record[0];
+        record = Object.keys(desc?{name, desc}:{name});
         function createBasicInputHTML(attr){
           return `
            <div class="form-group">
               <label>${attr}</label>
-              <input id="${attr}" type="text" class="form-control" required>
+              <input id="Edit_${attr}" type="text" class="form-control" required>
           </div>`
         }
-        return record.map(createBasicInputHTML).join('');
-
-        
+        return record.map(createBasicInputHTML).join('');        
+      }
+      case 'ADD':return function(record){
+        // record = Object.keys(record[0])
+        const {name, desc} = record[0];
+        console.log(name, desc);
+        record = Object.keys(desc?{name, desc}:{name});
+        function createBasicInputHTML(attr){
+          return `
+           <div class="form-group">
+              <label>${attr}</label>
+              <input id="Add_${attr}" type="text" class="form-control" required>
+          </div>`
+        }
+        return record.map(createBasicInputHTML).join('');        
       }
     }
   }
@@ -168,6 +199,7 @@ const mdEdit = document.querySelector("#editModal .modal-body");
 const mdAdd = document.querySelector("#addModal .modal-body");
 const mdDel = document.querySelector("#deleteModal .modal-body");
 
+const EditSubmitButton = document.getElementById('EditSubmitButton');
 
 addAllElements();
 addAllEvents();
@@ -182,7 +214,6 @@ async function addAllElements() {
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
-
     // await createMenuToSystemCodeList();
 }
 async function createMenu(){
@@ -190,7 +221,7 @@ async function createMenu(){
   const menu = CreateTableHelper.createMenu(sysCodes);
   const systemCodeList = document.getElementById('systemCodeList');
   systemCodeList.insertAdjacentHTML("beforeend", menu);
-
+  
   systemCodeList.querySelectorAll('button').forEach(e=>e.addEventListener('click',createTable));
   async function createTable(e){
     const {id, name} = e.target.dataset;
