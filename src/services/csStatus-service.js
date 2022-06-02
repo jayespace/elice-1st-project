@@ -5,7 +5,7 @@ class CsStatusService {
   constructor(csStatusModel, orderStatusModel) {
     this.csStatusModel = csStatusModel;
     this.orderStatusModel = orderStatusModel;
-  }
+  };
 
   // 전체 CS Status 목록 확인
   async getAllCsStatus() {
@@ -13,9 +13,9 @@ class CsStatusService {
 
     if (allCsStatus.length < 1) {
       throw new Error('CS Status가 없습니다.');
-    }
+    };
     return allCsStatus;
-  }
+  };
 
   // CS Status 상세 정보 확인
   async getCsStatus(csStatusId) {
@@ -23,16 +23,16 @@ class CsStatusService {
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
 
     return csStatus;
-  }
+  };
 
   // 이름으로 Cs Status 정보 확인
   async getCsStatusByName(name) {
     const csStatus = await this.csStatusModel.findByName(name);
     return csStatus;
-  }
+  };
 
   // CS Status 이름으로 id 찾기
   async getCsStatusId(csStatusName) {
@@ -40,11 +40,11 @@ class CsStatusService {
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
 
     const csStatusId = csStatus._id.valueOf();
     return csStatusId;
-  }
+  };
 
   // CS Status id로 이름 찾기
   async getCsStatusName(csStatusId) {
@@ -53,11 +53,11 @@ class CsStatusService {
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
     const csStatusName = csStatus.name;
 
     return csStatusName;
-  }
+  };
 
   // CS Status 추가
   async addCsStatus(csStatusInfo) {
@@ -65,13 +65,13 @@ class CsStatusService {
 
     const isExist = await this.csStatusModel.findByName(name);
     if (isExist) {
-        throw new Error('이 이름으로 생성된 CS Status가 있습니다. 다른 이름을 지어주세요.');
-    }
+      throw new Error('이 이름으로 생성된 CS Status가 있습니다. 다른 이름을 지어주세요.');
+    };
     const newInfo = { name };
     // db에 저장
     const createdNew = await this.csStatusModel.create(newInfo);
     return createdNew;
-  }
+  };
 
   // CS Status 정보 수정
   async setCsStatus(csStatusId, toUpdate) {
@@ -79,7 +79,7 @@ class CsStatusService {
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
     
     csStatus = await this.csStatusModel.update({
       csStatusId,
@@ -95,7 +95,7 @@ class CsStatusService {
 
     if (!csStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
     const del = await this.csStatusModel.delete(csStatusId);
     return del;
   };
@@ -114,7 +114,7 @@ class CsStatusService {
 
     if (!reqCsStatus) {
         throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
 
     const reqCsStatusName = reqCsStatus.name;
 
@@ -123,7 +123,7 @@ class CsStatusService {
 
     if (!curCsStatus) {
         throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
 
     const curCsStatusName = curCsStatus.name;
 
@@ -132,13 +132,13 @@ class CsStatusService {
 
     if (!curOrderStatus) {
       throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
-    }
+    };
     const curOrderStatusName = curOrderStatus.name;
 
     /// 사용자 로직
     if (reqCsStatusName === "정상") {
       throw new Error ('해당 요청 사항은 반영될 수 없습니다.'); 
-    }
+    };
 
     if (reqCsStatusName === "취소"){
       if(curCsStatusName !== "정상") {
@@ -147,21 +147,21 @@ class CsStatusService {
         throw new Error ('현재 주문 진행 상태를 다시 한번 확인해 주세요.')
       } else if (curOrderStatusName !== '결제완료' && curOrderStatusName !== '상품준비중') {
         throw new Error ('현재 주문 진행 상태에서는 주문을 취소할 수 없습니다.')
-      } 
-    }
+      };
+    };
 
     if (reqCsStatusName === "교환" || reqCsStatusName === "반품"){
       if(curCsStatusName !== "정상") {
         throw new Error ('현재 요청 상태를 다시 한번 확인해 주세요.');
       } else if(curOrderStatusName !== "배송중" && curOrderStatusName !== "배송완료") {
         throw new Error ('현재 주문 진행 상태를 다시 한번 확인해 주세요.'); 
-      }
-    }
+      };
+    };
 
     const statusinfo = {
       orderStatus: curOrderStatusId,
       csStatus: reqCsStatusId
-    }
+    };
     return statusinfo;
   };
 
