@@ -1,5 +1,4 @@
 import { model } from 'mongoose';
-import { productService } from '../../services';
 import { ProductSchema } from '../schemas/product-schema';
 
 const Product = model('products', ProductSchema);
@@ -21,8 +20,8 @@ export class ProductModel {
     return counts;
   }
 
-  async countbyPrice(price) {
-    const counts = await Product.countDocuments({ price });
+  async countbyPrice(priceRange) {
+    const counts = await Product.countDocuments({ price: priceRange });
     return counts;
   }
 
@@ -110,8 +109,8 @@ export class ProductModel {
   }
 
   async delete(productId) {
-    await Product.findOneAndDelete({ _id: productId });
-    return;
+    const del = await Product.findOneAndDelete({ _id: productId });
+    return del;
   }
 
 };

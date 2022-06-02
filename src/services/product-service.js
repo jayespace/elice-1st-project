@@ -1,11 +1,10 @@
-import { productModel } from '../db';
-import { categoryService } from './category-service';
+import { productModel, categoryModel } from '../db';
 
 class ProductService {
 
-  constructor(productModel, categoryService) {
+  constructor(productModel, categoryModel) {
     this.productModel = productModel;
-    this.categoryService = categoryService;
+    this.categoryModel = categoryModel;
   }
 
   ///// 전체 상품 갯수 확인
@@ -32,7 +31,8 @@ class ProductService {
 
       const product = products[i];
 
-      const { 
+      const {
+        _id,
         name,
         price,
         category,
@@ -42,12 +42,18 @@ class ProductService {
         stock,
         keyword,
         image
-        } = product;
+      } = product;
 
       const product_category_id = product.category.valueOf();
-      const categoryName = await this.categoryService.getCategoryName(product_category_id);
+      const categoryInfo = await this.categoryModel.findById(product_category_id);
+
+      if (!categoryInfo) {
+        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      }
+      const categoryName = categoryInfo.name;
 
       let modified = { 
+        _id,
         name,
         price,
         category: categoryName,
@@ -58,33 +64,47 @@ class ProductService {
         keyword,
         image };
 
-        productList.push(modified)
+      productList.push(modified)
     }
 
     return productList;
   }
 
-    ///// 선택된 카테고리에 포함된 상품 갯수 확인
-    async countByField(field, value) {
+  ///// 선택된 카테고리에 포함된 상품 갯수 확인
+  async countByField(field, value) {
 
-      let total = 0;
+    let total = 0;
 
-      if (field == 'category') {
-        const categoryId = await this.categoryService.getCategoryId(value);
-        total = await this.productModel.countbyCategory(categoryId);
-      } else if (field == 'manufacturer') {
-        total = await this.productModel.countbyManufacturer(value);
-      } else if (field == 'price') {
-        total = await this.productModel.countbyPrice(value);
-      } else if (field == 'keyword') {
-        total = await this.productModel.countbyKeyword(value);
+    if (field == 'category') {
+      /// 이름으로 id 찾기
+      const categoryInfo = await this.categoryModel.findByName(value);
+
+      if (!categoryInfo) {
+        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
       }
+      const categoryId = categoryInfo._id;
+      total = await this.productModel.countbyCategory(categoryId);
 
-      if (total < 1) {
-          throw new Error('상품이 없습니다.');
-      }
-      return total;
+    } else if (field == 'manufacturer') {
+      total = await this.productModel.countbyManufacturer(value);
+
+    } else if (field == 'minPrice') {
+      const priceRange = { $gte: value }
+      total = await this.productModel.countbyPrice(priceRange);
+    
+    } else if (field == 'maxPrice') {
+      const priceRange = { $lte: value }
+      total = await this.productModel.countbyPrice(priceRange);
+
+    } else if (field == 'keyword') {
+      total = await this.productModel.countbyKeyword(value);
     }
+
+    if (total < 1) {
+        throw new Error('상품이 없습니다.');
+    }
+    return total;
+  }
 
   //// **** 페이지 별로 특정 필드에 포함된 상품 확인 (pagination) ****
   async getProductsByField(field, value, page, perPage) {
@@ -92,12 +112,27 @@ class ProductService {
     let products;
 
     if (field == 'category') {
-      const categoryId = await this.categoryService.getCategoryId(value);
+      /// 이름으로 id 찾기
+      const categoryInfo = await this.categoryModel.findByName(value);
+
+      if (!categoryInfo) {
+        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      }
+      const categoryId = categoryInfo._id;
+
       products = await this.productModel.findByCategory(categoryId, page, perPage);
+
     } else if (field == 'manufacturer') {
       products = await this.productModel.findByManufacturer(value, page, perPage);
-    } else if (field == 'price') {
-      products = await this.productModel.findByPrice(value, page, perPage);
+
+    } else if (field == 'minPrice') {
+      const priceRange = { $gte: value }
+      products = await this.productModel.findByPrice(priceRange, page, perPage);
+
+    } else if (field == 'maxPrice') {
+      const priceRange = { $lte: value }
+      products = await this.productModel.findByPrice(priceRange, page, perPage);
+
     } else if (field == 'keyword') {
       products = await this.productModel.findByKeyword(value, page, perPage);
     }
@@ -111,7 +146,8 @@ class ProductService {
 
       const product = products[i];
 
-      const { 
+      const {
+        _id,
         name,
         price,
         category,
@@ -121,12 +157,20 @@ class ProductService {
         stock,
         keyword,
         image
-        } = product;
+      } = product;
 
+      /// 카테고리 id로 이름 찾기
       const product_category_id = product.category.valueOf();
-      const categoryName = await this.categoryService.getCategoryName(product_category_id);
+      const categoryInfo = await this.categoryModel.findById(product_category_id);
 
+      if (!categoryInfo) {
+        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      }
+      const categoryName = categoryInfo.name;
+
+      // 카테고리 이름으로 반영된 정보 담기
       let modified = { 
+        _id,
         name,
         price,
         category: categoryName,
@@ -137,7 +181,7 @@ class ProductService {
         keyword,
         image };
 
-        productList.push(modified)
+      productList.push(modified)
     }
 
     return productList;
@@ -145,9 +189,11 @@ class ProductService {
 
   //// id로 상품 상세정보 확인
   async getProductDetail(productId) {
+
     const detail = await this.productModel.findById(productId);
 
-    const { 
+    const {
+      _id,
       name,
       price,
       category,
@@ -156,32 +202,37 @@ class ProductService {
       manufacturer,
       stock,
       keyword,
-      image } = detail;
+      image
+    } = detail;
 
-      const product_category_id = detail.category.valueOf();
-      const categoryName = await this.categoryService.getCategoryName(product_category_id);
+    /// 카테고리 id로 이름찾기
+    const product_category_id = detail.category.valueOf();
+    const categoryInfo = await this.categoryModel.findById(product_category_id);
 
-      const newProductInfo = {
-        name,
-        price,
-        category: categoryName,
-        briefDesc,
-        fullDesc,
-        manufacturer,
-        stock,
-        keyword,
-        image };
+    if (!categoryInfo) {
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+    const categoryName = categoryInfo.name;
+
+    // 카테고리 이름으로 반영된 정보 담기
+    const newProductInfo = {
+      _id,
+      name,
+      price,
+      category: categoryName,
+      briefDesc,
+      fullDesc,
+      manufacturer,
+      stock,
+      keyword,
+      image
+    };
 
     return newProductInfo;
   }
+  
 
-  ///// 가격으로 상품 검색
-  async getProductsByPrice(from, to) {
-    const price = { $gte: from, $lte: to }
-    const products = await this.productModel.findByPrice(price);
-    return products;
-  }
-
+  /// 제품 이름으로 정보 찾기
   async getProductByName(name) {
     const product = await this.productModel.findByName(name);
     return product;
@@ -199,7 +250,7 @@ class ProductService {
       stock,
       keyword,
       image
-      } = productInfo;
+    } = productInfo;
     
     const isExist = await this.productModel.findByName(name);
     if (isExist) {
@@ -207,8 +258,14 @@ class ProductService {
     }
 
     // 카테고리 이름으로 id 찾기
-    const categoryId = await this.categoryService.getCategoryId(category);
+    const categoryInfo = await this.categoryModel.findByName(category);
 
+    if (!categoryInfo) {
+      throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+    const categoryId = categoryInfo._id;
+
+    // 카테고리 이름으로 반영된 정보 담기
     const newProductInfo = {
       name,
       price,
@@ -220,7 +277,7 @@ class ProductService {
       keyword,
       image };
 
-    // db에 저장
+    // db에 저장 후 반환
     const createdNewProduct = await this.productModel.create(newProductInfo);
     return createdNewProduct;
   }
@@ -240,6 +297,7 @@ class ProductService {
 
   //// 상품 정보 수정 ***************
   async setProduct(productId, toUpdate) {
+
     let product = await this.productModel.findById(productId);
 
     if (!product) {
@@ -250,8 +308,13 @@ class ProductService {
     if (toUpdate.category) {
 
       const categoryName = toUpdate.category;
+      const categoryInfo = await this.categoryModel.findByName(categoryName);
 
-      const categoryId = await this.categoryService.getCategoryId(categoryName);
+      if (!categoryInfo) {
+        throw new Error('해당 카테고리 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      }
+
+      const categoryId = categoryInfo._id;
       const product_category_id = categoryId.valueOf();
 
       toUpdate.category = product_category_id;
@@ -265,40 +328,41 @@ class ProductService {
     return product;
   };
 
-//************** */
 
-  /// 카테고리 id로 정보조회
+  /// 카테고리 id로 정보 조회
   async isExist(categoryId) {
+
     const products = await this.productModel.findByCategoryId(categoryId);
     return products;
   }
 
-  /// id로 정보조회
+  /// 제품 id로 정보 조회
   async getDetail(productId) {
+
     const product = await this.productModel.findById(productId);
     return product;
   }
 
   /// 주문 들어올 경우 재고 수정
-  async modifyStock(productId, orderedQty) {
-    let product = await this.productModel.findById(productId);
-    const { stock } = product;
-    const qty = orderedQty
-    const toUpdate = {
-      stock: stock-qty
-    }
+  // async modifyStock(productId, orderedQty) {
+  //   let product = await this.productModel.findById(productId);
+  //   const { stock } = product;
+  //   const qty = orderedQty
+  //   const toUpdate = {
+  //     stock: stock-qty
+  //   }
+    
+  //   product = await this.productModel.update({
+  //     productId,
+  //     update: toUpdate,
+  //   });
 
-    product = await this.productModel.update({
-      productId,
-      update: toUpdate,
-    });
-
-    return product.stock;
-  }
+  //   return product.stock;
+  // }
 
 };
 
 
-const productService = new ProductService(productModel, categoryService);
+const productService = new ProductService(productModel, categoryModel);
 
 export { productService };
