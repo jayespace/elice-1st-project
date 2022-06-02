@@ -137,3 +137,7 @@ input[type='number']::-webkit-outer-spin-button {
   height: 4rem;
   width: 100%;
 }
+
+.purchase button a {
+  color: white;
+}
