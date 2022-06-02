@@ -1,7 +1,14 @@
 import { addCommas } from '/useful-functions.js';
-import { store } from './store.js';
 const $ = (selector) => document.querySelector(selector);
 
+const store = {
+  setLocalStorage(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  },
+  getLocalStorage() {
+    return JSON.parse(localStorage.getItem('cart'));
+  },
+};
 function App() {
   // 상태
   this.cart = [];
@@ -15,7 +22,7 @@ function App() {
   };
 
   const counts = $('#productsTitle');
-  const prices = $('#productsTotal');
+  const totalPrices = $('#productsTotal');
   const orderTotal = $('#orderTotal');
   const delivery = $('#deliveryFee');
 
@@ -61,11 +68,12 @@ function App() {
       if (item.cart === 'checked') {
         itemCounts += item.count;
         itemPrices += item.price * item.count;
+        console.log(itemPrices);
         orderedItem += `${item.name} / ${item.count}개<br />`;
         deliveryFee = 3000;
       }
       counts.innerHTML = orderedItem;
-      prices.innerText = `${addCommas(itemPrices)} 원`;
+      totalPrices.innerText = `${addCommas(itemPrices)} 원`;
       delivery.innerText = `${addCommas(deliveryFee)} 원`;
       orderTotal.innerText = `${addCommas(itemPrices + deliveryFee)} 원`;
     });
@@ -132,17 +140,6 @@ function App() {
     store.setLocalStorage(this.cart);
     render();
   });
-
-  // 체크한 상품이 없을 시 결제페이지로 넘어가지 않도록 함
-  // const purchaseBtn = $('#checkoutButton');
-  // const isEmpty = this.cart.filter((item) => item.cart === 'checked');
-  // purchaseBtn.addEventListener('click', () => {
-  //   if (isEmpty.length === 0) {
-  //     window.location.href = '/shippingpoint';
-  //   } else {
-  //     alert('구매할 상품을 선택해주세요. ');
-  //   }
-  // });
 }
 
 const app = new App();

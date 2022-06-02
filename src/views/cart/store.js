@@ -1,5 +1,5 @@
 // 스토리지
-export const store = {
+const store = {
   setLocalStorage(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
   },
@@ -7,3 +7,5 @@ export const store = {
     return JSON.parse(localStorage.getItem('cart'));
   },
 };
+
+export default store;
