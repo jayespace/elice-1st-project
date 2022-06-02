@@ -25,5 +25,3 @@ export * from './models/systemCode-model';
 export * from './models/order-model'
 export * from './models/orderStatus-model';
 export * from './models/csStatus-model';
-export * from './models/order/paymentStatus-model';
-export * from './models/order/paymentType-model';

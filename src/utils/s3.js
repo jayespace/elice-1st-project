@@ -28,7 +28,7 @@ const upload = multer({
       acl: 'public-read', // 클라이언트에서 자유롭게 가용하기 위함
       key: (req, file, cb) => {
           let extension = path.extname(file.originalname);
-          cb(null, 'product_dummy/'+Date.now().toString()+extension);
+          cb(null, 'test/'+Date.now().toString()+extension);
           // cb(null, file.originalname)
       },
   }),

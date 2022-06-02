@@ -16,19 +16,29 @@ export class OrderModel {
   }
 
   async findByUser(userId) {
-    const order = await Order.find({ user_id: userId });
+    const order = await Order.find({ "user.user_id": userId });
     return order;
-  }
+  };
+
+  async findByOrderStatus(orderStatusId) {
+    const orders = await Order.find({ orderStatus: orderStatusId });
+    return orders;
+  };
+
+  async findByCsStatus(csStatusId) {
+    const orders = await Order.find({ csStatus: csStatusId });
+    return orders;
+  };
 
   async countOrders() {
     const counts = await Order.countDocuments({})
     return counts;
-  }
+  };
 
   async countOrdersByUser(userId) {
-    const counts = await Order.countDocuments({ user_id : userId })
+    const counts = await Order.countDocuments({ user_id : userId });
     return counts;
-  }
+  };
 
   async create(orderId) {
     const createdNew = await Order.create(orderId);
@@ -41,7 +51,7 @@ export class OrderModel {
 
     const updated = await Order.findOneAndUpdate(filter, update, option);
     return updated;
-  }
+  };
 
 };
 

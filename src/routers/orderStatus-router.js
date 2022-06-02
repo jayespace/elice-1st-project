@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired, adminRequired, asyncHandler } from '../middlewares';
-import { orderStatusService } from '../services';
+import { orderStatusService, orderService } from '../services';
 
 const orderStatusRouter = Router();
 
@@ -42,6 +42,11 @@ orderStatusRouter.delete('/orderStatus/:orderStatusId', loginRequired, adminRequ
      asyncHandler(async (req, res) => {
     const { orderStatusId } = req.params;
 
+    const isExistInOrders = await orderService.isExistOrderStatus(orderStatusId);
+    if (isExistInOrders.length >= 1) {
+      throw new Error('해당 status에 속해 있는 주문이 있어 삭제 할 수 없습니다.');
+    };
+
     const del = await orderStatusService.deleteOrderStatus(orderStatusId)
     res.status(200).json(del);
 
@@ -61,6 +66,11 @@ orderStatusRouter.patch('/orderStatus/:orderStatusId', loginRequired, adminRequi
     const { orderStatusId } = req.params;
     const { name } = req.body;
 
+    const isExist = await orderStatusService.getOrderStatusByName(name);
+    if (isExist) {
+        throw new Error('이 이름으로 생성된 Order Status가 있습니다. 다른 이름을 지어주세요.');
+    }
+
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
     const toUpdate = {
@@ -71,7 +81,6 @@ orderStatusRouter.patch('/orderStatus/:orderStatusId', loginRequired, adminRequi
 
     // 업데이트 이후의 데이터를 프론트에 보내 줌
     res.status(200).json(updatedOrderStatus);
-
 }));
 
 export { orderStatusRouter };

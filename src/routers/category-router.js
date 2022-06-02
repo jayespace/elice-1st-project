@@ -57,7 +57,7 @@ categoryRouter.patch('/categories/:categoryId',
   const { name, desc } = req.body;
 
   // 이름이 있을 경우 에러 발생
-  const isExist = await this.productModel.getCategoryByName(name);
+  const isExist = await categoryService.getCategoryByName(name);
   if (isExist) {
     throw new Error('이 이름으로 생성된 카테고리가 있습니다. 다른 이름을 지어주세요.');
   }
@@ -81,8 +81,8 @@ categoryRouter.delete('/categories/:categoryId',
 
   const { categoryId } = req.params;
 
-  const isCategoryExistinProduct = await productService.isExist(categoryId);
-  if (isCategoryExistinProduct.length >= 1) {
+  const isExistInProducts = await productService.isExist(categoryId);
+  if (isExistInProducts.length >= 1) {
     throw new Error('해당 카테고리에 속해 있는 제품이 있어 삭제 할 수 없습니다.');
   }
 
