@@ -66,7 +66,6 @@ async function postMulti(endpoint, formData) {
   const res = await fetch(apiUrl, {
     method: 'POST',
     headers: {
-      'Content-Type': 'multipart/form-data',
       Authorization: `Bearer ${sessionStorage.getItem('token')}`,
     },
     body: formData,
