@@ -8,7 +8,7 @@ const getCategoryList = async () => {
     return categories
       .map(
         ({ _id, name }) =>
-          `<a href='?category=${name}'class="navbar-item"> ${name} </a>`
+          `<a href='/products?category=${name}'class="navbar-item"> ${name} </a>`
       )
       .join('');
   } catch (e) {
