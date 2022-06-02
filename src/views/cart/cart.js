@@ -1,15 +1,6 @@
 import { addCommas } from '/useful-functions.js';
+import { store } from './store.js';
 const $ = (selector) => document.querySelector(selector);
-
-// 스토리지
-const store = {
-  setLocalStorage(cart) {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  },
-  getLocalStorage() {
-    return JSON.parse(localStorage.getItem('cart'));
-  },
-};
 
 function App() {
   // 상태
