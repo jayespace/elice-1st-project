@@ -28,7 +28,7 @@ import * as Api from "/api.js";
 import { randomId } from "/useful-functions.js";
 
 class CreateTableHelper{
-  recentId ='';
+  currentId ='';
   constructor(name){
     this.name = name;
   }
@@ -47,19 +47,35 @@ class CreateTableHelper{
     return createButtons(sysCodes);
   }
 
-  async createTable(tbHead, tbBody, mdEdit, mdAdd){
+  async createTable(tbHead, tbBody, mdEdit, mdAdd, mdDel){
     const data = await translateSysCodeToApi(this.name,"all")();
     console.log('createTable',data);
 
     tbHead.innerHTML = this.createHtmlHelper('HEAD')(data);
     tbBody.innerHTML = this.createHtmlHelper('BODY')(data);
     tbBody.querySelectorAll('a').forEach(e=>
-    e.addEventListener('click',(e)=>console.log(e.target.dataset.id)));
+    e.addEventListener('click',async(e)=>{this.currentId = e.target.dataset.id
+      await this.insertInfoToEditModal(mdEdit);
+    }));
     mdEdit.innerHTML = this.createHtmlHelper("EDIT")(data);
     mdAdd.innerHTML = this.createHtmlHelper("EDIT")(data);
-    // console.log(test, mdEdit);
+    mdDel.parentElement
+      .querySelector(".md-ok")
+      .addEventListener("click", async(e) => {
+        e.preventDefault();
+        console.log('삭제중');
+        // const result = await translateSysCodeToApi(this.name,'','');
+      });
   };
-  update
+
+  async insertInfoToEditModal(mdEdit){
+    const info = await translateSysCodeToApi(
+      this.name,
+      "search"
+    )(this.currentId);
+    console.log(info);
+  }
+  
   
   // setElementName(...labelElement){
   //   [...labelElement].forEach((e) => (
@@ -150,9 +166,8 @@ const tbHead = document.getElementById('tbHead');
 const tbBody = document.getElementById('tbBody');
 const mdEdit = document.querySelector("#editModal .modal-body");
 const mdAdd = document.querySelector("#addModal .modal-body");
+const mdDel = document.querySelector("#deleteModal .modal-body");
 
-
-const td_del_ok = document.getElementById('td_del_ok');
 
 addAllElements();
 addAllEvents();
@@ -167,10 +182,7 @@ async function addAllElements() {
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
-  td_del_ok.addEventListener('click', (e) =>{
-    e.preventDefault();
-    console.log(e.dataset.id);
-  })
+
     // await createMenuToSystemCodeList();
 }
 async function createMenu(){
@@ -183,7 +195,13 @@ async function createMenu(){
   async function createTable(e){
     const {id, name} = e.target.dataset;
     const helper = new CreateTableHelper(name);
-    const table = await helper.createTable(tbHead, tbBody, mdEdit, mdAdd);
+    const table = await helper.createTable(
+      tbHead,
+      tbBody,
+      mdEdit,
+      mdAdd,
+      mdDel
+    );
     console.log('table', table);
   }
 }
