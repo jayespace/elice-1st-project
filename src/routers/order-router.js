@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired, asyncHandler } from '../middlewares';
-import { userService, productService, orderService, csStatusService, orderStatusService } from '../services';
+import { userService, orderService, csStatusService, orderStatusService } from '../services';
 
 const orderRouter = Router();
 
@@ -156,12 +156,12 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
 
     if (orderStatus) {
       requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
-      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
+      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentOrderStatus.id, currentCsStatus.id);
       csStatus = adjusted.csStatus
 
     } else if (csStatus) {
       requestCsStatusId = await csStatusService.getCsStatusId(csStatus);
-      adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentOrderStatus.id);
+      adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentCsStatus.id, currentOrderStatus.id);
       orderStatus = adjusted.orderStatus
     }
 

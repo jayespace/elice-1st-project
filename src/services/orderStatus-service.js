@@ -66,7 +66,7 @@ class OrderStatusService {
 
     const isExist = await this.orderStatusModel.findByName(name);
     if (isExist) {
-        throw new Error('이 이름으로 생성된 order Status가 있습니다. 다른 이름을 지어주세요.');
+      throw new Error('이 이름으로 생성된 order Status가 있습니다. 다른 이름을 지어주세요.');
     }
     const newInfo = { name };
     // db에 저장
@@ -79,12 +79,12 @@ class OrderStatusService {
     let orderStatus = await this.orderStatusModel.findById(orderStatusId);
 
     if (!orderStatus) {
-        throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     
     orderStatus = await this.orderStatusModel.update({
-        orderStatusId,
-        update: toUpdate,
+      orderStatusId,
+      update: toUpdate,
     });
 
     return orderStatus;
@@ -95,50 +95,107 @@ class OrderStatusService {
     let orderStatus = await this.orderStatusModel.findById(orderStatusId);
 
     if (!orderStatus) {
-        throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      throw new Error('해당 order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     const del = await this.orderStatusModel.delete(orderStatusId);
     return del;
   }
 
   // *** Order Status와 CS Status 체크하여 ID 반환 ****
-  async adjustStatus(orderStatusId, csStatusId) {
+  async adjustStatus(reqOrderStatusId, curOrderStatusId, curCsStatusId) {
 
-    let currentOrderStatusId = orderStatusId;
-    let currentCsStatusId = csStatusId;
-    
-    const orderStatus = await this.orderStatusModel.findById(orderStatusId);
+    //// 요청한 Order STATUS 확인
+    const reqOrderStatus = await this.orderStatusModel.findById(reqOrderStatusId);
 
-    if (!orderStatus) {
-        throw new Error('해당 Order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    if (!reqOrderStatus) {
+      throw new Error('해당 Order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
+
+    const reqOrderStatusName = reqOrderStatus.name;
+
     //// 현재 Order STATUS 확인
-    const orderStatusName = orderStatus.name;
+    const curOrderStatus = await this.orderStatusModel.findById(curOrderStatusId);
+
+    if (!curOrderStatus) {
+      throw new Error('해당 Order Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
+    }
+
+    const curOrderStatusName = curOrderStatus.name;
 
     /// 현재 CS Status 확인
-    const csStatus = await this.csStatusModel.findById(csStatusId);
+    const curCsStatus = await this.csStatusModel.findById(curCsStatusId);
 
-    if (!csStatus) {
+    if (!curCsStatus) {
       throw new Error('해당 CS Status 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
-    const csStatusName = csStatus.name;
+    const curCsStatusName = curCsStatus.name;
 
     /// 관리자 로직
-    if (orderStatusName === "배송중") {
-      if (csStatusName === '취소') {
-          throw new Error ('구매자의 요청사항을 확인해 주세요.')
+    if (reqOrderStatusName === "결제완료") {
+      throw new Error ('해당 요청 사항은 반영될 수 없습니다.'); 
+    }
+
+    if (reqOrderStatusName === "취소완료") {
+      if (curOrderStatusName !== '결제완료' || curOrderStatusName !== '상품준비중') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      } else if (curCsStatusName !== '취소') {
+        throw new Error ('구매자의 요청 사항을 확인해 주세요.')
       }
     } 
-    
-    if (orderStatusName === "배송완료") {
-      if (csStatusName === '교환' && csStatusName === "반품" || csStatusName === "취소") {
+
+    if (reqOrderStatusName === "상품준비중") {
+      if (curOrderStatusName !== '결제완료') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      } else if (curCsStatusName === '취소') {
+        throw new Error ('구매자의 요청 사항을 확인해 주세요.')
+      }
+    } 
+
+    if (reqOrderStatusName === "배송중") {
+      if (curOrderStatusName !== '상품준비중') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      }
+    } 
+
+    if (reqOrderStatusName === "배송완료") {
+      if (curOrderStatusName !== '배송중') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      } else if (curCsStatusName === '교환' && curCsStatusName === "반품") {
         throw new Error ('구매자의 요청사항을 확인해 주세요.');
       }
     } 
-    
+
+    if (reqOrderStatusName === "교환진행중") {
+      if (curOrderStatusName !== '배송중' || curOrderStatusName !== '배송완료') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      } else if (curCsStatusName !== '교환') {
+        throw new Error ('구매자의 요청사항을 확인해 주세요.');
+      }
+    } 
+
+    if (reqOrderStatusName === "교환완료") {
+      if (curOrderStatusName !== '교환진행중') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      }
+    } 
+
+    if (reqOrderStatusName === "반품진행중") {
+      if (curOrderStatusName !== '배송중' || curOrderStatusName !== '배송완료') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      } else if (curCsStatusName !== '반품') {
+        throw new Error ('구매자의 요청사항을 확인해 주세요.');
+      }
+    } 
+
+    if (reqOrderStatusName === "반품완료") {
+      if (curOrderStatusName !== '반품진행중') {
+        throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
+      }
+    } 
+
     const statusinfo = {
-      orderStatus: currentOrderStatusId,
-      csStatus: currentCsStatusId
+      orderStatus: reqOrderStatusId,
+      csStatus: curCsStatusId
     }
     return statusinfo;
   };
