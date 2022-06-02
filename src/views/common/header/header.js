@@ -2,16 +2,21 @@ import * as Api from '/api.js';
 
 const getCategoryList = async () => {
   // 카테고리 분류
-  try{
-  const categories = await Api.get(`/api/categories`);
-  console.log(categories);
-  return categories.map(({_id,name}) => `<a href='?category=${name}'class="navbar-item"> ${name} </a>`)
-  }catch(e){
-    console.error('카테고리 Nav 목록 :', e.message)
+  try {
+    const categories = await Api.get(`/api/categories`);
+    console.log(categories);
+    return categories
+      .map(
+        ({ _id, name }) =>
+          `<a href='?category=${name}'class="navbar-item"> ${name} </a>`
+      )
+      .join('');
+  } catch (e) {
+    console.error('카테고리 Nav 목록 :', e.message);
   }
 };
 
-export const headerTemplate = async() => {
+export const headerTemplate = async () => {
   // 토큰의 유무로 유저 로그인 판별
   const isLogIn = sessionStorage.getItem('token') ? true : false;
   const username = sessionStorage.getItem('username');
