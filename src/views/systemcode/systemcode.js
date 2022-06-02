@@ -27,24 +27,8 @@ function prepareModal() {
 import * as Api from "/api.js";
 import { randomId } from "/useful-functions.js";
 
-// // 요소(element), input 혹은 상수
-// const category_table = document.getElementById("category-table");
-
-// //ed-modal
-// const EditNameInput = document.getElementById("EditNameInput");
-// // const EditFullNameInput = document.getElementById('EditFullNameInput');
-// // const EditEmailInput = document.getElementById('EditEmailInput');
-// // const EditPostalCodeInput = document.getElementById('EditPostalCodeInput');
-// // const EditAddress1Input = document.getElementById('EditAddress1Input');
-// // const EditAddress2Input = document.getElementById('EditAddress2Input');
-// // const EditPhoneNumberInput = document.getElementById('EditPhoneNumberInput');
-// // const EditRoleSelectBox = document.getElementById('EditRoleSelectBox');
-// // const EditSearchAddressButton = document.getElementById('EditSearchAddressButton');
-// // const EditSubmitButton = document.getElementById('EditSubmitButton');
-
 class CreateTableHelper{
-    
-  
+  recentId ='';
   constructor(name){
     this.name = name;
   }
@@ -63,13 +47,26 @@ class CreateTableHelper{
     return createButtons(sysCodes);
   }
 
-  async createTable(tbHead, tbBody){
+  async createTable(tbHead, tbBody, mdEdit, mdAdd){
     const data = await translateSysCodeToApi(this.name,"all")();
-    console.log('createHAED',data);
+    console.log('createTable',data);
 
     tbHead.innerHTML = this.createHtmlHelper('HEAD')(data);
     tbBody.innerHTML = this.createHtmlHelper('BODY')(data);
-  }
+    tbBody.querySelectorAll('a').forEach(e=>
+    e.addEventListener('click',(e)=>console.log(e.target.dataset.id)));
+    mdEdit.innerHTML = this.createHtmlHelper("EDIT")(data);
+    mdAdd.innerHTML = this.createHtmlHelper("EDIT")(data);
+    // console.log(test, mdEdit);
+  };
+  update
+  
+  // setElementName(...labelElement){
+  //   [...labelElement].forEach((e) => (
+  //     e.textContent = `${e.textContent??''} ${this.name}`
+  //     ));
+  // }
+
 
 
   createHtmlHelper(Type){
@@ -95,8 +92,7 @@ class CreateTableHelper{
           function createTabLeData(value){
             return value.map(e => `<td>${e}</td>`).join('');
           }
-          let row = 
-          `
+          let row = `
           <tr>
             <td>
                 <span class="custom-checkbox">
@@ -106,18 +102,35 @@ class CreateTableHelper{
             </td>
             ${createTabLeData(value)}
             <td>
-                <a href="#editCategoryModal" class="td_edit" data-toggle="modal" >
-                    <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${value[0]}">&#xE254;</i>
+                <a href="#editModal" class="td_edit" data-toggle="modal" >
+                    <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${
+                      value[0]
+                    }">&#xE254;</i>
                 </a>
-                <a href="#deleteCategoryModal" class="td_delete" data-toggle="modal">
-                    <i class="material-icons" data-toggle="tooltip" title="Delete_Category"  data-id="${value[0]}">&#xE872;</i>
+                <a href="#deleteModal" class="td_delete" data-toggle="modal">
+                    <i class="material-icons" data-toggle="tooltip" title="Delete_Category"  data-id="${
+                      value[0]
+                    }">&#xE872;</i>
                 </a>
             </td>
           </tr>
-          `
+          `;
           return row;
         }
         return data.map(createTableRow).join('');
+      }
+      case 'EDIT':return function(record){
+        record = Object.keys(record[0])
+        function createBasicInputHTML(attr){
+          return `
+           <div class="form-group">
+              <label>${attr}</label>
+              <input id="${attr}" type="text" class="form-control" required>
+          </div>`
+        }
+        return record.map(createBasicInputHTML).join('');
+
+        
       }
     }
   }
@@ -135,6 +148,9 @@ function translateSysCodeToApi(syscode, type){
 }
 const tbHead = document.getElementById('tbHead');
 const tbBody = document.getElementById('tbBody');
+const mdEdit = document.querySelector("#editModal .modal-body");
+const mdAdd = document.querySelector("#addModal .modal-body");
+
 
 const td_del_ok = document.getElementById('td_del_ok');
 
@@ -167,7 +183,7 @@ async function createMenu(){
   async function createTable(e){
     const {id, name} = e.target.dataset;
     const helper = new CreateTableHelper(name);
-    const table = await helper.createTable(tbHead, tbBody);
+    const table = await helper.createTable(tbHead, tbBody, mdEdit, mdAdd);
     console.log('table', table);
   }
 }
