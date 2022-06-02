@@ -62,7 +62,11 @@ systemCodeRouter.patch('/admin/systemCodes/:systemCodeId', loginRequired, adminR
 
     const { systemCodeId } = req.params;
     const { name, desc } = req.body;
-
+    
+    const isExist = await systemCodeService.getSystemCodeByName(name);
+    if (isExist) {
+        throw new Error('이 이름으로 생성된 시스템코드가 있습니다. 다른 이름을 지어주세요.');
+    }
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
     const toUpdate = {

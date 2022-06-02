@@ -37,6 +37,16 @@ class SystemCodeModelService {
     return systemCode;
   }
 
+  async getSystemCodeByName(name) {
+    const systemCode = await this.systemCodeModel.findByName(name);
+
+    if (!systemCode) {
+      throw new Error('시스템 코드가 없습니다.');
+    }
+
+    return systemCode;
+  }
+
   // 시스템코드 추가
   async addSystemCode(systemCodeInfo) {
     const { name, desc } = systemCodeInfo;
