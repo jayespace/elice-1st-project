@@ -187,14 +187,15 @@ class OrderService {
 
       // product_id로 product의 이름을 가져와서 주문 정보에 담음
       const product = await this.productModel.findById(product_id);
-      const { name } = product;
+      const { name, image } = product;
 
       const modifiedProduct = {
         product_id,
         name,
         price,
         qty,
-        totalPrice
+        totalPrice,
+        image
       };
 
       productInfo.push(modifiedProduct);
