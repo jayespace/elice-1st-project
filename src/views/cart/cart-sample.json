@@ -75,7 +75,11 @@
     "keyword": ["핸드메이드", "쥐"],
     "image": "https://elice-team12.s3.ap-northeast-2.amazonaws.com/product_dummy/1653803571341.jpeg",
     "count": 1,
+<<<<<<< HEAD
     "cart": ""
+=======
+    "cart": "checked"
+>>>>>>> feature/cart
   },
   {
     "name": "캐티맨 강아지풀",
