@@ -25,6 +25,7 @@ body {
 .articles {
   margin: 5rem 0;
   margin-top: -200px;
+  background-color: #faf8f1;
 }
 .articles .content p {
   line-height: 1.9;
@@ -70,6 +71,6 @@ div.column.is-8:first-child {
 }
 
 .shop-info {
-  background: rgb(248, 219, 224) !important;
+  background: #f7f1e4 !important;
   padding-bottom: 130px !important;
 }

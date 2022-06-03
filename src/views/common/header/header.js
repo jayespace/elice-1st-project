@@ -7,7 +7,7 @@ const getCategoryList = async () => {
     return categories
       .map(
         ({ _id, name }) =>
-          `<a href='/products?category=${name}'class="navbar-item"> ${name} </a>`
+          `<a href='/products?category=${name}'class="navbar-item is-size-6"> ${name} </a>`
       )
       .join('');
   } catch (e) {
@@ -30,22 +30,22 @@ export const headerTemplate = async () => {
     loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
                       <a class="navbar-link">
                       <figure class="image is-24x24">
-                        <img class="is-rounded" src="${userImage}">
+                        <img class="is-rounded is-size-5" src="${userImage}">
                       </figure>
-                      <span>${username}</span>
+                      <span class="is-size-5">${username}</span>
                       </a>
                       <div class="navbar-dropdown">
-                        <a href="/orders"class="navbar-item"> 주문조회 </a>
+                        <a href="/orders"class="navbar-item is-size-6"> 주문조회 </a>
                         <hr class="navbar-divider" />
-                        <a href="/editprofile" class="navbar-item"> 회원정보관리 </a>
+                        <a href="/editprofile" class="navbar-item is-size-6"> 회원정보관리 </a>
                         ${adminTemplate}
                         <hr class="navbar-divider admin" />
-                        <a class="navbar-item logout" onclick="alert('로그아웃 되었습니다.');sessionStorage.clear();window.location.href='/';">로그아웃</a>
+                        <a class="navbar-item logout is-size-6" onclick="alert('로그아웃 되었습니다.');sessionStorage.clear();window.location.href='/';">로그아웃</a>
                       </div>
                     </div>`;
   } else {
-    loginTemplate = `<a href="/login" class="navbar-item"> 로그인 </a>
-                    <a href="/register" class="navbar-item"> 회원가입 </a>`;
+    loginTemplate = `<a href="/login" class="navbar-item is-size-5"> 로그인 </a>
+                    <a href="/register" class="navbar-item is-size-5"> 회원가입 </a>`;
   }
 
   return `
@@ -53,7 +53,7 @@ export const headerTemplate = async () => {
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="../">
-            <img src="../common/header/elice-rabbit.png" alt="Logo" />
+            <img src="../common/paw.png" alt="Logo" />
           </a>
           <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
@@ -65,18 +65,18 @@ export const headerTemplate = async () => {
           <!-- 좌측 메뉴바 -->
           <div class="navbar-start">
             <div class="navbar-item has-dropdown is-hoverable">
-              <a href="/products" class="navbar-link"> 모든 상품 </a>
+              <a href="/products" class="navbar-link is-size-5"> 모든 상품 </a>
               <div class="navbar-dropdown">
                 ${await getCategoryList()}
               </div>
             </div>
-            <a href="/brand-info" class="navbar-item"> 브랜드 소개 </a>
+            <a href="/brand-info" class="navbar-item is-size-5"> 프로젝트 소개 </a>
           </div>
 
           <!-- 우측 메뉴바 -->
           <div class="navbar-end">
           ${loginTemplate}
-            <a href="/cart" class="navbar-item"> 장바구니 </a>
+            <a href="/cart" class="navbar-item is-size-5"> 장바구니 </a>
           </div>
         </div>
       </div>
