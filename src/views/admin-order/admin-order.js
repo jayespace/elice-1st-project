@@ -1,3 +1,6 @@
+import {checkAdmin} from '/permission.js';
+checkAdmin();
+
 import * as Api from "/api.js";
 import { searchAddressByDaumPost } from "/useful-functions.js";
 
