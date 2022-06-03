@@ -20,6 +20,7 @@ export const headerTemplate = async () => {
   const isLogIn = sessionStorage.getItem('token') ? true : false;
   const username = sessionStorage.getItem('username');
   const isAdmin = sessionStorage.getItem('role') === 'admin' ? true : false;
+  const userImage = sessionStorage.getItem('image');
   let adminTemplate = '';
   if (isAdmin) {
     adminTemplate = `<a href="/account" class="navbar-item"> 관리자페이지 </a>`;
@@ -27,7 +28,12 @@ export const headerTemplate = async () => {
   let loginTemplate = '';
   if (isLogIn) {
     loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
-                      <a class="navbar-link"> ${username} </a>
+                      <a class="navbar-link">
+                      <figure class="image is-24x24">
+                        <img class="is-rounded" src="${userImage}">
+                      </figure>
+                      <span>${username}</span>
+                      </a>
                       <div class="navbar-dropdown">
                         <a href="/orders"class="navbar-item"> 주문조회 </a>
                         <hr class="navbar-divider" />

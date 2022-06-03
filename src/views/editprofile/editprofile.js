@@ -45,6 +45,8 @@ async function changeImageFile(file) {
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
       imageProfile.src = imgSrc;
+      console.log(imgSrc);
+      sessionStorage.setItem('image', imgSrc);
       imageProfile.style.width = '100%';
       imageProfile.style.height = '100%';
     } catch (e) {
@@ -159,29 +161,30 @@ async function handlePatch(e) {
   //   !isAddress2CodeValidModify ||
   //   !isPhoneNumberValidModify
   // ) {}
-    const address = {
-      postalCode: postalCode+"",
-      address1: address1,
-      address2: address2,
-    }
+  const address = {
+    postalCode: postalCode + '',
+    address1: address1,
+    address2: address2,
+  };
 
-    const formData = new FormData();
-    formData.append("fullName", fullName);
-    formData.append("password", reenPassword);
-    formData.append("currentPassword", currentPassword);
-    formData.append("address", address);
-    formData.append("phoneNumber", phoneNumber);
-    formData.append("image", imagedata);
+  const formData = new FormData();
+  formData.append('fullName', fullName);
+  formData.append('password', reenPassword);
+  formData.append('currentPassword', currentPassword);
+  formData.append('address', address);
+  formData.append('phoneNumber', phoneNumber);
+  formData.append('image', imagedata);
 
-    try {
-      const result = await Api.patchMulti(
-        '/api/users',sessionStorage.userid, formData
-      );
-      if (result) {
-        location.href = '/';
-      }
-    } catch (e) {
-      console.log(e.message);
+  try {
+    const result = await Api.patchMulti(
+      '/api/users',
+      sessionStorage.userid,
+      formData
+    );
+    if (result) {
+      location.href = '/';
     }
- 
+  } catch (e) {
+    console.log(e.message);
+  }
 }
