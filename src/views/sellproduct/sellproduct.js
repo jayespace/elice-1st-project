@@ -142,9 +142,8 @@ async function handlePatch(e) {
 
   const isProductNameValid = productName.length >= 1;
   const isInventoryValid = inventory > 0;
-  const isPriceValid = price >= 1000;
-  const isManufacturerValid = manufacturer.length >= 1;
-  const isShortDescriptionValid = shortDescription;
+  const isPriceValid = price >= 100;
+  const isManufacturerValid = (/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/).exec(manufacturer);
 
   if (!isProductNameValid) {
     return alert("제품 이름을 입력해주세요.");
@@ -161,8 +160,8 @@ async function handlePatch(e) {
   if (!isManufacturerValid) {
     return alert("제조사를 입력해주세요.");
   }
-  if (!isShortDescriptionValid) {
-    return alert("제품에 대한 1~2문장의 설명을 적어주세요.");
+  if(!imagedata){
+    return alert("이미지를 입력해주세요");
   }
   const keyword = document.querySelectorAll("span.tag");
 
