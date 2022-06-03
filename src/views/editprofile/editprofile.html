@@ -1,174 +1,259 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>쇼핑-데모</title>
-        <!-- 아이콘 -->
-        <link
-        rel="icon" type="image/png" sizes="16x16" href="../common/logo-icon.svg"/>
-        <!-- bulma css 관련 -->
-        <link
-        rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/>
-        <!-- 폰트 어썸: 아이콘 -->
-        <script defer src="https://kit.fontawesome.com/7630448495.js" crossorigin="anonymous"></script>
-        <!-- 커스텀 css, js -->
-        <link rel="stylesheet" href="editprofile.css"/>
-        <script src="editprofile.js" type="module" defer></script>
-        <script src="../common/landing.js" type="module" defer></script>
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    </head>
-    <body>
-        <header id="header"></header>
-        <main id="main" role="main">
-            <section class="section">
-                <div class="container">
-                    <div class="block profile-header">
-                        <h1 class="subtitle is-4" id="securityTitle">회원정보 관리</h1>
-                    </div>
-                    <div class="box edit-box">
-                        <div class="media">
-                            <div
-                                class="media-left is-align-self-center">
-                                <!--업로드된 이미지 표시-->
-                                <div class="field-body">
-                                    <figure class="image is-128x128">
-                                        <img class="is-rounded" id="profile-image" src="https://bulma.io/images/placeholders/128x128.png">
-                                    </figure>
-                                </div>
-                                <!--이미지 업로드 Form-->
-                                <div class="image-input">
-                                    <input type="file" accept="image/*" id="imageInput">
-                                    <label for="imageInput" class="image-button">
-                                        <i class="far fa-image"></i>
-                                        Choose image</label>
-                                </div>
-                            </div>
-                            <!--사용자 이름 입력 Form-->
-                            <div class="media-content">
-                                <div class="field">
-                                    <label class="label" for="fullNameInput">이름</label>
-                                    <div class="control">
-                                        <input class="input" type="name" id="fullNameInput" autocomplete="off">
-                                    </div>
-                                </div>
-                                <!--현재 비밀번호 입력 Form-->
-                                <div class="field">
-                                    <label class="label" for="passwordInput">현재 비밀번호</label>
-                                    <div class="control">
-                                        <input class="input" type="password" id="currentPasswordInput" autocomplete="off" value='' placeholder="정보 수정시 현재 비밀번호를 입력해주세요.">
-                                    </div>
-                                </div>
-                                <!--변경 비밀번호 입력 Form-->
-                                <div class="field">
-                                    <label class="label" for="passwordInput">변경 비밀번호</label>
-                                    <div class="control">
-                                        <input class="input" type="password" id="reenPasswordInput" autocomplete="off">
-                                    </div>
-                                </div>
-                                <!--비밀번호 확인 Form-->
-                                <div class="field">
-                                    <label class="label" for="passwordConfirmInput">변경 비밀번호 확인</label>
-                                    <div class="control">
-                                        <input class="input" type="password" id="reenPasswordConfirmInput" autocomplete="off">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="profile-sub">
-                            <!--다음지번API 우편번호 표시 Form-->
-                            <div class="field">
-                                <label class="label label-" for="address">주소</label>
-                                <div class="field-body search">
-                                    <div class="field">
-                                        <p class="control">
-                                            <input class="input" id="postalCodeInput" type="text" placeholder="주소찾기를 클릭해 주세요." readonly/>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <button class="button is-light is-hovered" id="searchAddressButton">
-                                            주소찾기
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--다음지번API 주소 표시 Form-->
-                            <div class="field">
-                                <div class="field-label is-normal no-label"></div>
-                                <div class="field">
-                                    <p class="control">
-                                        <input class="input" id="address1Input" type="text" placeholder="" readonly/>
-                                    </p>
-                                </div>
-                            </div>
-                            <!--사용자 입력가능한 주소 Form-->
-                            <div class="field">
-                                <div class="field-label is-normal no-label"></div>
-                                <div class="field-body">
-                                    <div class="field">
-                                        <p class="control">
-                                            <input class="input" id="address2Input" type="text" placeholder="상세주소를 입력해 주세요" autocomplete="on"/>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--전화번호 Form-->
-                            <div class="field">
-                                <label class="label" for="phoneNumberInput">전화번호</label>
-                                <div class="control">
-                                    <input class="input" id="phoneNumberInput" type="number" placeholder="- 없이 입력해 주세요." autocomplete="on">
-                                </div>
-                            </div>
-                            <div
-                                class="field-body">
-                                <!--수정하기 버튼-->
-                                <button class="button button-submit is-warning is-half" id="saveButton" data-target="modal-js-example">
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <i class="fas fa-paw"></i>
-                                        </span>
-                                        <span>수정하기</span>
-                                    </span>
-                                </button>
-                                <!--회원탈퇴 버튼 -> 모달을 통해 한번더 물음-->
-                                <button class="button button-submit is-black is-half js-modal-trigger" id="deletButton" data-target="modal">
-                                    <span class="icon-text">
-                                        <span class="icon">
-                                            <i class="fas fa-cat"></i>
-                                        </span>
-                                        <span>탈퇴하기</span>
-                                    </span>
-                                </button>
-                            </div>
-
-
-                            <!-- 회원정보를 정말 삭제할 지 묻는 Modal 창 -->
-                            <div id="modal" class="modal">
-                                <div class="modal-background" id="modalBackground"></div>
-                                <div class="modal-content">
-                                    <div class="box">
-                                        <p class="mb-3">
-                                            회원정보 삭제 시 복구할 수 없습니다. 정말로 삭제하시겠습니까?
-                                        </p>
-                                        <div class="buttons">
-                                            <button class="button mt-5" id="deleteCompleteButton" aria-label="execute">
-                                                네
-                                            </button>
-                                            <button class="button is-primary mt-5 cancel" id="deleteCancelButton" aria-label=" modal-close">
-                                                아니오
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="modal-close is-large" id="modalCloseButton" aria-label="close"></button>
-                            </div>
-                        </div>
-                    </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>쇼핑-데모</title>
+    <!-- 아이콘 -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../common/logo-icon.svg"
+    />
+    <!-- bulma css 관련 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+      defer
+      src="https://kit.fontawesome.com/7630448495.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="editprofile.css" />
+    <script src="editprofile.js" type="module" defer></script>
+    <script src="../common/landing.js" type="module" defer></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  </head>
+  <body>
+    <header id="header"></header>
+    <main id="main" role="main">
+      <section class="section">
+        <div class="container">
+          <nav class="breadcrumb is-large" aria-label="breadcrumbs">
+            <ul class="category profile-header">
+              <li><a id="securityTitle">회원정보 관리</a></li>
+            </ul>
+          </nav>
+          <hr />
+          <div class="box edit-box">
+            <div class="media">
+              <div class="media-left is-align-self-center">
+                <!--업로드된 이미지 표시-->
+                <div class="field-body">
+                  <figure class="image is-128x128">
+                    <img
+                      class="is-rounded"
+                      id="profile-image"
+                      src="https://bulma.io/images/placeholders/128x128.png"
+                    />
+                  </figure>
                 </div>
-            </section>
-        </main>
-        <footer id="footer"></footer>
-    </body>
-</html>
+                <!--이미지 업로드 Form-->
+                <div class="image-input">
+                  <input type="file" accept="image/*" id="imageInput" />
+                  <label for="imageInput" class="image-button">
+                    <i class="far fa-image"></i>
+                    Choose image</label
+                  >
+                </div>
+              </div>
+              <!--사용자 이름 입력 Form-->
+              <div class="media-content">
+                <div class="field">
+                  <label class="label" for="fullNameInput">이름</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="name"
+                      id="fullNameInput"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <!--현재 비밀번호 입력 Form-->
+                <div class="field">
+                  <label class="label" for="passwordInput">현재 비밀번호</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="password"
+                      id="currentPasswordInput"
+                      autocomplete="off"
+                      value=""
+                      placeholder="정보 수정시 현재 비밀번호를 입력해주세요."
+                    />
+                  </div>
+                </div>
+                <!--변경 비밀번호 입력 Form-->
+                <div class="field">
+                  <label class="label" for="passwordInput">변경 비밀번호</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="password"
+                      id="reenPasswordInput"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <!--비밀번호 확인 Form-->
+                <div class="field">
+                  <label class="label" for="passwordConfirmInput"
+                    >변경 비밀번호 확인</label
+                  >
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="password"
+                      id="reenPasswordConfirmInput"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="profile-sub">
+              <!--다음지번API 우편번호 표시 Form-->
+              <div class="field">
+                <label class="label label-" for="address">주소</label>
+                <div class="field-body search">
+                  <div class="field">
+                    <p class="control">
+                      <input
+                        class="input"
+                        id="postalCodeInput"
+                        type="text"
+                        placeholder="주소찾기를 클릭해 주세요."
+                        readonly
+                      />
+                    </p>
+                  </div>
+                  <div>
+                    <button
+                      class="button is-light is-hovered"
+                      id="searchAddressButton"
+                    >
+                      주소찾기
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!--다음지번API 주소 표시 Form-->
+              <div class="field">
+                <div class="field-label is-normal no-label"></div>
+                <div class="field">
+                  <p class="control">
+                    <input
+                      class="input"
+                      id="address1Input"
+                      type="text"
+                      placeholder=""
+                      readonly
+                    />
+                  </p>
+                </div>
+              </div>
+              <!--사용자 입력가능한 주소 Form-->
+              <div class="field">
+                <div class="field-label is-normal no-label"></div>
+                <div class="field-body">
+                  <div class="field">
+                    <p class="control">
+                      <input
+                        class="input"
+                        id="address2Input"
+                        type="text"
+                        placeholder="상세주소를 입력해 주세요"
+                        autocomplete="on"
+                      />
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!--전화번호 Form-->
+              <div class="field">
+                <label class="label" for="phoneNumberInput">전화번호</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    id="phoneNumberInput"
+                    type="number"
+                    placeholder="- 없이 입력해 주세요."
+                    autocomplete="on"
+                  />
+                </div>
+              </div>
+              <div class="field-body">
+                <!--수정하기 버튼-->
+                <button
+                  class="button button-submit is-warning is-half"
+                  id="saveButton"
+                  data-target="modal-js-example"
+                >
+                  <span class="icon-text">
+                    <span class="icon">
+                      <i class="fas fa-paw"></i>
+                    </span>
+                    <span>수정하기</span>
+                  </span>
+                </button>
+                <!--회원탈퇴 버튼 -> 모달을 통해 한번더 물음-->
+                <button
+                  class="button button-submit is-black is-half js-modal-trigger"
+                  id="deletButton"
+                  data-target="modal"
+                >
+                  <span class="icon-text">
+                    <span class="icon">
+                      <i class="fas fa-cat"></i>
+                    </span>
+                    <span>탈퇴하기</span>
+                  </span>
+                </button>
+              </div>
 
+              <!-- 회원정보를 정말 삭제할 지 묻는 Modal 창 -->
+              <div id="modal" class="modal">
+                <div class="modal-background" id="modalBackground"></div>
+                <div class="modal-content">
+                  <div class="box">
+                    <p class="mb-3">
+                      회원정보 삭제 시 복구할 수 없습니다. 정말로
+                      삭제하시겠습니까?
+                    </p>
+                    <div class="buttons">
+                      <button
+                        class="button mt-5"
+                        id="deleteCompleteButton"
+                        aria-label="execute"
+                      >
+                        네
+                      </button>
+                      <button
+                        class="button is-primary mt-5 cancel"
+                        id="deleteCancelButton"
+                        aria-label=" modal-close"
+                      >
+                        아니오
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="modal-close is-large"
+                  id="modalCloseButton"
+                  aria-label="close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </body>
+</html>

@@ -46,3 +46,11 @@ body{
     font-size: 1.9rem;
     font-weight: bold;
 }
+
+.admin .has-text-info{
+    color: #d6c802 !important;
+}
+.admin:hover{
+    background: #e0dca4;
+
+}
