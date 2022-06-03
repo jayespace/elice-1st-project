@@ -135,7 +135,7 @@ async function handlePatch(e) {
   const isCurrentPasswordValid = currentPassword.length > 1;
   const isReenPasswordValidModify = reenPassword.length < 1;
   const isReenPasswordSame = reenPassword === reenPasswordConfirm;
-  const isPostalCodeValidModify = postalCode === userInfoObject.postalCode;
+  const isPostalCodeValidModify = postalCode+"" === userInfoObject.postalCode;
   const isAddress1CodeValidModify = address1 === userInfoObject.address2Code;
   const isAddress2CodeValidModify = address2 === userInfoObject.address2Code;
   const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
@@ -155,17 +155,15 @@ async function handlePatch(e) {
     !isAddress2CodeValidModify ||
     !isPhoneNumberValidModify
   ) {
-    const address = {
-      postalCode: postalCode+"",
-      address1: address1,
-      address2: address2,
-    }
-
+    console.log(isFullNameValidModify, isReenPasswordValidModify, isPostalCodeValidModify, isAddress1CodeValidModify, isAddress2CodeValidModify, isPhoneNumberValidModify);
+    console.log(fullName, reenPassword, currentPassword, postalCode, address1, address2, phoneNumber);
     const formData = new FormData();
     formData.append("fullName", fullName);
     formData.append("password", reenPassword);
     formData.append("currentPassword", currentPassword);
-    formData.append("address", address);
+    formData.append("postalCode", postalCode);
+    formData.append("address1", address1);
+    formData.append("address2", address2);
     formData.append("phoneNumber", phoneNumber);
     formData.append("image", imagedata);
 
@@ -177,7 +175,7 @@ async function handlePatch(e) {
         location.href = '/';
       }
     } catch (e) {
-      console.log(e.message);
+      alert(e.message);
     }
   }
 }
