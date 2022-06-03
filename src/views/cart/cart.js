@@ -47,6 +47,10 @@ function App() {
                       item.price
                     )} 원 </small>
                   </p>
+                  <p>
+                  ${addCommas(item.price)} 원 x ${item.count} 
+                  = ${addCommas(item.price * item.count)} 원
+                  </p>
                 </div>
                 <nav class="level">
                 <button class="decrease-item button is-rounded"> - </button>

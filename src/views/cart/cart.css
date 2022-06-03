@@ -1,38 +1,9 @@
-.shipping-box {
-  width: 35rem;
-}
-.order-box {
-  width: 30rem;
-}
 @media screen and (max-width: 1190px) {
   .order-box {
     margin-left: 0;
     margin-top: 2rem;
     width: 40rem;
   }
-}
-.delivery-info {
-  width: 100%;
-}
-
-.delivery-info .subtitle {
-  padding-left: 0.4rem;
-}
-
-.delivery-info .field-label {
-  flex-basis: 7rem;
-  flex-grow: 0;
-  height: 3rem;
-  line-height: 2rem;
-  padding-left: 0.5rem;
-  text-align: left;
-}
-
-.delivery-info .field-body,
-.delivery-info .select {
-  flex-basis: 35rem;
-  flex-grow: 0;
-  height: 3rem;
 }
 
 .select select {
@@ -44,32 +15,6 @@
 .select .select-option {
   color: #000;
   font-size: 1.1rem;
-}
-
-.delivery-info .button {
-  height: 3rem;
-}
-
-.delivery-info .field-body .control,
-.delivery-info .field-body .input {
-  height: 100%;
-}
-
-.delivery-info .custom-request {
-  display: none;
-}
-
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.tile-order-summary {
-  height: 100%;
-  position: sticky;
-  top: 0.5rem;
 }
 
 .order-box .header {
@@ -127,7 +72,7 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .purchase {
-  margin-top: 3rem;
+  margin-top: 1rem;
   padding: 0.2rem 0;
 }
 
@@ -143,5 +88,5 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .product-info {
-  margin-top: 1rem !important;
+  margin-top: 0 !important;
 }
