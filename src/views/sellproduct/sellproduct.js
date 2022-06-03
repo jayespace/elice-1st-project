@@ -20,24 +20,54 @@ const addKeywordButton = document.getElementById("addKeywordButton");
 
 // 이미지 관련 패턴
 const imageInput = document.getElementById("productimageInput");
-const image = document.getElementById("product-image");
+const imageProduct = document.getElementById("product-image");
 
 let imagedata = "";
 
 addAllElements();
 addAllEvents();
 
+
+
 async function addAllElements() {
   createCategoryToCategorySelectBox();
+  insertProductInfo();
 }
 
 function addAllEvents() {
   imageInput.addEventListener("change", changeImageFile);
   addNewProductButton.addEventListener("click", handlePatch);
-  addKeywordButton.addEventListener("click", addKeywordTag);
+  addKeywordButton.addEventListener("click", inputKeywordTag);
   addKeywordInput.addEventListener("keypress", (e) =>
-    e.key === "Enter" ? addKeywordTag() : ""
+    e.key === "Enter" ? inputKeywordTag() : ""
   );
+}
+
+async function insertProductInfo(){
+  if(location.search){
+    const id = new URLSearchParams(location.search).get('id');
+    globalThis.id = id;
+
+    try{
+      const {name, price, category, briefDesc, fullDesc, image, keyword, manufacturer, stock} = await Api.get('/api/products',id);
+      globalThis.name = name;
+      productNameInput.value = name;
+      inventoryInput.value = stock;
+      priceInput.value = price;
+      manufacturerInput.value = manufacturer;
+      categorySelectBox.value = category;
+      shortDescriptionInput.value = briefDesc;
+      detailDescriptionInput.value = fullDesc;
+      imageProduct.src = image;
+      imageProduct.style.width = "128px";
+      imageProduct.style.height = "128px";
+      keyword.map(addKeywordTag);
+    }
+    catch(e){
+      console.error(e);
+      alert('유효하지 않은 정보입니다.')
+    }
+}
 }
 
 //이미지 업로드 관련
@@ -46,9 +76,9 @@ async function changeImageFile(file) {
     imagedata = file.target.files[0];
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
-      image.src = imgSrc;
-      image.style.width = "128px";
-      image.style.height = "128px";
+      imageProduct.src = imgSrc;
+      imageProduct.style.width = "128px";
+      imageProduct.style.height = "128px";
     } catch (e) {
       console.error("이미지 관련 오류", e.massage);
     }
@@ -73,10 +103,14 @@ async function createCategoryToCategorySelectBox() {
   }
 }
 //
-function addKeywordTag() {
+function inputKeywordTag(){
   const keyword = addKeywordInput.value;
   if (!keyword) return;
+  addKeywordTag(keyword)
+}
 
+
+function addKeywordTag(keyword) {
   const rand = randomId();
   addKeywordInput.value = "";
   keywordContainer.insertAdjacentHTML(
@@ -94,7 +128,7 @@ function addKeywordTag() {
   control.querySelector("a").addEventListener("click", () => control.remove());
 }
 
-//회원정보 수정 진행
+//상품 등록/ 수정
 async function handlePatch(e) {
   e.preventDefault();
 
@@ -133,7 +167,9 @@ async function handlePatch(e) {
   const keyword = document.querySelectorAll("span.tag");
 
   const formData = new FormData();
-  formData.append("name", productName);
+  if(!globalThis.id || productName !== globalThis.name){
+    formData.append("name", productName);
+  }
   formData.append("price", price);
   formData.append("category", categorySelect);
   formData.append("briefDesc", shortDescription);
@@ -144,13 +180,28 @@ async function handlePatch(e) {
   formData.append("image", imagedata);
 
   try {
-    const result = await Api.postMulti("/api/products", formData);
+    let result;
+    if(!globalThis.id){
+      result = await Api.postMulti("/api/products", formData);
+    }else{
+      result = await Api.patchMulti("/api/products", globalThis.id, formData);
+    }
     if (result) {
-      alert("이미지가 업로드 됐습니다.");
-      location.reload();
+      if(globalThis.id) redirectUrl('admin-product');
+      else{alert("이미지가 업로드 됐습니다.");
+      location.reload();}
     }
   } catch (err) {
     console.error(err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
   }
+}
+
+function redirectUrl(page, params) {
+  page ?? '';
+  const protocol = location.protocol;
+  const host = location.hostname;
+  const port = location.port
+  console.log(page);
+  location.href = `${protocol}//${host}:${port}/${page}${params?'?'+params:''}`
 }

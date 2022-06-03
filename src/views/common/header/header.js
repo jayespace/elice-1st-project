@@ -2,24 +2,39 @@ import * as Api from '/api.js';
 
 const getCategoryList = async () => {
   // 카테고리 분류
-  const category = await Api.get(`/api/products`);
+  try {
+    const categories = await Api.get(`/api/categories`);
+    return categories
+      .map(
+        ({ _id, name }) =>
+          `<a href='/products?category=${name}'class="navbar-item"> ${name} </a>`
+      )
+      .join('');
+  } catch (e) {
+    console.error('카테고리 Nav 목록 :', e.message);
+  }
 };
 
-export const headerTemplate = () => {
+export const headerTemplate = async () => {
   // 토큰의 유무로 유저 로그인 판별
   const isLogIn = sessionStorage.getItem('token') ? true : false;
   const username = sessionStorage.getItem('username');
-
+  const isAdmin = sessionStorage.getItem('role') === 'admin' ? true : false;
+  let adminTemplate = '';
+  if (isAdmin) {
+    adminTemplate = `<a href="/account" class="navbar-item"> 관리자페이지 </a>`;
+  }
   let loginTemplate = '';
   if (isLogIn) {
     loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
                       <a class="navbar-link"> ${username} </a>
                       <div class="navbar-dropdown">
-                        <a class="navbar-item"> 주문조회 </a>
+                        <a href="/#"class="navbar-item"> 주문조회 </a>
                         <hr class="navbar-divider" />
-                        <a class="navbar-item"> 회원정보관리 </a>
+                        <a href="/editprofile" class="navbar-item"> 회원정보관리 </a>
+                        ${adminTemplate}
                         <hr class="navbar-divider admin" />
-                        <a class="navbar-item logout">로그아웃</a>
+                        <a class="navbar-item logout" onclick="alert('로그아웃 되었습니다.');sessionStorage.clear();window.location.href='/';">로그아웃</a>
                       </div>
                     </div>`;
   } else {
@@ -46,9 +61,7 @@ export const headerTemplate = () => {
             <div class="navbar-item has-dropdown is-hoverable">
               <a href="/products" class="navbar-link"> 모든 상품 </a>
               <div class="navbar-dropdown">
-                <a class="navbar-item"> 카테고리1 </a>
-                <a class="navbar-item"> 카테고리2 </a>
-                <a class="navbar-item"> 카테고리3 </a>
+                ${await getCategoryList()}
               </div>
             </div>
           </div>

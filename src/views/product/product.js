@@ -1,42 +1,92 @@
 import * as Api from '../api.js';
+import { addCommas } from '/useful-functions.js';
 
-const list = document.querySelector(".product-list");
+const categoryNav = document.querySelector('.category');
+const moreImage = document.getElementById('moreImage');
+const list = document.querySelector('.product-list');
+globalThis.page = 1;
+globalThis.perPage = 8;
+const queryCategory = new URLSearchParams(location.search).get('category');
+console.log(queryCategory);
+//initial Create Products
+getDataFromApi(queryCategory, globalThis.page++, globalThis.perPage);
 
-getDataFromApi();
+//infinity Scroll Function of Product Pagination
+//catch ScrollEvent
+const onScroll = (e) => {
+  const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
+  if (
+    scrollHeight === scrollTop + clientHeight &&
+    globalThis.page <= globalThis.totalPage
+  ) {
+    getDataFromApi(queryCategory, globalThis.page++, globalThis.perPage);
+  }
+};
+//prevent repeating Call Function
+const debounce = (func, delay) => {
+  let timeoutId = null;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(func.bind(null, ...args), delay);
+  };
+};
 
-async function getDataFromApi() {
-  const data = await Api.get('/api/products');
-  const arr = data.products;
+document.addEventListener('scroll', debounce(onScroll, 150));
 
-  arr.map((product)=>{
-      insertHTMLToList(product);
-  });
+function setMoreImage(page, totalPage) {
+  if (page > totalPage) {
+    moreImage.classList.add('is-hidden');
+  } else {
+    moreImage.classList.remove('is-hidden');
+  }
 }
 
-/**************여기 밑에 함수(function)을 입력해주세요***************/
+async function getDataFromApi(category, page, perPage) {
+  console.log('category',category);
+  const query =(category? `?category='${category}'`:'?')+
+  `&page=${page}&perPage=${perPage}`
+  try{  
+  const data = await Api.get("/api/products",query);
+  console.log(data);
+  const {totalPage, products} = data;
+  globalThis.totalPage = totalPage;
+  setMoreImage(globalThis.page, totalPage);
+  products.map(insertHTMLToList);
+
+  }catch(e){
+    console.error('페이지네이션 관련:',e);
+  }
+}
+
 function insertHTMLToList(product) {
-  let price = (product.price).toLocaleString('en');
+  const { _id, image, name, price } = product;
   list.insertAdjacentHTML(
     'beforeend',
     `
-      <div class="product" id="${product._id}">
+      <div class="product" id="${_id}">
         <div class="img">
-          <img src="${product.image}" alt="상품이미지">
+          <img src="${image}" alt="상품이미지">
         </div>
         <div class="content">
-          <h2 class="name" id="pname">${product.name}</h2>
-          <p class="price" id="pprice">${price}원</p>
+          <h2 class="name" id="pname">${name}</h2>
+          <p class="price" id="pprice">${addCommas(price)}원</p>
         </div>
       </div>
     `
   );
 
-  let url;
-  const id = document.getElementById(product._id);
+  const id = document.getElementById(_id);
+  function redirectProductDetail(e) {
+    const url = `/detail?id=${_id}`;
+    console.log(url);
+    location.href = url;
+  }
+  id.addEventListener('click', redirectProductDetail);
+}
 
-  id.querySelector('div').addEventListener('click', (url = `/detail?id=${product._id}`,
-    function () {
-      window.location.href = url;
-    }
-  ))
+if (queryCategory !== null) {
+  categoryNav.insertAdjacentHTML(
+    'beforeend',
+    `<li><a>${queryCategory}</a></li>`
+  );
 }
