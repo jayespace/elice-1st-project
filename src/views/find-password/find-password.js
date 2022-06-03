@@ -28,7 +28,7 @@ async function handleSubmit(e) {
     return alert('이메일 형태가 맞는지 확인해 주세요.');
   }
 
-  // 로그인 api 요청
+  // 비밀번호 찾기 api 요청
   try {
     const data = { email };
     const result = await Api.post('/api/user/reset-password', data);
