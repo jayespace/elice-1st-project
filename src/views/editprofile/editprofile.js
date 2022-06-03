@@ -144,21 +144,21 @@ async function handlePatch(e) {
   const isAddress2CodeValidModify = address2 === userInfoObject.address2Code;
   const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
 
-  // if (!isCurrentPasswordValid) {
-  //   return alert('정보 수정 시 현재 비빌번호를 입력해주세요.');
-  // }
+  if (!isCurrentPasswordValid) {
+    return alert('정보 수정 시 현재 비빌번호를 입력해주세요.');
+  }
 
-  // if (!isReenPasswordSame) {
-  //   return alert('비밀번호가 일치하지 않습니다.');
-  // }
-  // if (
-  //   !isFullNameValidModify ||
-  //   !isReenPasswordValidModify ||
-  //   !isPostalCodeValidModify ||
-  //   !isAddress1CodeValidModify ||
-  //   !isAddress2CodeValidModify ||
-  //   !isPhoneNumberValidModify
-  // ) {}
+  if (!isReenPasswordSame) {
+    return alert('비밀번호가 일치하지 않습니다.');
+  }
+  if (
+    !isFullNameValidModify ||
+    !isReenPasswordValidModify ||
+    !isPostalCodeValidModify ||
+    !isAddress1CodeValidModify ||
+    !isAddress2CodeValidModify ||
+    !isPhoneNumberValidModify
+  ) {
     const address = {
       postalCode: postalCode+"",
       address1: address1,
@@ -183,5 +183,5 @@ async function handlePatch(e) {
     } catch (e) {
       console.log(e.message);
     }
- 
+  }
 }

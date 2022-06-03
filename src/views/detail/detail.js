@@ -37,9 +37,9 @@ function insertHTMLToDetail(product) {
   );
 }
 async function getDataFromApi() {
-  const data = await Api.get('/api/products');
-  const arr = data.products;
-  product = arr.find((a) => a._id === id);
+  const data = await Api.get('/api/products',id);
+  product = data;
+  console.log(product);
 
   insertHTMLToDetail(product);
   insertValue();
