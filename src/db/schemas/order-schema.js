@@ -74,6 +74,10 @@ const OrderSchema = new Schema({
             type: Number,
             required: false
           },
+          image: {
+            type: String,
+            required: false
+          },
         },
         {
           _id: false,

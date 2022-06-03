@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired, asyncHandler } from '../middlewares';
-import { userService, productService, orderService, csStatusService, orderStatusService } from '../services';
+import { userService, orderService, csStatusService, orderStatusService } from '../services';
 
 const orderRouter = Router();
 
@@ -18,7 +18,7 @@ orderRouter.get('/orders', loginRequired, asyncHandler(async (req, res) => {
 
   } else { 
     orders = await orderService.getOrdersByUser(currentUserId);
-  }
+  };
   
   res.status(200).json(orders);
 }));
@@ -52,7 +52,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     throw new Error(
     'headers의 Content-Type을 application/json으로 설정해주세요'
     );
-  }
+  };
 
   // 현재 로그인 된 유저의 아이디로 유저정보 조회해서 이름, 연락처, 이메일 정보 가져오기
   const currentUserId = req.currentUserId;
@@ -77,7 +77,7 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     fullName,
     phoneNumber,
     email
-  }
+  };
 
   // 유저의 정보와 함께 주문 정보 저장
   const newOrder = await orderService.addOrder(
@@ -102,7 +102,7 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
     throw new Error(
     'headers의 Content-Type을 application/json으로 설정해주세요'
     );
-  }
+  };
 
   const { orderId } = req.params;
 
@@ -136,19 +136,26 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
   if (!csStatus && !orderStatus) {
 
     if (currentOrderStatus.name !== "결제완료") {
-      throw new Error('현재 주문 상태에서는 배송 정보를 변경할 수 없습니다.')
+      throw new Error('현재 주문 상태에서는 배송 정보를 변경할 수 없습니다.');
 
     } else {
+
       /// 업데이트용 객체에 삽입함.
       toUpdate = {
         ...(fullNameTo && { fullNameTo }),
         ...(phoneNumberTo && { phoneNumberTo }),
         ...(addressTo && { addressTo }),
-        ...(messageTo && { messageTo }),
+        ...(messageTo && { messageTo })
       };
-    }
+    };
 
   } else {  
+
+    if(role === 'basic-user') {
+      if (orderStatus) {
+        throw new Error('관리자만 변경할 수 있습니다.')
+      }
+    }
 
     let requestOrderStatusId;
     let requestCsStatusId;
@@ -156,12 +163,12 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
 
     if (orderStatus) {
       requestOrderStatusId = await orderStatusService.getOrderStatusId(orderStatus);
-      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentCsStatus.id);
+      adjusted = await orderStatusService.adjustStatus(requestOrderStatusId, currentOrderStatus.id, currentCsStatus.id);
       csStatus = adjusted.csStatus
 
     } else if (csStatus) {
       requestCsStatusId = await csStatusService.getCsStatusId(csStatus);
-      adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentOrderStatus.id);
+      adjusted = await csStatusService.adjustStatus(requestCsStatusId, currentCsStatus.id, currentOrderStatus.id);
       orderStatus = adjusted.orderStatus
     }
 
@@ -169,7 +176,7 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
     toUpdate = {
       ...(orderStatus && { orderStatus : adjusted.orderStatus }),
       ...(csStatus && { csStatus : adjusted.csStatus })
-    }
+    };
   };
 
   // 상품 정보를 업데이트함.

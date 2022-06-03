@@ -329,7 +329,6 @@ class ProductService {
     return product;
   };
 
-
   /// 카테고리 id로 정보 조회
   async isExist(categoryId) {
 
@@ -343,23 +342,6 @@ class ProductService {
     const product = await this.productModel.findById(productId);
     return product;
   }
-
-  /// 주문 들어올 경우 재고 수정
-  // async modifyStock(productId, orderedQty) {
-  //   let product = await this.productModel.findById(productId);
-  //   const { stock } = product;
-  //   const qty = orderedQty
-  //   const toUpdate = {
-  //     stock: stock-qty
-  //   }
-    
-  //   product = await this.productModel.update({
-  //     productId,
-  //     update: toUpdate,
-  //   });
-
-  //   return product.stock;
-  // }
 
 };
 

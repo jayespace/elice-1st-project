@@ -2,6 +2,7 @@ const KakaoStrategy = require('passport-kakao').Strategy;
 import { model } from 'mongoose';
 import { UserSchema } from '../../db/schemas/user-schema';
 import { generateRandomPassword } from '../../utils/generate-Random-Password';
+import bcrypt from 'bcrypt';
 
 const User = model('users', UserSchema);
 
@@ -17,11 +18,12 @@ async function findOrCreateUser(email, fullName) {
   if (user) { 
     return user;
   }
+  const hashedPassword = await bcrypt.hash(generateRandomPassword(), 10);
 
   const created = await User.create({
     fullName:fullName,
     email:email,
-    password: generateRandomPassword(),  //나중에 random password로 바꾸고 비밀번호를 찾고싶으면
+    password: hashedPassword,  //나중에 random password로 바꾸고 비밀번호를 찾고싶으면
                               //비밀번호 분실 로직은 사용하여 찾을 수 있게 하자....
   });
 

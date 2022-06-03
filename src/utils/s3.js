@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import multer from 'multer';
-import multerS3 from 'multer-S3';
+import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
 import path from 'path';
 
@@ -28,7 +28,7 @@ const upload = multer({
       acl: 'public-read', // 클라이언트에서 자유롭게 가용하기 위함
       key: (req, file, cb) => {
           let extension = path.extname(file.originalname);
-          cb(null, 'product_dummy/'+Date.now().toString()+extension);
+          cb(null, 'test/'+Date.now().toString()+extension);
           // cb(null, file.originalname)
       },
   }),

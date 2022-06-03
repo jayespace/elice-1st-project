@@ -81,8 +81,8 @@ categoryRouter.delete('/categories/:categoryId',
 
   const { categoryId } = req.params;
 
-  const isCategoryExistinProduct = await productService.isExist(categoryId);
-  if (isCategoryExistinProduct.length >= 1) {
+  const isExistInProducts = await productService.isExist(categoryId);
+  if (isExistInProducts.length >= 1) {
     throw new Error('해당 카테고리에 속해 있는 제품이 있어 삭제 할 수 없습니다.');
   }
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
 import { loginRequired, adminRequired, asyncHandler } from '../middlewares';
-import { csStatusService } from '../services';
+import { csStatusService, orderService } from '../services';
 
 const csStatusRouter = Router();
 
@@ -40,9 +40,15 @@ csStatusRouter.post('/csStatus', loginRequired, adminRequired,
 // 로그인 후 admin일 경우 CS Status 삭제
 csStatusRouter.delete('/csStatus/:csStatusId', loginRequired, adminRequired,
      asyncHandler(async (req, res) => {
+
     const { csStatusId } = req.params;
 
-    const del = await csStatusService.deleteCsStatus(csStatusId)
+    const isExistInOrders = await orderService.isExistCsStatus(csStatusId);
+    if (isExistInOrders.length >= 1) {
+      throw new Error('해당 status에 속해 있는 주문이 있어 삭제 할 수 없습니다.');
+    };
+
+    const del = await csStatusService.deleteCsStatus(csStatusId);
     res.status(200).json(del);
 
 }));
@@ -66,8 +72,6 @@ csStatusRouter.patch('/csStatus/:csStatusId', loginRequired, adminRequired,
     if (isExist) {
         throw new Error('이 이름으로 생성된 CS Status가 있습니다. 다른 이름을 지어주세요.');
     }
-
-    console.log(name)
 
     // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
     // 보내주었다면, 업데이트용 객체에 삽입함.
