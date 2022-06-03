@@ -39,18 +39,20 @@ function App() {
                   item.image
                 }" /></figure>
               </div>
-              <div class="media-content">
+              <div class="media-content product-info">
                 <div class="content">
                   <p>
-                    <strong> ${item.name} </strong> 
-                    <small> ${addCommas(item.price)} 원 </small>
+                    <strong class="title is-6"> ${item.name} </strong> 
+                    <small class="subtitle is-6"> ${addCommas(
+                      item.price
+                    )} 원 </small>
                   </p>
                 </div>
                 <nav class="level">
-                <button class="decrease-item"> - </button>
+                <button class="decrease-item button is-rounded"> - </button>
                 <span class="menu-count">${item.count}</span>
-                <button class="increase-item"> + </button>
-                <button class="delete-item"> 삭제 </button>
+                <button class="increase-item button is-rounded"> + </button>
+                <button class="delete-item button is-rounded"> 삭제 </button>
                 </nav>
               </div>
             </li>
@@ -68,7 +70,6 @@ function App() {
       if (item.cart === 'checked') {
         itemCounts += item.count;
         itemPrices += item.price * item.count;
-        console.log(itemPrices);
         orderedItem += `${item.name} / ${item.count}개<br />`;
         deliveryFee = 3000;
       }

@@ -23,8 +23,8 @@
       crossorigin="anonymous"
     ></script>
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="./cart.css" />
     <script src="../common/landing.js" type="module" defer></script>
+    <link rel="stylesheet" href="./cart.css" />
     <script src="cart.js" type="module" defer></script>
   </head>
   <body>
@@ -44,6 +44,7 @@
         <a id="remove-all">전체삭제</a>
         <span>|</span>
         <a id="remove-partial">선택삭제</a>
+        <br />
         <br />
         <div class="columns">
           <div class="column">
@@ -73,14 +74,11 @@
                 <p class="total-price" id="orderTotal">0원</p>
               </div>
               <div class="purchase">
-                <button class="button is-info" id="checkoutButton">
-                  <a
-                    href="/shippingpoint"
-                    class="purchage-button"
-                    id="purchaseBtn"
-                    >구매하기</a
-                  >
-                </button>
+                <a href="/shippingpoint">
+                  <button class="button is-info" id="purchaseBtn">
+                    구매하기
+                  </button>
+                </a>
               </div>
             </div>
           </div>
