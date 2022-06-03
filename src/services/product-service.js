@@ -289,7 +289,7 @@ class ProductService {
     let product = await this.productModel.findById(productId);
 
     if (!product) {
-        throw new Error('상품 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      throw new Error('상품 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     
     const deletedProduct = await this.productModel.delete(productId);
@@ -302,7 +302,7 @@ class ProductService {
     let product = await this.productModel.findById(productId);
 
     if (!product) {
-        throw new Error('상품 내역이 없습니다. 다시 한 번 확인해 주세요.');
+      throw new Error('상품 내역이 없습니다. 다시 한 번 확인해 주세요.');
     }
     
     // 변경할 카테고리가 있을 경우 카테고리 이름으로 objectId 검색하여 db 카테고리 필드에 id 저장
