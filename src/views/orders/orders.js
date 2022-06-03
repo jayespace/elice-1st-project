@@ -1,7 +1,8 @@
+import {checkToken} from '/permission.js';
+checkToken();
 import * as Api from "../api.js";
 import { addCommas } from "/useful-functions.js";
 const ordersTop = document.querySelector(".orders-top");
-
 getDataFromApi();
 let data;
 globalThis.i = 0;

@@ -3,7 +3,7 @@
  * Author: 박상준
  * date : 2022-05-31
  */
-
+ import {redirectMain} from '/permission.js';
 import * as Api from '/api.js';
 import store from '../cart/store.js';
 import { addCommas, searchAddressByDaumPost } from '/useful-functions.js';
@@ -17,6 +17,10 @@ location.search?
   .getLocalStorage()
   .filter((item) => item.cart === 'checked');
 console.log(storedItem);
+if(storedItem){
+  alert("잘못된 접근입니다.")
+  redirectMain();
+}
 //user Inputs
 const receiverNameInput = document.getElementById('receiverNameInput');
 const receiverPhoneNumberInput = document.getElementById(

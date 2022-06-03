@@ -1,5 +1,7 @@
 import * as Api from "/api.js";
 import { randomId, insertImageFile } from "/useful-functions.js";
+import {checkAdmin} from '/permission.js';
+checkAdmin();
 
 const categorySelectBox = document.getElementById("categorySelectBox");
 

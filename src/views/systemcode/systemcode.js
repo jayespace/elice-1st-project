@@ -1,6 +1,8 @@
 import * as Api from "/api.js";
 import { randomId } from "/useful-functions.js";
 import CreateTableHelper from "./CreateTableHelper.js";
+import {checkAdmin} from '/permission.js';
+checkAdmin();
 
 const tbHead = document.getElementById('tbHead');
 const tbBody = document.getElementById('tbBody');
