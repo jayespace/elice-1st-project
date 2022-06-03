@@ -14,10 +14,11 @@
 
 ## 📚 프로젝트 개발 자료
 
-* [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
+* [Daily Scrum](https://capricious-dust-d0c.notion.site/093c9da7bfe641708e39b00badb22979)
 * [API Testcase](https://docs.google.com/spreadsheets/d/1vFKmgQDme3tyQ85SEX9_vGW-K-wLmpys8z09be8-O0A/edit?usp=sharing)
-* [Daily Scrum](https://capricious-dust-d0c.notion.site/Fuctional-Specification-fb60727032e541aabf7819111c602217)
-
+* [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
+* [Menu Structure](https://capricious-dust-d0c.notion.site/Menu-Structure-09f8d2f4ed6a4277a11c36d4c66c27ac)
+* [Functional Specification](https://capricious-dust-d0c.notion.site/Fuctional-Specification-fb60727032e541aabf7819111c602217)
 
 ## 🙂 팀원 소개
 | front-end | back-end |
