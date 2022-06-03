@@ -35,9 +35,6 @@ function getDataFromProducts(products) {
     `;
   }
 
-  if (price >= 50000) {
-    shipFee = 0;
-  }
   totalFee = price + shipFee;
 
   return { name, price, shipFee, totalFee, info };
