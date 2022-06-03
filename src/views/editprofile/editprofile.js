@@ -1,9 +1,4 @@
-//토큰이 없다면 로그인 페이지로 이동
-if (!sessionStorage.getItem('token')) {
-  const { pathname, search } = window.location;
-  window.location.replace(`/login?previouspage=${pathname + search}`);
-}
-
+import {checkToken} from '/permission.js';
 import * as Api from '/api.js';
 import {
   activeModalFunction,
@@ -11,8 +6,11 @@ import {
   insertImageFile,
 } from '/useful-functions.js';
 
-const profileHeadLabel = document.querySelector('#securityTitle');
 
+checkToken();
+
+
+const profileHeadLabel = document.querySelector('#securityTitle');
 const fullNameInput = document.getElementById('fullNameInput');
 const currentPasswordInput = document.getElementById('currentPasswordInput');
 //비밀번호 재생성 Inputs
@@ -24,14 +22,12 @@ const postalCodeInput = document.getElementById('postalCodeInput');
 const address1Input = document.getElementById('address1Input');
 const address2Input = document.getElementById('address2Input');
 const phoneNumberInput = document.getElementById('phoneNumberInput');
-
 const searchAddressButton = document.getElementById('searchAddressButton');
 const saveButton = document.getElementById('saveButton');
 const deleteCompleteButton = document.getElementById('deleteCompleteButton');
 const imageInput = document.getElementById('imageInput');
-const image = document.querySelector('#profile-image');
+const imageProfile = document.querySelector('#profile-image');
 let imagedata = '';
-
 const userInfoObject = {};
 
 activeModalFunction();
@@ -44,9 +40,9 @@ async function changeImageFile(file) {
     imagedata = file.target.files[0];
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
-      image.src = imgSrc;
-      image.style.width = '100%';
-      image.style.height = '100%';
+      imageProfile.src = imgSrc;
+      imageProfile.style.width = '100%';
+      imageProfile.style.height = '100%';
     } catch (e) {
       console.error('이미지 관련 오류', e.massage);
     }
@@ -95,7 +91,7 @@ async function deleteAccount() {
 async function setUserInfoToInputs() {
   const userid = sessionStorage.getItem('userid');
   const data = await Api.get(`/api/users/${userid}`);
-  const { fullName, email, password, address, phoneNumber } = data;
+  const { image, fullName, email, password, address, phoneNumber } = data;
 
   //가져온 불확실한 정보 유효성 검사
   const postalCode = address ? address.postalCode : '';
@@ -109,6 +105,7 @@ async function setUserInfoToInputs() {
   userInfoObject.address1 = address1;
   userInfoObject.address2 = address2;
   userInfoObject.phoneNumber = phoneNumber ?? '';
+  imageProfile.src = image;
 
   //input에 셋팅
   profileHeadLabel.insertAdjacentText('beforeend', `(${email})`);
@@ -133,7 +130,6 @@ async function handlePatch(e) {
   const address1 = address1Input.value;
   const address2 = address2Input.value;
   const phoneNumber = phoneNumberInput.value;
-  // const image = imageInput.value;
 
   const isFullNameValidModify = fullName === userInfoObject.fullName;
   const isCurrentPasswordValid = currentPassword.length > 1;
@@ -159,29 +155,29 @@ async function handlePatch(e) {
     !isAddress2CodeValidModify ||
     !isPhoneNumberValidModify
   ) {
-    try {
-      const data = {
-        fullName,
-        password: reenPassword,
-        currentPassword: currentPassword,
-        address: {
-          postalCode: postalCode,
-          address1: address1,
-          address2: address2,
-        },
-        phoneNumber: phoneNumber,
-      };
+    const address = {
+      postalCode: postalCode+"",
+      address1: address1,
+      address2: address2,
+    }
 
-      const result = await Api.patch(
-        `/api/users/${sessionStorage.userid}`,
-        '',
-        data
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("password", reenPassword);
+    formData.append("currentPassword", currentPassword);
+    formData.append("address", address);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("image", imagedata);
+
+    try {
+      const result = await Api.patchMulti(
+        '/api/users',sessionStorage.userid, formData
       );
       if (result) {
         location.href = '/';
       }
     } catch (e) {
-      e.message;
+      console.log(e.message);
     }
   }
 }

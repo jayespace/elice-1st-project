@@ -2,7 +2,6 @@
  *
  * Author: 박상준
  * date : 2022-05-31
- * Todo:
  */
 
 import * as Api from '/api.js';
@@ -10,10 +9,14 @@ import store from '../cart/store.js';
 import { addCommas, searchAddressByDaumPost } from '/useful-functions.js';
 
 // localStorage data
-const storedItem = store
+const storedItem =
+location.search?
+  [ JSON.parse( sessionStorage.getItem('product'))]
+  :
+  store
   .getLocalStorage()
   .filter((item) => item.cart === 'checked');
-
+console.log(storedItem);
 //user Inputs
 const receiverNameInput = document.getElementById('receiverNameInput');
 const receiverPhoneNumberInput = document.getElementById(
@@ -91,7 +94,6 @@ function insertOrderSummary() {
 //회원정보 수정 진행
 async function sendOrderInfoByPost(e) {
   e.preventDefault();
-
   const receiverName = receiverNameInput.value;
   const receiverPhoneNumber = receiverPhoneNumberInput.value;
   const postalCode = postalCodeInput.value;
@@ -156,10 +158,16 @@ async function sendOrderInfoByPost(e) {
     messageTo: requestComment,
     products,
   };
-  console.log(order);
+
   try {
     const result = await Api.post('/api/orders', order);
     if (result) {
+      if(Product){
+        sessionStorage.setItem('Product','');
+      }else{
+        localStorage.clear();
+      }
+      window.location.href="/complete";
       return alert('성공적으로 주문했습니다.');
     }
   } catch (err) {
