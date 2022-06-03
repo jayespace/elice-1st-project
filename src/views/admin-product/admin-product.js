@@ -4,6 +4,8 @@ import { randomId } from "/useful-functions.js";
 // 요소(element), input 혹은 상수
 const category_table = document.getElementById("category-table");
 const clearfix = document.getElementById("clearfix");
+const mdEditBtn = document.getElementById('mdEditBtn');
+const mdDelBtn = document.getElementById('mdDelBtn');
 //ed-modal
 const EditNameInput = document.getElementById("EditNameInput");
 
@@ -19,18 +21,29 @@ async function addAllElements() {
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
+  mdEditBtn.addEventListener('click', updateUserInfo);
+  mdDelBtn.addEventListener('click', deleteUserInfo);
   // EditSearchAddressButton.addEventListener('click',insertAddressInputsByDumPost);
   // EditSubmitButton.addEventListener('click', updateUserInfo);
 }
 
-async function updateUserInfo() {
+async function updateUserInfo(e) {
+  e.preventDefault();
   const id = globalThis.userId;
-  
+  console.log(id);
+  redirectUrl('sellproduct',`id=${id}`);
 }
 
-async function deleteUserInfo() {
+async function deleteUserInfo(e) {
   const id = globalThis.userId;
-  
+  try{
+    const result = await Api.delete('/api/products',id);
+    if(result){
+      alert('성공적으로 삭제됨.');
+    }
+  }catch(e){
+    console.error(e);
+  }
 }
 
 
@@ -115,6 +128,9 @@ async function createProductsToTable(products) {
         `
     );
   }
+  //bind ObejectID
+  const edit = category_table.querySelectorAll('a');
+  edit.forEach(e => e.addEventListener('click',  (e) => globalThis.userId = e.target.dataset.id));
 }
 
 function createClearFix(perPage, totalPRoducts, totalPage, nowPage) {

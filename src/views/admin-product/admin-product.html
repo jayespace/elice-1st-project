@@ -29,13 +29,11 @@
         <script>
         function redirectUrl(page, params) {
             page ?? '';
-            params ? `?${params}` : '';
             const protocol = location.protocol;
             const host = location.hostname;
             const port = location.port
 
-            location.href = `${protocol}//${host}:${port}/${page}${params??''}`
-
+            location.href = `${protocol}//${host}:${port}/${page}${params?'?'+params:''}`
         }
         </script>
     </head>
@@ -138,7 +136,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel">
-                                    <input type="submit" class="btn btn-success md-ok" value="Continue">
+                                    <input type="submit" class="btn btn-success md-ok" id="mdEditBtn"value="Continue">
                                 </div>
                             </form>
                         </div>
@@ -161,8 +159,8 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel">
-                                    <input type="submit" class="btn btn-danger md-ok" value="Delete">
+                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                    <input type="submit" class="btn btn-danger" id="mdDelBtn"value="Delete">
                                 </div>
                             </form>
                         </div>
