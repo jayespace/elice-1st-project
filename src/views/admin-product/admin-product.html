@@ -23,9 +23,21 @@
 
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <!-- 커스텀 css, js -->
-        <link rel="stylesheet" href="admin-categories.css"/>
-        <script src="admin-categories.js" type="module" defer></script>
+        <link rel="stylesheet" href="admin-product.css"/>
+        <script src="admin-product.js" type="module" defer></script>
         <script src="../common/landing.js" type="module" defer></script>
+        <script>
+        function redirectUrl(page, params) {
+            page ?? '';
+            params ? `?${params}` : '';
+            const protocol = location.protocol;
+            const host = location.hostname;
+            const port = location.port
+
+            location.href = `${protocol}//${host}:${port}/${page}${params??''}`
+
+        }
+        </script>
     </head>
     <body>
         <!-- header -->
@@ -41,18 +53,13 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h2>Manage
-                                            <b>Category</b>
+                                            <b>Products</b>
                                         </h2>
                                     </div>
                                     <div class="col-sm-6 d-flex is-justify-content-end">
-                                        <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">
+                                        <a class="btn btn-success" onclick="redirectUrl('sellproduct');">
                                             <i class="material-icons">&#xE147;</i>
-                                            <span>Add New Category</span>
-                                        </a>
-
-                                        <a href="#deleteCategoryModal" class="btn btn-danger" data-toggle="modal">
-                                            <i class="material-icons">&#xE15C;</i>
-                                            <span>Delete</span>
+                                            <span>Add New Product</span>
                                         </a>
                                     </div>
                                 </div>
@@ -60,50 +67,20 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            <span class="custom-checkbox">
-                                                <input type="checkbox" id="selectAll">
-                                                <label for="selectAll"></label>
-                                            </span>
-                                        </th>
-                                        <th>카테고리 명</th>
-                                        <th>설명</th>
-                                        <th>Created At</th>
-                                        <th>Updated At</th>
-                                        <th>추가/삭제</th>
+                                        <th>이미지</th>
+                                        <th>상품명(name)</th>
+                                        <th>가격</th>
+                                        <th>카테고리</th>
+                                        <th>짧은 설명</th>
+                                        <th>긴 설명</th>
+                                        <th>제조사</th>
+                                        <th>재고량</th>
+                                        <th>키워드</th>
                                     </tr>
                                 </thead>
                                 <tbody id="category-table"></tbody>
                             </table>
-                            <div class="clearfix">
-                                <div class="hint-text">Showing
-                                    <b>5</b>
-                                    out of
-                                    <b>25</b>
-                                    entries</div>
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a href="#">Previous</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">2</a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a href="#" class="page-link">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">5</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">Next</a>
-                                    </li>
-                                </ul>
+                            <div class="clearfix" id="clearfix">
                             </div>
                         </div>
                     </div>
@@ -143,69 +120,31 @@
                         </div>
                     </div>
                 </div>
-                <div id="addEmployeeModal" class="modal fade">
+
+                 <!-- Edit Modal HTML -->
+                 <div id="editProductModal" class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form>
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Add Employee</h4>
+                                    <h4 class="modal-title">modify Product</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="email" class="form-control" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address</label>
-                                        <textarea class="form-control" required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Phone</label>
-                                        <input type="text" class="form-control" required>
-                                    </div>
+                                    <p>Are you sure you want to modify these Records?</p>
+                                    <p class="text-warning">
+                                        <small>This action cannot be undone.</small>
+                                    </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel">
+                                    <input type="submit" class="btn btn-success md-ok" value="Continue">
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <!-- Edit Modal HTML -->
-                <div id="editCategoryModal" class="modal fade">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form>
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Edit Category</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" id="EditNameInput" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Desc</label>
-                                        <textarea class="form-control" id="EditDescInput" row="10"></textarea>
-                                    </div>
-                                   
-                                    <div class="modal-footer">
-                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                        <input type="submit" class="btn btn-info" id="EditSubmitButton" value="Save">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 <!-- Delete Modal HTML -->
                 <div id="deleteCategoryModal" class="modal fade">
                     <div class="modal-dialog">
@@ -222,8 +161,8 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                    <input type="submit" class="btn btn-danger" value="Delete">
+                                    <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel">
+                                    <input type="submit" class="btn btn-danger md-ok" value="Delete">
                                 </div>
                             </form>
                         </div>

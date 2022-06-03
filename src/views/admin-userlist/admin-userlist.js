@@ -1,62 +1,5 @@
-function prepareModal() {
-  $(document).ready(function () {
-    // Activate tooltip
-    $('[data-toggle="tooltip"]').tooltip();
-
-    // Select/Deselect checkboxes
-    var checkbox = $('table tbody input[type="checkbox"]');
-    $("#selectAll").click(function () {
-      if (this.checked) {
-        checkbox.each(function () {
-          this.checked = true;
-        });
-      } else {
-        checkbox.each(function () {
-          this.checked = false;
-        });
-      }
-    });
-    checkbox.click(function () {
-      if (!this.checked) {
-        $("#selectAll").prop("checked", false);
-      }
-    });
-
-
-
-    // const edit = document.querySelectorAll(".td_edit")
-    // edit.forEach(e =>{
-    //     e.addEventListener('click',()=>console.log('hi'));
-    // })
-  }); 
-}
-
-function searchAddressByDaumPost(){
-  return new Promise((resole) =>{
-    new daum.Postcode({
-      oncomplete: function(data) {
-          let addr = ''; // 주소 변수
-
-          let buildingName = data.buildingName ? ` (${data.buildingName})`:''; 
-          //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-          if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-              addr = `${data.roadAddress}${buildingName}`;
-          } else { // 사용자가 지번 주소를 선택했을 경우(J)
-              addr = `${data.jibunAddress}${buildingName}`;
-          }
-
-          // 우편번호와 주소 정보를 해당 필드에 넣는다.
-          const zonecode = data.zonecode;
-          const address = addr;
-          // 커서를 상세주소 필드로 이동한다.
-          resole({zonecode, address});
-      }
-  }).open();
-  })
-}
-
 import * as Api from "/api.js";
-import { randomId } from "/useful-functions.js";
+import { searchAddressByDaumPost } from "/useful-functions.js";
 
 // 요소(element), input 혹은 상수
 const userInfo_table = document.getElementById("userInfo-table");
@@ -71,32 +14,49 @@ const EditPhoneNumberInput = document.getElementById('EditPhoneNumberInput');
 const EditRoleSelectBox = document.getElementById('EditRoleSelectBox');
 const EditSearchAddressButton = document.getElementById('EditSearchAddressButton');
 const EditSubmitButton = document.getElementById('EditSubmitButton');
-
+const ChangeSubmitButton = document.getElementById('ChangeSubmitButton');
 
 addAllElements();
 addAllEvents();
-prepareModal();
 
 
 // html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllElements() {
+  history.replaceState({}, null, location.pathname);
   createUserInfoToTable();
 }
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
   EditSearchAddressButton.addEventListener('click',insertAddressInputsByDumPost);
-  EditSubmitButton.addEventListener('click', updateUserInfo);
+  EditSubmitButton.addEventListener('click', updateUserPermission);
+  ChangeSubmitButton.addEventListener('click', deleteUserInfo)
 }
 
-async function updateUserInfo(){
+async function updateUserPermission(e){
   const id = globalThis.userId
-  console.log(id);
+  const data = {}
+  data.role = EditRoleSelectBox.value;
+  try{
+    const result = await Api.patch('/api/admin/users',id,data);
+    if(result){
+      alert('성공적 권한 변경')
+    }
+  }catch(e){
+    console.error('정보권한변경관련 : ',e);
+  }
 }
 
-async function deleteUserInfo(){
+async function changeUserPassword(e){
   const id = globalThis.userId
-  console.log(id);
+  try{
+    const result = await Api.patch('/api/admin/users',id);
+    if(result){
+      alert('성공적 삭제')
+    }
+  }catch(e){
+    console.error('정보삭제관련 : ',e);
+  }
 }
 
 async function insertAddressInputsByDumPost(){
@@ -107,7 +67,7 @@ async function insertAddressInputsByDumPost(){
 async function createUserInfoToTable() {
   const {users} = await Api.get('/api/admin/userlist','');
   console.log(users);
-  users.forEach(({_id, fullName, email, address, phoneNumber, role}) =>{
+  users.forEach(({image, _id, fullName, email, address, phoneNumber, role}) =>{
       //불확실한 값
       const addr = address
       ?
@@ -117,34 +77,31 @@ async function createUserInfoToTable() {
       :
       ``;
       const phNum = phoneNumber ?? '';
-      createUserInfoRow(_id, fullName, email, addr, role, phNum);
+      createUserInfoRow(image, _id, fullName, email, addr, role, phNum);
     });
 
     const edit = document.querySelectorAll('.td_edit');
     edit.forEach(e => e.addEventListener('click', setUserInfoToEditModal));
+    const del = document.querySelectorAll('.td_delete');
+    del.forEach(e => e.addEventListener('click', (e) => globalThis.userId = e.target.dataset.id));
 
-    function createUserInfoRow(_id, fullName, email, address, role, phoneNumber) {
+    function createUserInfoRow(image, _id, fullName, email, address, role, phoneNumber) {
       userInfo_table.insertAdjacentHTML(
         "beforeend",
           `
           <tr>
-              <td>
-                  <span class="custom-checkbox">
-                      <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                      <label for="checkbox1"></label>
-                  </span>
-              </td>
+              <td class="tb_image"><img src='${image}'></td>
               <td class="tb_username">${fullName}</td>
               <td class="tb_useremail">${email}</td>
               <td class="tb_address">${address}</td>
               <td class="tb_phonenumber">${phoneNumber}</td>
               <td class="tb_role">${role}</td>
               <td>
-                  <a href="#editUserInfoModal" class="td_edit" data-toggle="modal" >
-                      <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
+                  <a href="#editUserInfoModal" class="td_edit" data-toggle="modal" data-id="${_id}" >
+                      <i class="material-icons" data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
                   </a>
-                  <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal">
-                      <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}">&#xE872;</i>
+                  <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal" data-id="${_id}">
+                      <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}">&#xf0d2;</i>
                   </a>
               </td>
           </tr>
