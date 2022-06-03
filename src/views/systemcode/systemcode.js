@@ -10,6 +10,7 @@ const mdDel = document.querySelector("#deleteModal");
 
 const systemCodeList = document.getElementById('systemCodeList');
 
+const camelLabels = document.querySelectorAll('.camel');
 
 addAllElements();
 addAllEvents();
@@ -21,19 +22,18 @@ async function addAllElements() {
   await CreateTableHelper.initialize(systemCodeList, addSystemCodeEvent);
   const name = sessionStorage.getItem('syscode');
   new CreateTableHelper(name, tbHead, tbBody, mdEdit, mdAdd, mdDel).createTable();
+  camelLabels.forEach(e => e.textContent = name);
 }
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
 
 }
-function selectAllCheckBox(e){
-  console.log(e.target);
-}
 async function addSystemCodeEvent(e){
   const {id, name} = e.target.dataset;
   const table = new CreateTableHelper(name, tbHead, tbBody, mdEdit, mdAdd, mdDel);
   sessionStorage.setItem('syscode', name);
+  camelLabels.forEach(e => e.textContent = name);
   table.createTable();
 }
 

@@ -16,6 +16,7 @@ const EditSearchAddressButton = document.getElementById('EditSearchAddressButton
 const EditSubmitButton = document.getElementById('EditSubmitButton');
 const ChangeSubmitButton = document.getElementById('ChangeSubmitButton');
 
+
 addAllElements();
 addAllEvents();
 
@@ -30,10 +31,12 @@ async function addAllElements() {
 async function addAllEvents() {
   EditSearchAddressButton.addEventListener('click',insertAddressInputsByDumPost);
   EditSubmitButton.addEventListener('click', updateUserPermission);
-  ChangeSubmitButton.addEventListener('click', deleteUserInfo)
+  ChangeSubmitButton.addEventListener('click', changeUserPassword)
 }
 
 async function updateUserPermission(e){
+  console.log(globalThis.email);
+
   const id = globalThis.userId
   const data = {}
   data.role = EditRoleSelectBox.value;
@@ -48,12 +51,11 @@ async function updateUserPermission(e){
 }
 
 async function changeUserPassword(e){
-  const id = globalThis.userId
-  try{
-    const result = await Api.patch('/api/admin/users',id);
-    if(result){
-      alert('성공적 삭제')
-    }
+  console.log(globalThis.email);
+  try {
+    const result = await Api.post('/api/user/reset-password',  {email:globalThis.email});
+    // 비밀번호 찾기 성공 알림
+    if(result)alert(`임시 비밀번호가 발급되었습니다. 이메일을 확인해주세요.`);
   }catch(e){
     console.error('정보삭제관련 : ',e);
   }
@@ -83,7 +85,10 @@ async function createUserInfoToTable() {
     const edit = document.querySelectorAll('.td_edit');
     edit.forEach(e => e.addEventListener('click', setUserInfoToEditModal));
     const del = document.querySelectorAll('.td_delete');
-    del.forEach(e => e.addEventListener('click', (e) => globalThis.userId = e.target.dataset.id));
+    del.forEach(e => e.addEventListener('click', (e) => {
+      globalThis.userId = e.target.dataset.id
+      globalThis.email = e.target.dataset.email
+    }));
 
     function createUserInfoRow(image, _id, fullName, email, address, role, phoneNumber) {
       userInfo_table.insertAdjacentHTML(
@@ -100,8 +105,8 @@ async function createUserInfoToTable() {
                   <a href="#editUserInfoModal" class="td_edit" data-toggle="modal" data-id="${_id}" >
                       <i class="material-icons" data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
                   </a>
-                  <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal" data-id="${_id}">
-                      <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}">&#xf0d2;</i>
+                  <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal" data-id="${_id}" data-email="${email}">
+                      <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}" data-email="${email}">&#xf0d2;</i>
                   </a>
               </td>
           </tr>
