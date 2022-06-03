@@ -29,7 +29,7 @@ const searchAddressButton = document.getElementById('searchAddressButton');
 const saveButton = document.getElementById('saveButton');
 const deleteCompleteButton = document.getElementById('deleteCompleteButton');
 const imageInput = document.getElementById('imageInput');
-const image = document.querySelector('#profile-image');
+const imageProfile = document.querySelector('#profile-image');
 let imagedata = '';
 
 const userInfoObject = {};
@@ -44,9 +44,9 @@ async function changeImageFile(file) {
     imagedata = file.target.files[0];
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
-      image.src = imgSrc;
-      image.style.width = '100%';
-      image.style.height = '100%';
+      imageProfile.src = imgSrc;
+      imageProfile.style.width = '100%';
+      imageProfile.style.height = '100%';
     } catch (e) {
       console.error('이미지 관련 오류', e.massage);
     }
@@ -95,7 +95,7 @@ async function deleteAccount() {
 async function setUserInfoToInputs() {
   const userid = sessionStorage.getItem('userid');
   const data = await Api.get(`/api/users/${userid}`);
-  const { fullName, email, password, address, phoneNumber } = data;
+  const { image, fullName, email, password, address, phoneNumber } = data;
 
   //가져온 불확실한 정보 유효성 검사
   const postalCode = address ? address.postalCode : '';
@@ -109,6 +109,7 @@ async function setUserInfoToInputs() {
   userInfoObject.address1 = address1;
   userInfoObject.address2 = address2;
   userInfoObject.phoneNumber = phoneNumber ?? '';
+  imageProfile.src = image;
 
   //input에 셋팅
   profileHeadLabel.insertAdjacentText('beforeend', `(${email})`);
@@ -133,7 +134,6 @@ async function handlePatch(e) {
   const address1 = address1Input.value;
   const address2 = address2Input.value;
   const phoneNumber = phoneNumberInput.value;
-  // const image = imageInput.value;
 
   const isFullNameValidModify = fullName === userInfoObject.fullName;
   const isCurrentPasswordValid = currentPassword.length > 1;
@@ -144,44 +144,44 @@ async function handlePatch(e) {
   const isAddress2CodeValidModify = address2 === userInfoObject.address2Code;
   const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
 
-  if (!isCurrentPasswordValid) {
-    return alert('정보 수정 시 현재 비빌번호를 입력해주세요.');
-  }
+  // if (!isCurrentPasswordValid) {
+  //   return alert('정보 수정 시 현재 비빌번호를 입력해주세요.');
+  // }
 
-  if (!isReenPasswordSame) {
-    return alert('비밀번호가 일치하지 않습니다.');
-  }
-  if (
-    !isFullNameValidModify ||
-    !isReenPasswordValidModify ||
-    !isPostalCodeValidModify ||
-    !isAddress1CodeValidModify ||
-    !isAddress2CodeValidModify ||
-    !isPhoneNumberValidModify
-  ) {
+  // if (!isReenPasswordSame) {
+  //   return alert('비밀번호가 일치하지 않습니다.');
+  // }
+  // if (
+  //   !isFullNameValidModify ||
+  //   !isReenPasswordValidModify ||
+  //   !isPostalCodeValidModify ||
+  //   !isAddress1CodeValidModify ||
+  //   !isAddress2CodeValidModify ||
+  //   !isPhoneNumberValidModify
+  // ) {}
+    const address = {
+      postalCode: postalCode+"",
+      address1: address1,
+      address2: address2,
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("password", reenPassword);
+    formData.append("currentPassword", currentPassword);
+    formData.append("address", address);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("image", imagedata);
+
     try {
-      const data = {
-        fullName,
-        password: reenPassword,
-        currentPassword: currentPassword,
-        address: {
-          postalCode: postalCode,
-          address1: address1,
-          address2: address2,
-        },
-        phoneNumber: phoneNumber,
-      };
-
-      const result = await Api.patch(
-        `/api/users/${sessionStorage.userid}`,
-        '',
-        data
+      const result = await Api.patchMulti(
+        '/api/users',sessionStorage.userid, formData
       );
       if (result) {
         location.href = '/';
       }
     } catch (e) {
-      e.message;
+      console.log(e.message);
     }
-  }
+ 
 }
