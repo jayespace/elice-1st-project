@@ -29,18 +29,3 @@ async function insertHeaderEl() {
 function insertFooterEl() {
   footerEl.insertAdjacentHTML('afterbegin', footerTemplate);
 }
-
-// 로그아웃
-const logoutEl = $('.logout');
-
-if ($('.logout')) {
-  userLogout();
-}
-
-function userLogout() {
-  logoutEl.addEventListener('click', () => {
-    alert('로그아웃 되었습니다. ');
-    sessionStorage.clear();
-    window.location.href = '/';
-  });
-}

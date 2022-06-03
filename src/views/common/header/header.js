@@ -4,7 +4,6 @@ const getCategoryList = async () => {
   // 카테고리 분류
   try {
     const categories = await Api.get(`/api/categories`);
-    // console.log(categories);
     return categories
       .map(
         ({ _id, name }) =>
@@ -35,7 +34,7 @@ export const headerTemplate = async () => {
                         <a href="/editprofile" class="navbar-item"> 회원정보관리 </a>
                         ${adminTemplate}
                         <hr class="navbar-divider admin" />
-                        <a class="navbar-item logout">로그아웃</a>
+                        <a class="navbar-item logout" onclick="alert('로그아웃 되었습니다.');sessionStorage.clear();window.location.href='/';">로그아웃</a>
                       </div>
                     </div>`;
   } else {
