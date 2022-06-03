@@ -79,7 +79,6 @@ orderRouter.post('/orders', loginRequired, asyncHandler(async(req,res) => {
     email
   };
 
-  console.log(currentUserInfo, userInfo, products);
   // 유저의 정보와 함께 주문 정보 저장
   const newOrder = await orderService.addOrder(
     {
