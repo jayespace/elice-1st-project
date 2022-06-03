@@ -48,8 +48,8 @@ productRouter.get('/products', asyncHandler(async (req, res) => {
     } else if (field == 'keyword') {
       value = req.query.keyword;
     }
-
-    totalProducts = await productService.countByField(field, value);
+    value =  value.replace(/\'/gi, "");
+    totalProducts = await productService.countByField(field,value);
     products = await productService.getProductsByField(field, value, page, perPage);
   }
 

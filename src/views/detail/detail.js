@@ -1,8 +1,8 @@
 import * as Api from '../api.js';
 
 const url = new URL(window.location.href);
-const id = url.searchParams.get("id");
-const detail = document.querySelector(".product-detail");
+const id = url.searchParams.get('id');
+const detail = document.querySelector('.product-detail');
 const addBtn = document.querySelector('.add-button');
 const purchaseBtn = document.querySelector('.purchase-button');
 const minusBtn = document.getElementById("minus");
@@ -14,19 +14,9 @@ let product = new Array(); //상품정보
 
 addAllElements();
 addAllEvents();
-getDataFromApi();
-
-async function getDataFromApi() {
-  const data = await Api.get('/api/products');
-  const arr = data.products;
-  product = arr.find(a => a._id === id);
-
-  insertHTMLToDetail(product);
-  insertValue();
-}
 
 async function addAllElements() {
-  
+  getDataFromApi();
 }
 function addAllEvents() {
   addBtn.addEventListener("click", addToCart);
@@ -46,29 +36,37 @@ function insertHTMLToDetail(product) {
     `
   );
 }
+async function getDataFromApi() {
+  const data = await Api.get('/api/products');
+  const arr = data.products;
+  product = arr.find((a) => a._id === id);
 
-function insertValue(){
-  const name = document.querySelector(".name");
-  const price = document.querySelector(".price");
-  const briefDesc = document.querySelector(".briefDesc");
-  const fullDesc = document.querySelector(".fullDesc");
-  
+  insertHTMLToDetail(product);
+  insertValue();
+}
+
+function insertValue() {
+  const name = document.querySelector('.name');
+  const price = document.querySelector('.price');
+  const briefDesc = document.querySelector('.briefDesc');
+  const fullDesc = document.querySelector('.fullDesc');
+
   name.innerText = product.name;
-  price.innerText = (product.price).toLocaleString('en') + " 원";
+  price.innerText = product.price.toLocaleString('en') + ' 원';
   briefDesc.innerText = product.briefDesc;
   fullDesc.innerText = product.fullDesc;
-  total.innerText = (product.price).toLocaleString('en') + " 원";
+  total.innerText = product.price.toLocaleString('en') + ' 원';
 }
 
 function addToCart() {
   product.count = Number(qty.innerText); //상품 수량 추가
   product.cart = 'checked';
 
-  let getItem = JSON.parse(window.localStorage.getItem("cart"));
+  let getItem = JSON.parse(window.localStorage.getItem('cart'));
   let objectId = product._id;
 
-
-  if(getItem === null) { //localstorage에 아무것도 없을 때
+  if (getItem === null) {
+    //localstorage에 아무것도 없을 때
     getItem = [];
   }
   if (!getItem instanceof Array) {
@@ -88,7 +86,7 @@ function addToCart() {
   if(check) alert('장바구니에 상품을 담았어요!');
 
 
-  window.localStorage.setItem("cart", JSON.stringify(getItem));
+  window.localStorage.setItem('cart', JSON.stringify(getItem));
 
   console.log(getItem);
 }
@@ -104,18 +102,17 @@ function purchaseProduct() {
 
 function minusQty() {
   let num = Number(qty.innerText);
-  if(num > 1){
-    num -=1;
+  if (num > 1) {
+    num -= 1;
   }
   qty.innerText = num;
-  total.innerText = (product.price*num).toLocaleString('en') + " 원";
+  total.innerText = (product.price * num).toLocaleString('en') + ' 원';
 }
 function plusQty() {
   let num = Number(qty.innerText);
-    if(num < product.stock)
-      num +=1;
-    else alert('재고가 더 없어요(T_T)');
+  if (num < product.stock) num += 1;
+  else alert('재고가 더 없어요(T_T)');
 
-    qty.innerText = num;
-    total.innerText = (product.price*num).toLocaleString('en') + " 원";
+  qty.innerText = num;
+  total.innerText = (product.price * num).toLocaleString('en') + ' 원';
 }

@@ -1,0 +1,32 @@
+<script>
+    function parseCookie(cookie) {
+        const data = decodeURIComponent(cookie.value);
+        return JSON.parse(data.substring(2));
+    }
+    async function getTokenAndSetSession() {
+        const token = await cookieStore.get('userTokenAndInfo');
+        const result = await parseCookie(token);
+
+        sessionStorage.setItem('token', result.token);
+        sessionStorage.setItem('userid', result.user._id);
+        sessionStorage.setItem('username', result.user.fullName);
+        sessionStorage.setItem('role', result.user.role);
+    }
+    async function execute(){
+        try{
+        await getTokenAndSetSession();
+        // alert('정상적인 로그인입니다.')
+        cookieStore.delete('userTokenAndInfo');
+
+        location.href = '/'
+        }
+        catch(e){
+        location.href = '/login'
+
+        }
+    }
+    execute();
+    
+    
+</script>
+

@@ -62,7 +62,8 @@ class ProductService {
         manufacturer,
         stock,
         keyword,
-        image };
+        image,
+      };
 
       productList.push(modified)
     }

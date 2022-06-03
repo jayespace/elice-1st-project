@@ -1,40 +1,55 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>쇼핑-데모</title>
+    <!-- 아이콘 -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/elice-rabbit-favicon.png"
+    />
+    <!-- bulma css 관련 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 폰트 어썸: 아이콘 -->
+    <!-- 이건 폰트 어썸 최신 Url임.. 삭제하지마셈-->
+    <script
+      src="https://kit.fontawesome.com/fc99c35a8f.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="product.css" />
+    <script src="../common/landing.js" type="module" defer></script>
+    <script src="product.js" type="module" defer></script>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>쇼핑-데모</title>
-  <!-- 아이콘 -->
-  <link rel="icon" type="image/png" sizes="16x16" href="/elice-rabbit-favicon.png" />
-  <!-- bulma css 관련 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
-  <!-- 폰트 어썸: 아이콘 -->
-  <script defer src="https://kit.fontawesome.com/7630448495.js" crossorigin="anonymous"></script>
-  <!-- 구글 OAuth -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <!-- 카카오 OAuth -->
-  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-  <!-- 커스텀 css, js -->
-  <link rel="stylesheet" href="product.css" />
-  <script src="../common/landing.js" type="module" defer></script>
-  <script src="product.js" type="module" defer></script>
-</head>
+  <body>
+    <header id="header"></header>
 
-<body>
-  <header id="header"></header>
+    <main role="main" id="main" class="container">
+      <section class="section">
+        <div class="container">
+          <nav class="breadcrumb is-large" aria-label="breadcrumbs">
+            <ul class="category">
+              <li><a href="/products">모든 상품</a></li>
+              <!-- <li class="is-active"><a>주문결제</a></li> -->
+            </ul>
+          </nav>
+          <hr />
 
-  <main role="main">
-    <section class="section">
-      <div class="container">
-        <div class="product-list">
+          <div class="product-list"></div>
+
+          <div id="moreImage" class="has-text-centered" style="opacity: 0.5">
+            <i class="fa-solid fa-ellipsis-vertical fa-8x"></i>
+          </div>
         </div>
-      </div>
-    </section>
-
-
-  </main>
-  <footer id="footer"></footer>
-</body>
-
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </body>
 </html>
