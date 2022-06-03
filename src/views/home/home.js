@@ -1,3 +1,6 @@
+const slides = document.querySelectorAll('.mySlides');
+console.log(slides.length);
+
 let slideIndex = 1;
 showSlides(slideIndex);
 
