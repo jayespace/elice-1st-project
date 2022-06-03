@@ -1,6 +1,11 @@
 import { addCommas } from '/useful-functions.js';
 const $ = (selector) => document.querySelector(selector);
 
+const counts = $('#productsTitle');
+const totalPrices = $('#productsTotal');
+const orderTotal = $('#orderTotal');
+const delivery = $('#deliveryFee');
+
 const store = {
   setLocalStorage(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -15,16 +20,13 @@ function App() {
 
   // 스토리지에서 카트 리스트 불러오기
   this.init = () => {
-    if (store.getLocalStorage().length > 1) {
+    if (store.getLocalStorage().length > 0) {
       this.cart = store.getLocalStorage();
+      render();
+    } else {
+      $('#cart-list').innerHTML = '<h1>장바구니에 담긴 상품이 없습니다. </h1>';
     }
-    render();
   };
-
-  const counts = $('#productsTitle');
-  const totalPrices = $('#productsTotal');
-  const orderTotal = $('#orderTotal');
-  const delivery = $('#deliveryFee');
 
   // 카트 리스트 목록
   const render = () => {
