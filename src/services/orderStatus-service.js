@@ -136,7 +136,7 @@ class OrderStatusService {
     }
 
     if (reqOrderStatusName === "취소완료") {
-      if (curOrderStatusName !== '결제완료' || curOrderStatusName !== '상품준비중') {
+      if (curOrderStatusName !== '결제완료' && curOrderStatusName !== '상품준비중') {
         throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
       } else if (curCsStatusName !== '취소') {
         throw new Error ('구매자의 요청 사항을 확인해 주세요.')
@@ -166,7 +166,7 @@ class OrderStatusService {
     } 
 
     if (reqOrderStatusName === "교환진행중") {
-      if (curOrderStatusName !== '배송중' || curOrderStatusName !== '배송완료') {
+      if (curOrderStatusName !== '배송중' && curOrderStatusName !== '배송완료') {
         throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
       } else if (curCsStatusName !== '교환') {
         throw new Error ('구매자의 요청사항을 확인해 주세요.');
@@ -180,7 +180,7 @@ class OrderStatusService {
     } 
 
     if (reqOrderStatusName === "반품진행중") {
-      if (curOrderStatusName !== '배송중' || curOrderStatusName !== '배송완료') {
+      if (curOrderStatusName !== '배송중' && curOrderStatusName !== '배송완료') {
         throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
       } else if (curCsStatusName !== '반품') {
         throw new Error ('구매자의 요청사항을 확인해 주세요.');
