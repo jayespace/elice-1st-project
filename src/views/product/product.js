@@ -61,7 +61,7 @@ async function getDataFromApi(category, page, perPage) {
 function insertHTMLToList(product) {
   const { _id, image, name, price } = product;
   list.insertAdjacentHTML(
-    'beforeend',
+    "beforeend",
     `
       <div class="product" id="${_id}">
         <div class="img">

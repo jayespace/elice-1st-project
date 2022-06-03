@@ -4,10 +4,11 @@ const url = new URL(window.location.href);
 const id = url.searchParams.get('id');
 const detail = document.querySelector('.product-detail');
 const addBtn = document.querySelector('.add-button');
-const minusBtn = document.getElementById('minus');
-const plusBtn = document.getElementById('plus');
-const total = document.querySelector('.total');
-const qty = document.getElementById('qty');
+const purchaseBtn = document.querySelector('.purchase-button');
+const minusBtn = document.getElementById("minus");
+const plusBtn = document.getElementById("plus");
+const total = document.querySelector(".total");
+const qty = document.getElementById("qty");
 
 let product = new Array(); //상품정보
 
@@ -18,9 +19,10 @@ async function addAllElements() {
   getDataFromApi();
 }
 function addAllEvents() {
-  addBtn.addEventListener('click', addToCart);
-  minusBtn.addEventListener('click', minusQty);
-  plusBtn.addEventListener('click', plusQty);
+  addBtn.addEventListener("click", addToCart);
+  purchaseBtn.addEventListener("click",purchaseProduct);
+  minusBtn.addEventListener("click",minusQty);
+  plusBtn.addEventListener("click",plusQty);
 }
 
 /**************여기 밑에 함수(function)을 입력해주세요***************/
@@ -70,17 +72,33 @@ function addToCart() {
   if (!getItem instanceof Array) {
     getItem = [getItem];
   }
-
-  getItem = getItem.filter(function (a) {
-    if (a._id === objectId) alert('이미 장바구니에 담겨있어요!');
+  
+  var check = true;
+  getItem = getItem.filter(function(a){
+    if(a._id === objectId) {
+      check = false;
+      alert('이미 장바구니에 담겨있어요!');
+    }
     return a._id !== objectId;
   });
 
   getItem.push(product);
+  if(check) alert('장바구니에 상품을 담았어요!');
+
 
   window.localStorage.setItem('cart', JSON.stringify(getItem));
 
   console.log(getItem);
+}
+
+function purchaseProduct() {
+  console.log(sessionStorage.getItem('token'));
+  if(sessionStorage.getItem('token')===null){
+    window.location.href="/login";
+  }else{
+    const url = `/shippingpoint?id=${id}`;
+    location.href=url;
+  }
 }
 
 function minusQty() {

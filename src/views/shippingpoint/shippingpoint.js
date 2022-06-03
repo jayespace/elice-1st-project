@@ -9,6 +9,10 @@ import * as Api from '/api.js';
 import store from '../cart/store.js';
 import { addCommas, searchAddressByDaumPost } from '/useful-functions.js';
 
+// 바로구매확인
+const url = new URL(window.location.href);
+const id = url.searchParams.get('id');
+
 // localStorage data
 const storedItem = store
   .getLocalStorage()
@@ -65,6 +69,11 @@ async function insertAddressToAddrInputs() {
 }
 
 function insertOrderSummary() {
+  //바로구매
+  if(id !== null){
+        
+  }
+
   if (!storedItem || storedItem.length < 1) return;
   console.log(storedItem);
   let amount = 0;
@@ -160,6 +169,7 @@ async function sendOrderInfoByPost(e) {
   try {
     const result = await Api.post('/api/orders', order);
     if (result) {
+      window.location.href="/complete";
       return alert('성공적으로 주문했습니다.');
     }
   } catch (err) {
