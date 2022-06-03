@@ -1,62 +1,61 @@
-.section{
-    padding-top: 70px;
-    padding-bottom: 70px;
+.section {
+  padding-top: 70px;
+  padding-bottom: 70px;
 }
-.section .container{
-    max-width: 960px;
+.section .container {
+  max-width: 960px;
 }
-.section .container .product-list{
-    margin-left: 10px;
-    display: flex;
-    flex-wrap: wrap;
+.section .container .product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
-.section .container .product-list .product{
-    width: 310px;
-    height:460px;
-    margin: 0 10px 30px 10px;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    overflow: hidden;
-    cursor: pointer;
+.section .container .product-list .product {
+  width: 310px;
+  height: 410px;
+  margin: 0 10px 30px 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #fff;
 }
-.product .img{
-    transform: scale(1);
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+.product .img {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out; /* 부드러운 모션을 위해 추가*/
 }
-.product .img:hover{
-    transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    -o-transform: scale(1.1);
-}z
-
-.content {
-    display: flex;
-    flex-direction: column;
+.product .img:hover {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
 }
-#pname{
-    font-size: 15px;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 20px;
+z .content {
+  display: flex;
+  flex-direction: column;
 }
-#pname:hover{
-    opacity: .8;
+#pname {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
 }
-#pprice{
-  
-    font-weight: bold;
-    text-align: center;
-    margin-top: 8px;
+#pname:hover {
+  opacity: 0.8;
 }
-#pprice span{
-     font-weight: bold; 
-    color:crimson;
-    text-align: center;
-    margin-top: 8px;
+#pprice {
+  font-weight: bold;
+  text-align: center;
+  margin-top: 8px;
+}
+#pprice span {
+  font-weight: bold;
+  color: crimson;
+  text-align: center;
+  margin-top: 8px;
 }

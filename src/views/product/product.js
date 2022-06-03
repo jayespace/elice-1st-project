@@ -7,6 +7,7 @@
 import * as Api from '../api.js';
 import { addCommas } from '/useful-functions.js';
 
+const categoryNav = document.querySelector('.category');
 const moreImage = document.getElementById('moreImage');
 const list = document.querySelector('.product-list');
 globalThis.page = 1;
@@ -87,4 +88,11 @@ function insertHTMLToList(product) {
     location.href = url;
   }
   id.addEventListener('click', redirectProductDetail);
+}
+
+if (queryCategory !== null) {
+  categoryNav.insertAdjacentHTML(
+    'beforeend',
+    `<li><a>${queryCategory}</a></li>`
+  );
 }
