@@ -38,7 +38,7 @@ async function handleSubmit(e) {
     alert(`임시 비밀번호가 발급되었습니다. 이메일을 확인해주세요.`);
 
     // 기본 페이지로 이동
-    // window.location.href = '/';
+    window.location.href = '/login';
   } catch (err) {
     // console.error(err.stack);
     alert(`${err.message}`);
