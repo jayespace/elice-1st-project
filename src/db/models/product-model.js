@@ -20,8 +20,8 @@ export class ProductModel {
     return counts;
   }
 
-  async countbyPrice(price) {
-    const counts = await Product.countDocuments({ price });
+  async countbyPrice(priceRange) {
+    const counts = await Product.countDocuments({ price: priceRange });
     return counts;
   }
 
@@ -43,6 +43,11 @@ export class ProductModel {
   async findById(productId) {
     const product = await Product.findById({ _id: productId });
     return product;
+  }
+
+  async findByCategoryId(categoryId) {
+    const products = await Product.find({ category: categoryId });
+    return products;
   }
 
   async findAllbyPage(page, perPage) {
@@ -104,8 +109,8 @@ export class ProductModel {
   }
 
   async delete(productId) {
-    await Product.findOneAndDelete({ _id: productId });
-    return;
+    const del = await Product.findOneAndDelete({ _id: productId });
+    return del;
   }
 
 };

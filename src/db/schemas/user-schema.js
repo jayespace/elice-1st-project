@@ -31,6 +31,11 @@ const UserSchema = new Schema(
       ),
       required: false,
     },
+    image: {
+      type: String,
+      required: false,
+      default:'https://elice-team12.s3.ap-northeast-2.amazonaws.com/product_dummy/1654062281799.png',
+    },
     role: {
       type: String,
       required: false,

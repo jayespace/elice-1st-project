@@ -1,9 +1,3 @@
-/**
- * @todo
- *
- *
- */
-
 import * as Api from '../api.js';
 import { addCommas } from '/useful-functions.js';
 
@@ -48,19 +42,19 @@ function setMoreImage(page, totalPage) {
 }
 
 async function getDataFromApi(category, page, perPage) {
-  console.log('category', category);
-  const query =
-    (category ? `category='${category}'` : '') +
-    `&page=${page}&perPage=${perPage}`;
-  try {
-    const data = await Api.get(`/api/products?${query}`);
-    console.log(data);
-    const { totalPage, products } = data;
-    globalThis.totalPage = totalPage;
-    setMoreImage(globalThis.page, totalPage);
-    products.map(insertHTMLToList);
-  } catch (e) {
-    console.error('페이지네이션 관련:', e);
+  console.log('category',category);
+  const query =(category? `?category='${category}'`:'?')+
+  `&page=${page}&perPage=${perPage}`
+  try{  
+  const data = await Api.get("/api/products",query);
+  console.log(data);
+  const {totalPage, products} = data;
+  globalThis.totalPage = totalPage;
+  setMoreImage(globalThis.page, totalPage);
+  products.map(insertHTMLToList);
+
+  }catch(e){
+    console.error('페이지네이션 관련:',e);
   }
 }
 

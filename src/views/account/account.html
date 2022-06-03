@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>쇼핑-데모</title>
+    <title>쇼핑-n팀</title>
     <!-- 아이콘 -->
     <link
       rel="icon"
@@ -11,7 +11,7 @@
       sizes="16x16"
       href="/elice-rabbit-favicon.png"
     />
-    <!-- bulma css 관련 -->
+    <!-- bulma css -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
@@ -34,71 +34,94 @@
     <main id="main" role="main">
       <section>
         <div class="container">
-          <div>
-            <h1 class="title">계정 관리</h1>
-          </div>
-          <div class="menu-container">
-            <!--주문 조회-->
-            <a class="menu-card">
-              <div class="menu-icon">
-                <span class="icon has-text-info">
-                  <i class="fa-solid fa-credit-card"></i>
-                </span>
-              </div>
-              <div class="menu-contents">
-                <div class="menu-head">주문조회</div>
-                <div class="menu-body">
-                  지난 주문 내역을 확인, 취소할 수 있습니다.
-                </div>
-              </div>
-            </a>
-            <!--회원정보 관리-->
-            <a class="menu-card" href="/editprofile">
-              <div class="menu-icon">
-                <span class="icon has-text-info">
-                  <i class="fa-solid fa-user-gear"></i>
-                </span>
-              </div>
-              <div class="menu-contents">
-                <div class="menu-head">회원정보 관리</div>
-                <div class="menu-body">
-                  회원 정보를 확인, 수정할 수 있습니다.
-                </div>
-              </div>
-            </a>
-            <!--제품 판매-->
+            <div>
+                <h1 class="title">어드민 페이지</h1>
+            </div>
+            <div
+                class="menu-container">
+                <!--주문 조회-->
+                <a class="menu-card">
+                    <div class="menu-icon">
+                        <span class="icon has-text-info">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </span>
+                    </div>
+                    <div class="menu-contents">
+                        <div class="menu-head">주문조회</div>
+                        <div class="menu-body">지난 주문 내역을 확인, 취소할 수 있습니다.</div>
+                    </div>
+                </a>
+                <!--회원정보 관리-->
+                <a class="menu-card" href="/editprofile">
+                    <div class="menu-icon">
+                        <span class="icon has-text-info">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </span>
+                    </div>
+                    <div class="menu-contents">
+                        <div class="menu-head">회원정보 관리</div>
+                        <div class="menu-body">회원 정보를 확인, 수정할 수 있습니다.</div>
+                    </div>
+                </a>
+                <!--제품 판매-->
 
-            <a class="menu-card" href="/sellproduct">
-              <div class="menu-icon">
-                <span class="icon has-text-info">
-                  <i class="fa-solid fa-won-sign"></i>
-                </span>
-              </div>
-              <div class="menu-contents">
-                <div class="menu-head">제품판매</div>
-                <div class="menu-body">
-                  제품 정보를 등록하여, 판매를 시작할 수 있습니다.
-                </div>
-              </div>
-            </a>
-            <!--회원 탈퇴-->
-            <a class="menu-card">
-              <div class="menu-icon">
-                <span class="icon has-text-info">
-                  <i class="fa-solid fa-cart-shopping"></i>
-                </span>
-              </div>
-              <div class="menu-contents">
-                <div class="menu-head">회원 탈퇴</div>
-                <div class="menu-body">
-                  모든 정보를 안전하게 삭제한 후 탈퇴할 수 있습니다.
-                </div>
-              </div>
-            </a>
-          </div>
+                <a class="menu-card admin" href="/sellproduct">
+                    <div class="menu-icon">
+                        <span class="icon has-text-info">
+                            <i class="fa-solid fa-won-sign"></i>
+                        </span>
+                    </div>
+                    <div class="menu-contents">
+                        <div class="menu-head">제품판매</div>
+                        <div class="menu-body">제품 정보를 등록하여, 판매를 시작할 수 있습니다.</div>
+                    </div>
+                </a>
+
+                <!--전체 사용자 조회-->
+                <a class="menu-card admin" href="/admin-userlist">
+                    <div class="menu-icon">
+                        <span class="icon has-text-info">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </span>
+                    </div>
+                    <div class="menu-contents">
+                        <div class="menu-head">전체 사용자 조회</div>
+                        <div class="menu-body">등록된 사용자 정보를 확인, 권한부여, 비밀번호 변경을 할 수 있습니다.</div>
+                    </div>
+                </a>
+
+                <!--전체 상품등록/수정/삭제 조회-->
+                 <a class="menu-card admin" href="/admin-product">
+                    <div class="menu-icon">
+                        <span class="icon has-text-info">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </span>
+                    </div>
+                    <div class="menu-contents">
+                        <div class="menu-head">제품관리</div>
+                        <div class="menu-body">모든 제품를 안전하게 삭제, 수정, 추가할 수 있습니다.</div>
+                    </div>
+                </a>
+                <!-- 시스템 코드-->
+                 <a class="menu-card admin" href="/systemcode">
+                    <div class="menu-icon">
+                        <span class="icon has-text-info">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </span>
+                    </div>
+                    <div class="menu-contents">
+                        <div class="menu-head">시스템 코드</div>
+                        <div class="menu-body">모든 정보를 상태를 제어할 수 있습니다.</div>
+                    </div>
+                </a>
+            </div>
         </div>
-      </section>
+    </section>
+
+
     </main>
+
+    <!-- footer -->
     <footer id="footer"></footer>
   </body>
 </html>
