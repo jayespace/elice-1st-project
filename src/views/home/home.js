@@ -1,5 +1,4 @@
 let slideIndex = 1;
-const slides = document.querySelectorAll('.mySlides');
 showSlides(slideIndex);
 
 function plusSlides(n) {
@@ -24,5 +23,4 @@ function showSlides(n) {
   }
 
   slides[slideIndex - 1].style.display = 'block';
-  dots[slideIndex - 1].className += ' active';
 }
