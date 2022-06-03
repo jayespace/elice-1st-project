@@ -10,7 +10,7 @@ class OrderService {
     this.orderStatusModel = orderStatusModel;
   };
 
-  /// [1] 전체 주문 목록 확인
+  /// [1] admin 일때 전체 주문 목록 확인
   async getOrders() {
     const orders = await this.orderModel.findAll();
 
@@ -21,6 +21,31 @@ class OrderService {
     // 각 주문 내역마다 cs status & order status 이름 반환 작업
     let returnOrders = [];
     for(let i = 0; i < orders.length; i++){
+      
+      // 만약 구매자가 탈퇴한 회원이라면 구매자 개인 정보를 unknown으로 변경
+      const order_user_id = orders[i].user.user_id;
+      const user = await this.userModel.findById(order_user_id);
+
+      if (!user) {
+        const toUpdate = { 
+          user: 
+          {
+            fullName: "탈퇴한 회원",
+            email: "unknown",
+            phoneNumber: "unknown"
+          },
+
+        };
+
+        const orderId = orders[i]._id;
+
+        const order = await this.orderModel.update(
+          {
+            orderId,
+            update: toUpdate,
+          }
+        );
+      };
 
       // order status id로 이름 반환 
       const order_orderStatus_id = orders[i].orderStatus.valueOf();
@@ -32,7 +57,7 @@ class OrderService {
 
       const orderStatusName = orderStatus.name;
 
-      // < cs status id로 이름 반환 >
+      // cs status id로 이름 반환
       const order_csStatus_id = orders[i].csStatus.valueOf();
       const csStatus = await this.csStatusModel.findById(order_csStatus_id);
 
