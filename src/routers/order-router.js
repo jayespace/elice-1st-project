@@ -151,6 +151,12 @@ orderRouter.patch('/orders/:orderId', loginRequired, asyncHandler(async (req, re
 
   } else {  
 
+    if(role === 'basic-user') {
+      if (orderStatus) {
+        throw new Error('관리자만 변경할 수 있습니다.')
+      }
+    }
+
     let requestOrderStatusId;
     let requestCsStatusId;
     let adjusted;
