@@ -96,7 +96,8 @@ function purchaseProduct() {
   if(sessionStorage.getItem('token')===null){
     window.location.href="/login";
   }else{
-    window.location.href="/shippingpoint";
+    const url = `/shippingpoint?id=${id}`;
+    location.href=url;
   }
 }
 
