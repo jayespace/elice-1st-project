@@ -5,7 +5,7 @@ const categoryNav = document.querySelector('.category');
 const moreImage = document.getElementById('moreImage');
 const list = document.querySelector('.product-list');
 globalThis.page = 1;
-globalThis.perPage = 8;
+globalThis.perPage = 9;
 const queryCategory = new URLSearchParams(location.search).get('category');
 console.log(queryCategory);
 //initial Create Products

@@ -37,9 +37,9 @@ function insertHTMLToDetail(product) {
   );
 }
 async function getDataFromApi() {
-  const data = await Api.get('/api/products');
-  const arr = data.products;
-  product = arr.find((a) => a._id === id);
+  const data = await Api.get('/api/products',id);
+  product = data;
+  console.log(product);
 
   insertHTMLToDetail(product);
   insertValue();
@@ -96,7 +96,12 @@ function purchaseProduct() {
   if(sessionStorage.getItem('token')===null){
     window.location.href="/login";
   }else{
-    window.location.href="/shippingpoint";
+    const url = '/shippingpoint?direct';
+    product.count = Number(qty.innerText); //상품 수량 추가
+    product.cart = 'checked';
+    console.log("product", product);
+    sessionStorage.setItem('product', JSON.stringify(product));
+    location.href=url;
   }
 }
 
