@@ -29,7 +29,7 @@ export const headerTemplate = async () => {
     loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
                       <a class="navbar-link"> ${username} </a>
                       <div class="navbar-dropdown">
-                        <a href="/#"class="navbar-item"> 주문조회 </a>
+                        <a href="/orders"class="navbar-item"> 주문조회 </a>
                         <hr class="navbar-divider" />
                         <a href="/editprofile" class="navbar-item"> 회원정보관리 </a>
                         ${adminTemplate}

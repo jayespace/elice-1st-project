@@ -169,6 +169,7 @@ async function sendOrderInfoByPost(e) {
   try {
     const result = await Api.post('/api/orders', order);
     if (result) {
+      localStorage.clear();
       window.location.href="/complete";
       return alert('성공적으로 주문했습니다.');
     }

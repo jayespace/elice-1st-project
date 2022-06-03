@@ -58,7 +58,7 @@ function insertHTMLToList(orderList, length) {
         <div class="box colums orders-item">
           <div class="date">${date} ${time}</div>
           <div class="info">${name}</div>
-          <div class="price">총 ${totalFee.toLocaleString("en")}원</div>
+          <div class="price">총 ${addCommas(totalFee)}원</div>
           <div class="status">${statusInfo.orderStatus}</div>
           <div class="buttons">
             <button class="order-detail" id="detailBtn" data-columns=${i}>주문상세</button>
@@ -103,17 +103,18 @@ function showCancleModal(colNum) {
 
 //주문취소 함수
 async function deleteOrder(colNum) {
-  data[colNum].statusInfo.orderStatus = "주문취소";
 
   console.log("데이터");
   console.log(data);
   console.log(data[colNum].statusInfo);
   const id = data[colNum].orderInfo._id;
-
+  const formData ={
+    csStatus : "취소"
+  }
   console.log(id);
     
   // await Api.patch("/api/orders", id, update);
-  await Api.delete("/api/orders", id);
+  await Api.patch("/api/orders",id, formData);
 
   // getDataFromApi();
   
