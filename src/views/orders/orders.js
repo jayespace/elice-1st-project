@@ -6,6 +6,7 @@ getDataFromApi();
 let data;
 
 async function getDataFromApi() {
+  console.log("여기?");
   data = await Api.get("/api/orders");
   console.log(data);
 
@@ -45,6 +46,7 @@ function getDataFromProducts(products){
 }
 
 function insertHTMLToList(orderList, length) {
+  console.log("왜")
   for (let i = 0; i < length; i++) {
     const { orderInfo, statusInfo } = orderList[i];
     const { createdAt, products } = orderInfo;
@@ -107,8 +109,13 @@ async function deleteOrder(colNum) {
   data[colNum].statusInfo.orderStatus = "주문취소";
   console.log(data);
   console.log(data[colNum].statusInfo);
+  const id = data[colNum].orderInfo._id;
+  
+  console.log(id);
     
-  await Api.patch("/api/orders",data[colNum], data);
+  await Api.patch("/api/orders", id, data);
+  console.log("됐나?");
+  console.log(data);
   
   closeCancleModal();
 }
@@ -117,7 +124,11 @@ async function deleteOrder(colNum) {
 function closeCancleModal() {
   document.querySelector('.modal').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
-  location.reload();
+  // setTimeout(()=>{
+  //   location.reload();
+  // },6000);
+  insertHTMLToList(data, data.length);
+  
 }
 
 //상세정보Modal
