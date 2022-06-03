@@ -29,7 +29,8 @@ async function handleSubmit(e) {
   const passwordConfirm = passwordConfirmInput.value;
 
   // 잘 입력했는지 확인
-  const isFullNameValid = fullName.length >= 2;
+  const isFullNameValid = fullName.length >= 2 && 	
+  (/^[a-zA-Z0-9]+$/).exec(fullName);
   const isEmailValid = validateEmail(email);
   const isPasswordValid = password.length >= 4;
   const isPasswordSame = password === passwordConfirm;
