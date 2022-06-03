@@ -94,7 +94,12 @@ function addToCart() {
 }
 
 function purchaseProduct() {
-  window.location.href='../shippingpoint/shippingpoint.html';
+  console.log(sessionStorage.getItem('token'));
+  if(sessionStorage.getItem('token')===null){
+    window.location.href="/login";
+  }else{
+    window.location.href="/shippingpoint";
+  }
 }
 
 function minusQty() {
