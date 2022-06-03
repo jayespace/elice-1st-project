@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import is from '@sindresorhus/is';
+import bcrypt from 'bcrypt';
 // 폴더에서 import하면, 자동으로 폴더의 index.js에서 가져옴
 //loginRequired : 로그인 여부&&토큰 여부
 //adminRequired : 토큰에서 role이 admin인지 판별
@@ -8,6 +9,10 @@ import { loginRequired } from '../middlewares';
 import { adminRequired } from '../middlewares';
 import { tokenMatchRequest } from '../middlewares';
 import { userService } from '../services';
+import { asyncHandler } from '../middlewares';
+
+import { generateRandomPassword } from '../utils/generate-Random-Password';
+import { sendChangePassword } from '../utils/sendMail'
 
 const userRouter = Router();
 
@@ -302,5 +307,22 @@ userRouter.delete(
     }
   }
 );
+
+userRouter.post('/user/reset-password', asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    throw new Error('해당 메일로 가입된 사용자가 없습니다.');
+  }
+  
+  const newPassword = generateRandomPassword();
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+  
+  const resetPasswordUser = await userService.changeToRandomPassword(user._id,newHashedPassword);
+  
+  const sendMail = await sendChangePassword(email, '임시 비밀번호가 발급되었습니다', `회원님의 임시 비밀번호는 [${newPassword}] 입니다.`);
+  
+  res.status(200).json(resetPasswordUser);
+}));
 
 export { userRouter };

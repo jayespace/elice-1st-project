@@ -5,8 +5,12 @@ body {
   font-size: 14px;
   background: #f0f2f4;
 }
+#main {
+  margin-top: 5rem;
+}
 .navbar {
   background-color: transparent;
+  min-height: 5rem;
 }
 .navbar.is-white {
   background: #f0f2f4;

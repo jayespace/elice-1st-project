@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-const { Router } = require('express');
-const passport = require('passport');
+import { Router } from 'express';
+import passport from 'passport';
 
 const authRouter = Router();
 const userTokenAndInfo ={};
