@@ -1,9 +1,4 @@
-//토큰이 없다면 로그인 페이지로 이동
-if (!sessionStorage.getItem('token')) {
-  const { pathname, search } = window.location;
-  window.location.replace(`/login?previouspage=${pathname + search}`);
-}
-
+import {checkToken} from '/permission.js';
 import * as Api from '/api.js';
 import {
   activeModalFunction,
@@ -11,8 +6,11 @@ import {
   insertImageFile,
 } from '/useful-functions.js';
 
-const profileHeadLabel = document.querySelector('#securityTitle');
 
+checkToken();
+
+
+const profileHeadLabel = document.querySelector('#securityTitle');
 const fullNameInput = document.getElementById('fullNameInput');
 const currentPasswordInput = document.getElementById('currentPasswordInput');
 //비밀번호 재생성 Inputs
@@ -24,14 +22,12 @@ const postalCodeInput = document.getElementById('postalCodeInput');
 const address1Input = document.getElementById('address1Input');
 const address2Input = document.getElementById('address2Input');
 const phoneNumberInput = document.getElementById('phoneNumberInput');
-
 const searchAddressButton = document.getElementById('searchAddressButton');
 const saveButton = document.getElementById('saveButton');
 const deleteCompleteButton = document.getElementById('deleteCompleteButton');
 const imageInput = document.getElementById('imageInput');
 const imageProfile = document.querySelector('#profile-image');
 let imagedata = '';
-
 const userInfoObject = {};
 
 activeModalFunction();

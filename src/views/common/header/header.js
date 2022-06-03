@@ -21,15 +21,19 @@ export const headerTemplate = async () => {
   const username = sessionStorage.getItem('username');
   const isAdmin = sessionStorage.getItem('role') === 'admin' ? true : false;
   let adminTemplate = '';
+  let userTemplate = '';
   if (isAdmin) {
     adminTemplate = `<a href="/account" class="navbar-item"> 관리자페이지 </a>`;
+  }
+  if(!isAdmin){
+    userTemplate = `<a href="/orders"class="navbar-item"> 주문조회 </a>`;
   }
   let loginTemplate = '';
   if (isLogIn) {
     loginTemplate = `<div class="navbar-item has-dropdown is-hoverable">
                       <a class="navbar-link"> ${username} </a>
                       <div class="navbar-dropdown">
-                        <a href="/orders"class="navbar-item"> 주문조회 </a>
+                        ${userTemplate}
                         <hr class="navbar-divider" />
                         <a href="/editprofile" class="navbar-item"> 회원정보관리 </a>
                         ${adminTemplate}

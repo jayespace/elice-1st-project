@@ -96,7 +96,11 @@ function purchaseProduct() {
   if(sessionStorage.getItem('token')===null){
     window.location.href="/login";
   }else{
-    const url = `/shippingpoint?id=${id}`;
+    const url = '/shippingpoint?direct';
+    product.count = Number(qty.innerText); //상품 수량 추가
+    product.cart = 'checked';
+    console.log("product", product);
+    sessionStorage.setItem('product', JSON.stringify(product));
     location.href=url;
   }
 }
