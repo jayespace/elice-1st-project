@@ -64,6 +64,7 @@ export const headerTemplate = async () => {
                 ${await getCategoryList()}
               </div>
             </div>
+            <a href="/brand-info" class="navbar-item"> 브랜드 소개 </a>
           </div>
 
           <!-- 우측 메뉴바 -->
