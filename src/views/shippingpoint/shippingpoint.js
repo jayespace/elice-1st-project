@@ -3,7 +3,6 @@
  * Author: 박상준
  * date : 2022-05-31
  * Todo:
- * insertOrderSummary에서 cart: checked 된 아이템만 추가해줘야함
  */
 
 import * as Api from '/api.js';
@@ -11,7 +10,9 @@ import store from '../cart/store.js';
 import { addCommas, searchAddressByDaumPost } from '/useful-functions.js';
 
 // localStorage data
-let sessionStore = store.getLocalStorage();
+const storedItem = store
+  .getLocalStorage()
+  .filter((item) => item.cart === 'checked');
 
 //user Inputs
 const receiverNameInput = document.getElementById('receiverNameInput');
@@ -64,12 +65,12 @@ async function insertAddressToAddrInputs() {
 }
 
 function insertOrderSummary() {
-  if (!sessionStore || sessionStore.length < 1) return;
-  console.log(sessionStore);
+  if (!storedItem || storedItem.length < 1) return;
+  console.log(storedItem);
   let amount = 0;
   let Fee = 3000;
 
-  globalThis.products = sessionStore.map(({ _id, name, price, count }) => {
+  globalThis.products = storedItem.map(({ _id, name, price, count }) => {
     amount += price * count;
     return {
       _id,
