@@ -23,8 +23,6 @@ function App() {
     if (store.getLocalStorage().length > 0) {
       this.cart = store.getLocalStorage();
       render();
-    } else {
-      $('#cart-list').innerHTML = '<h1>장바구니에 담긴 상품이 없습니다. </h1>';
     }
   };
 
