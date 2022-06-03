@@ -39,7 +39,6 @@ async function handleSubmit(e) {
     const data = { email, password };
 
     const result = await Api.post('/api/login', data);
-    console.log(result.user);
     const token = result.token;
     const user = result.user;
     const { _id, fullName, role } = user;
