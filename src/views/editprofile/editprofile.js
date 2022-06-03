@@ -1,35 +1,35 @@
 //토큰이 없다면 로그인 페이지로 이동
-if (!sessionStorage.getItem("token")) {
+if (!sessionStorage.getItem('token')) {
   const { pathname, search } = window.location;
   window.location.replace(`/login?previouspage=${pathname + search}`);
 }
 
-import * as Api from "/api.js";
+import * as Api from '/api.js';
 import {
   activeModalFunction,
   searchAddressByDaumPost,
-  insertImageFile
-} from "/useful-functions.js";
+  insertImageFile,
+} from '/useful-functions.js';
 
-const profileHeadLabel = document.querySelector(".profile-header h1");
+const profileHeadLabel = document.querySelector('#securityTitle');
 
-const fullNameInput = document.getElementById("fullNameInput");
-const currentPasswordInput = document.getElementById("currentPasswordInput");
+const fullNameInput = document.getElementById('fullNameInput');
+const currentPasswordInput = document.getElementById('currentPasswordInput');
 //비밀번호 재생성 Inputs
-const reenPasswordInput = document.getElementById("reenPasswordInput");
+const reenPasswordInput = document.getElementById('reenPasswordInput');
 const reenPasswordConfirmInput = document.getElementById(
-  "reenPasswordConfirmInput"
+  'reenPasswordConfirmInput'
 );
-const postalCodeInput = document.getElementById("postalCodeInput");
-const address1Input = document.getElementById("address1Input");
-const address2Input = document.getElementById("address2Input");
-const phoneNumberInput = document.getElementById("phoneNumberInput");
+const postalCodeInput = document.getElementById('postalCodeInput');
+const address1Input = document.getElementById('address1Input');
+const address2Input = document.getElementById('address2Input');
+const phoneNumberInput = document.getElementById('phoneNumberInput');
 
-const searchAddressButton = document.getElementById("searchAddressButton");
-const saveButton = document.getElementById("saveButton");
-const deleteCompleteButton = document.getElementById("deleteCompleteButton");
-const imageInput = document.getElementById("imageInput");
-const image = document.querySelector("#profile-image");
+const searchAddressButton = document.getElementById('searchAddressButton');
+const saveButton = document.getElementById('saveButton');
+const deleteCompleteButton = document.getElementById('deleteCompleteButton');
+const imageInput = document.getElementById('imageInput');
+const image = document.querySelector('#profile-image');
 let imagedata = '';
 
 const userInfoObject = {};
@@ -45,24 +45,23 @@ async function changeImageFile(file) {
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
       image.src = imgSrc;
-      image.style.width = "100%";
-      image.style.height = "100%";
+      image.style.width = '100%';
+      image.style.height = '100%';
     } catch (e) {
-      console.error("이미지 관련 오류", e.massage);
+      console.error('이미지 관련 오류', e.massage);
     }
   }
 }
-
 
 async function addAllElements() {
   setUserInfoToInputs();
 }
 
 async function addAllEvents() {
-  imageInput.addEventListener("change", changeImageFile);
-  searchAddressButton.addEventListener("click", insertAddressToAddrInputs);
-  saveButton.addEventListener("click", handlePatch);
-  deleteCompleteButton.addEventListener("click", deleteAccount);
+  imageInput.addEventListener('change', changeImageFile);
+  searchAddressButton.addEventListener('click', insertAddressToAddrInputs);
+  saveButton.addEventListener('click', handlePatch);
+  deleteCompleteButton.addEventListener('click', deleteAccount);
 }
 
 async function insertAddressToAddrInputs() {
@@ -73,12 +72,12 @@ async function insertAddressToAddrInputs() {
 }
 //계정삭제 관련
 async function deleteAccount() {
-  const userid = sessionStorage.getItem("userid");
+  const userid = sessionStorage.getItem('userid');
   const currentPassword = currentPasswordInput.value;
   const isCurrentPasswordValid = currentPassword.length > 1;
 
   if (!isCurrentPasswordValid) {
-    return alert("정보 삭제 시 현재 비빌번호를 입력해주세요.");
+    return alert('정보 삭제 시 현재 비빌번호를 입력해주세요.');
   }
   const data = {
     userid,
@@ -87,21 +86,21 @@ async function deleteAccount() {
   try {
     const result = await Api.delete(`/api/users`, userid, data);
     if (result) {
-      location.href = "/login";
+      location.href = '/login';
     }
   } catch (e) {}
 }
 
 //회원정보 셋팅
 async function setUserInfoToInputs() {
-  const userid = sessionStorage.getItem("userid");
+  const userid = sessionStorage.getItem('userid');
   const data = await Api.get(`/api/users/${userid}`);
   const { fullName, email, password, address, phoneNumber } = data;
 
   //가져온 불확실한 정보 유효성 검사
-  const postalCode = address ? address.postalCode : "";
-  const address1 = address ? address.address1 : "";
-  const address2 = address ? address.address2 : "";
+  const postalCode = address ? address.postalCode : '';
+  const address1 = address ? address.address1 : '';
+  const address2 = address ? address.address2 : '';
 
   //userInfo 저장
   userInfoObject.fullName = fullName;
@@ -112,11 +111,11 @@ async function setUserInfoToInputs() {
   userInfoObject.phoneNumber = phoneNumber ?? '';
 
   //input에 셋팅
-  profileHeadLabel.insertAdjacentText("beforeend", `(${email})`);
+  profileHeadLabel.insertAdjacentText('beforeend', `(${email})`);
   fullNameInput.value = fullName;
-  currentPasswordInput.value = "";
-  reenPasswordInput.value = "";
-  reenPasswordConfirmInput.value = "";
+  currentPasswordInput.value = '';
+  reenPasswordInput.value = '';
+  reenPasswordConfirmInput.value = '';
   postalCodeInput.value = postalCode;
   address1Input.value = address1;
   address2Input.value = address2;
@@ -146,11 +145,11 @@ async function handlePatch(e) {
   const isPhoneNumberValidModify = phoneNumber === userInfoObject.phoneNumber;
 
   if (!isCurrentPasswordValid) {
-    return alert("정보 수정 시 현재 비빌번호를 입력해주세요.");
+    return alert('정보 수정 시 현재 비빌번호를 입력해주세요.');
   }
 
   if (!isReenPasswordSame) {
-    return alert("비밀번호가 일치하지 않습니다.");
+    return alert('비밀번호가 일치하지 않습니다.');
   }
   if (
     !isFullNameValidModify ||
@@ -175,11 +174,11 @@ async function handlePatch(e) {
 
       const result = await Api.patch(
         `/api/users/${sessionStorage.userid}`,
-        "",
+        '',
         data
       );
       if (result) {
-        location.href = "/";
+        location.href = '/';
       }
     } catch (e) {
       e.message;
