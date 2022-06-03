@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>쇼핑-데모</title>
+    <!-- 아이콘 -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/elice-rabbit-favicon.png"
+    />
+    <!-- bulma css 관련 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+      defer
+      src="https://kit.fontawesome.com/7630448495.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 커스텀 css, js -->
+    <script src="../common/landing.js" type="module" defer></script>
+    <link rel="stylesheet" href="./cart.css" />
+    <script src="cart.js" type="module" defer></script>
+  </head>
+  <body>
+    <header id="header"></header>
+    <main id="main" role="main" class="container">
+      <section class="section">
+        <nav class="breadcrumb is-large" aria-label="breadcrumbs">
+          <ul>
+            <li><a>장바구니</a></li>
+            <li class="is-active"><a>주문결제</a></li>
+            <li class="is-active"><a>주문완료</a></li>
+          </ul>
+        </nav>
+        <hr />
+
+        <a id="remove-all">전체삭제</a>
+        <span>|</span>
+        <a id="remove-partial">선택삭제</a>
+        <br />
+        <br />
+        <div class="columns">
+          <div class="column">
+            <ul id="cart-list">
+              <div class="notification is-warning">
+                장바구니에 담긴 상품이 없습니다.
+              </div>
+            </ul>
+          </div>
+          <div class="column is-5">
+            <div class="box order-box has-background-info-light">
+              <div class="header">
+                <p>결제정보</p>
+              </div>
+              <div class="order-info">
+                <div class="info">
+                  <p>주문상품</p>
+                  <p class="products-title" id="productsTitle">0 개</p>
+                </div>
+                <div class="info">
+                  <p>상품총액</p>
+                  <p id="productsTotal">0 원</p>
+                </div>
+                <div class="info">
+                  <p>배송비</p>
+                  <p id="deliveryFee">0 원</p>
+                </div>
+              </div>
+              <div class="total">
+                <p class="total-label">총 결제금액</p>
+                <p class="total-price" id="orderTotal">0원</p>
+              </div>
+              <div class="purchase">
+                <a href="/shippingpoint">
+                  <button class="button is-info" id="purchaseBtn">
+                    구매하기
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer"></footer>
+  </body>
+</html>

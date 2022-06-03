@@ -5,3 +5,8 @@ export * from './views-router';
 export * from './user-router';
 export * from './product-router';
 export * from './category-router';
+export * from './auth-router';
+export * from './systemCode-router';
+export * from './order-router';
+export * from './csStatus-router';
+export * from './orderStatus-router';

@@ -4,13 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>쇼핑-n팀</title>
-    <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/elice-rabbit-favicon.png"
-    />
     <!-- bulma css -->
     <link
       rel="stylesheet"
@@ -23,17 +16,27 @@
       crossorigin="anonymous"
     ></script>
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="home.css" />
     <script src="../common/landing.js" type="module" defer></script>
+    <link rel="stylesheet" href="home.css" />
   </head>
   <body>
     <!-- header -->
     <header id="header"></header>
 
     <!-- contents -->
-    <main id="main" role="main"></main>
+    <main id="main" role="main">
+      <div class="slideshow-container container">
+
+        <div class="mySlides fade">
+          <img src="./banner.png" style="width:100%">
+        </div>
+        
+        <a class="prev" onclick="plusSlides(-1)">❮</a>
+        <a class="next" onclick="plusSlides(1)">❯</a>
+    </main>
 
     <!-- footer -->
-    <footer id="footer"></footer>
+    <footer id="footer" class="section"></footer>
   </body>
+  <script src="home.js" defef></script>
 </html>

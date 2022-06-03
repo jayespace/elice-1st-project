@@ -15,6 +15,21 @@ export class ProductModel {
     return counts;
   }
 
+  async countbyManufacturer(manufacturer) {
+    const counts = await Product.countDocuments({ manufacturer });
+    return counts;
+  }
+
+  async countbyPrice(priceRange) {
+    const counts = await Product.countDocuments({ price: priceRange });
+    return counts;
+  }
+
+  async countbyKeyword(keyword) {
+    const counts = await Product.countDocuments({ keyword });
+    return counts;
+  }
+
   async findAll() {
     const products = await Product.find({});
     return products;
@@ -30,36 +45,53 @@ export class ProductModel {
     return product;
   }
 
-  async findByPrice(priceRange) {
-    const products = await Product.find({ price: priceRange });
-    return products;
-  }
-
-  async findByKeyword(keyword) {
-    const products = await Product.find({ keyword });
-    return products;
-  }
-
-  async findByManufacturer(manufacturer) {
-    const products = await Product.find({ manufacturer });
+  async findByCategoryId(categoryId) {
+    const products = await Product.find({ category: categoryId });
     return products;
   }
 
   async findAllbyPage(page, perPage) {
     const products = await Product
-                              .find({})
-                              .sort({ createdAt : -1 })
-                              .skip(perPage * (page - 1))
-                              .limit(perPage);
+      .find({})
+      .sort({ createdAt : -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage);
     return products;
   }
 
   async findByCategory(category, page, perPage) {
     const products = await Product
-                              .find({ category })
-                              .sort({ createdAt : -1 })
-                              .skip(perPage * (page - 1))
-                              .limit(perPage);
+      .find({ category })
+      .sort({ createdAt : -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage);
+    return products;
+  }
+
+  async findByManufacturer(manufacturer, page, perPage) {
+    const products = await Product
+      .find({ manufacturer })
+      .sort({ createdAt : -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage);
+    return products;
+  }
+
+  async findByPrice(priceRange, page, perPage) {
+    const products = await Product
+      .find({ price: priceRange })                              
+      .sort({ createdAt : -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage);
+    return products;
+  }
+
+  async findByKeyword(keyword, page, perPage) {
+    const products = await Product
+      .find({ keyword })
+      .sort({ createdAt : -1 })
+      .skip(perPage * (page - 1))
+      .limit(perPage);
     return products;
   }
 
@@ -77,8 +109,8 @@ export class ProductModel {
   }
 
   async delete(productId) {
-    await Product.findOneAndDelete({ _id: productId });
-    return;
+    const del = await Product.findOneAndDelete({ _id: productId });
+    return del;
   }
 
 };
