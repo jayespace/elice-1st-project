@@ -58,8 +58,8 @@ categoryRouter.patch('/categories/:categoryId',
 
   // 이름이 있을 경우 에러 발생
   const isExist = await categoryService.getCategoryByName(name);
-  if (isExist) {
-    throw new Error('이 이름으로 생성된 카테고리가 있습니다. 다른 이름을 지어주세요.');
+  if (isExist.name !== name) {
+      throw new Error('이 이름으로 생성된 카테고리가 있습니다. 다른 이름을 지어주세요.');
   }
 
   // 위 데이터가 undefined가 아니라면, 즉, 프론트에서 업데이트를 위해
