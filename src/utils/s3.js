@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import multer from 'multer';
-import multerS3 from 'multer-S3';
+import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
 import path from 'path';
 
