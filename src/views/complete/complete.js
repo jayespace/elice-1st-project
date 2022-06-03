@@ -1,10 +1,18 @@
-const orderBtn = document.getElementById("#orderDetailButton");
-const shopBtn = document.getElementById("#shoppingButton");
+const orderBtn = document.getElementById("orderDetailButton");
+const shopBtn = document.getElementById("shoppingButton");
 
-orderBtn.addEventListener("click", ()=>{
-    window.location.href='';
-})
+function changeToProducts(e) {
+    const url = `/products`;
+    console.log(url);
+    location.href = url;
+}
 
-orderBtn.addEventListener("click", ()=>{
-    window.location.href='';
-})
+function changeToOrders(e) {
+    const url = `/orders`;
+    console.log(url);
+    location.href = url;
+}
+
+shopBtn.addEventListener("click",changeToProducts)
+
+orderBtn.addEventListener("click", changeToOrders);
