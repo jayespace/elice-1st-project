@@ -13,6 +13,7 @@ viewsRouter.use('/sellproduct', serveStatic('sellproduct'));
 viewsRouter.use('/editprofile', serveStatic('editprofile'));
 viewsRouter.use('/account', serveStatic('account'));
 viewsRouter.use('/products', serveStatic('product'));
+viewsRouter.use('/oauth', serveStatic('oauth'));
 viewsRouter.use('/detail', serveStatic('detail'));
 viewsRouter.use('/cart', serveStatic('cart'));
 viewsRouter.use('/shippingpoint', serveStatic('shippingpoint'));
