@@ -23,7 +23,7 @@ export const headerTemplate = async () => {
   const userImage = sessionStorage.getItem('image');
   let adminTemplate = '';
   if (isAdmin) {
-    adminTemplate = `<a href="/account" class="navbar-item"> 관리자페이지 </a>`;
+    adminTemplate = `<a href="/account" class="navbar-item is-size-6"> 관리자페이지 </a>`;
   }
   let loginTemplate = '';
   if (isLogIn) {
