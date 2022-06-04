@@ -138,8 +138,8 @@ class OrderStatusService {
     if (reqOrderStatusName === "취소완료") {
       if (curOrderStatusName !== '결제완료' && curOrderStatusName !== '상품준비중') {
         throw new Error ('해당 요청 사항은 반영될 수 없습니다.')
-      } else if (curCsStatusName !== '취소') {
-        throw new Error ('구매자의 요청 사항을 확인해 주세요.')
+      } if (curCsStatusName === '정상') {
+        curCsStatusId = '62958fe60408c67d1e8d3656';
       }
     } 
 
