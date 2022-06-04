@@ -1,7 +1,6 @@
 import * as Api from '../api.js';
 
 const list = document.querySelector('.product-list');
-const id = documtne.querySelector('.product');
 
 async function getProducts() {
   const data = await Api.get('/api/products');
