@@ -15,7 +15,7 @@ authRouter.get('/kakao/callback', passport.authenticate('kakao', { session: fals
   userTokenAndInfo.token =  token; 
   userTokenAndInfo.user = user;
   res.cookie('userTokenAndInfo', userTokenAndInfo)
-  res.redirect('http://localhost:5000/oauth');
+  res.redirect('http://kdt-sw2-seoul-team12.elicecoding.com/oauth');
 });
 
 
