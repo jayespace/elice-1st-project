@@ -9,7 +9,7 @@ async function getProducts() {
   const productList = products
     .map((item) => {
       return `
-        <div class="product" id="${item._id}">
+        <div class="product" id="${item._id}" onclick="location.href='/detail?id=${item._id}'">
             <div class="img">
                 <img src="${item.image}" alt="상품이미지">
             </div>
