@@ -17,8 +17,8 @@ location.search?
   .getLocalStorage()
   .filter((item) => item.cart === 'checked');
 console.log(storedItem);
-if(storedItem){
-  alert("잘못된 접근입니다.")
+if(storedItem.length < 1){
+  alert("상품을 선택해주세요.");
   redirectMain();
 }
 //user Inputs
