@@ -8,7 +8,7 @@ const User = model('users', UserSchema);
 
 const config = {
   clientID: process.env.KAKAO_ID, // 카카오 로그인에서 발급받은 REST API 키
-  callbackURL: '/api/auth/kakao/callback', // 카카오 로그인 Redirect URI 경로
+  callbackURL: 'http://kdt-sw2-seoul-team12.elicecoding.com/api/auth/kakao/callback', // 카카오 로그인 Redirect URI 경로
 };
 
 async function findOrCreateUser(email, fullName) {

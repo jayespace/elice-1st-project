@@ -1,11 +1,16 @@
 <script>
-    function parseCookie(cookie) {
-        const data = decodeURIComponent(cookie.value);
-        return JSON.parse(data.substring(2));
-    }
+    const getCookie = (name) => {
+	const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    const deleteCookie = (name) => {
+	document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+}
+	return value? value[2] : null;
+};
     async function getTokenAndSetSession() {
-        const token = await cookieStore.get('userTokenAndInfo');
-        const result = await parseCookie(token);
+        const token = await getCookie('userTokenAndInfo');
+        const json = await decodeURIComponent(token).substring(2);
+        const result = JSON.parse(json);
+
 
         sessionStorage.setItem('token', result.token);
         sessionStorage.setItem('userid', result.user._id);
@@ -13,10 +18,11 @@
         sessionStorage.setItem('role', result.user.role);
     }
     async function execute(){
+        getTokenAndSetSession();
         try{
         await getTokenAndSetSession();
         // alert('정상적인 로그인입니다.')
-        cookieStore.delete('userTokenAndInfo');
+        delete('userTokenAndInfo');
 
         location.href = '/'
         }

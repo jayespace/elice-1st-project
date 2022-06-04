@@ -2,3 +2,5 @@
 node_modules
 yarn.lock
 .env
+src/passport
+src/views/oauth
