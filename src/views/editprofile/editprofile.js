@@ -41,6 +41,8 @@ async function changeImageFile(file) {
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
       imageProfile.src = imgSrc;
+      console.log(imgSrc);
+      sessionStorage.setItem('image', imgSrc);
       imageProfile.style.width = '100%';
       imageProfile.style.height = '100%';
     } catch (e) {
