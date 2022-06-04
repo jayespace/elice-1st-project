@@ -222,7 +222,10 @@ userRouter.patch(
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const fullName = req.body.fullName;
       const password = req.body.password;
-      const address = req.body.address;
+      const postalCode = req.body.postalCode;
+      const address1 = req.body.address1;
+      const address2 = req.body.address2;
+      const address = {postalCode, address1, address2};
       const phoneNumber = req.body.phoneNumber;
       const role = req.body.role;
       // body data로부터, 확인용으로 사용할 현재 비밀번호를 추출함.
@@ -232,7 +235,7 @@ userRouter.patch(
       if (newImage !== "none") {
         image = newImage
       }
-      console.log(password, currentPassword);
+      console.log(address,password, currentPassword);
 
       // currentPassword 없을 시, 진행 불가
       if (!currentPassword) {

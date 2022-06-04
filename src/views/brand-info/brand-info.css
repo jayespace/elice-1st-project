@@ -25,6 +25,8 @@ body {
 .articles {
   margin: 5rem 0;
   margin-top: -200px;
+  background-color: #faf8f1;
+  margin-bottom: 200px;
 }
 .articles .content p {
   line-height: 1.9;
@@ -60,6 +62,9 @@ div.column.is-8:first-child {
   font-weight: lighter;
   line-height: 2;
 }
+.article-title strong {
+  font-weight: 500;
+}
 .article-subtitle {
   color: #909aa0;
   margin-bottom: 3rem;
@@ -70,6 +75,10 @@ div.column.is-8:first-child {
 }
 
 .shop-info {
-  background: rgb(248, 219, 224) !important;
-  padding-bottom: 130px !important;
+  background: #f7f1e4 !important;
+  padding-bottom: 200px !important;
+}
+
+.card-content {
+  margin-bottom: 100px;
 }

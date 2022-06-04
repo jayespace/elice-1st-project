@@ -30,7 +30,7 @@ class OrderService {
         const toUpdate = { 
           user: 
           {
-            fullName: "탈퇴한 회원",
+            fullName: "탈퇴",
             email: "unknown",
             phoneNumber: "unknown"
           },

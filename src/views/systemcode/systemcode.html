@@ -1,110 +1,94 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Elice SW2 Team12</title>
+        <!-- 아이콘 -->
+        <link
+        rel="icon" type="image/png" sizes="16x16" href="/black-cat.png"/>
+        <!-- bulma css 관련 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/><!-- 폰트 어썸: 아이콘 -->
+        <!-- 이건 폰트 어썸 최신 Url임.. 삭제하지마셈--><script src="https://kit.fontawesome.com/fc99c35a8f.js" crossorigin="anonymous"> </script>
+        <!-- 커스텀 css, js -->
+        <link rel="stylesheet" href="systemcode.css"/>
+        <script src="../common/landing.js" type="module" defer></script>
+        <script src="systemcode.js" type="module" defer></script>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>쇼핑-데모</title>
-    <!-- 아이콘 -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/elice-rabbit-favicon.png" />
-    <!-- bulma css 관련 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" /><!-- 폰트 어썸: 아이콘 -->
-    <!-- 이건 폰트 어썸 최신 Url임.. 삭제하지마셈-->
-    <script src="https://kit.fontawesome.com/fc99c35a8f.js" crossorigin="anonymous"> </script>
-    <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="systemcode.css" />
-    <script src="../common/landing.js" type="module" defer></script>
-    <script src="systemcode.js" type="module" defer></script>
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    </head>
 
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-</head>
+    <body>
+        <header id="header"></header>
 
-<body>
-    <header id="header"></header>
-
-    <!-- contents -->
-    <main id="main" role="main">
-        <section>
-            <div class="container">
-                <div class="table">
-                    <div class="table-wrapper">
-                        <div class="table-header">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h2>Manage
-                                        <b>Category</b>
-                                    </h2>
-                                </div>
-                                <div class="col-sm-6 d-flex is-justify-content-end">
-                                    <a href="#addModal" class="btn btn-success" data-toggle="modal">
-                                        <i class="material-icons">&#xE147;</i>
-                                        <span>Add New Category</span>
-                                    </a>
+        <!-- contents -->
+        <main id="main" role="main">
+            <section>
+                <div class="container">
+                    <div class="table">
+                        <div class="table-wrapper">
+                            <div class="table-header">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h2>Manage
+                                            <b class="camel">Category</b>
+                                        </h2>
+                                    </div>
+                                    <div class="col-sm-6 d-flex is-justify-content-end">
+                                        <a href="#addModal" class="btn btn-success" data-toggle="modal">
+                                            <i class="material-icons">&#xE147;</i>
+                                            <span class="camel"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr id="tbHead">
-                                    <!-- <th>
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr id="tbHead"></tr>
+                                </thead>
+                                <tbody id="tbBody">
+                                    <tr>
+                                        <td>
                                             <span class="custom-checkbox">
-                                                <input type="checkbox" id="selectAll">
-                                                <label for="selectAll"></label>
+                                                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                                <label for="checkbox1"></label>
                                             </span>
-                                        </th>
-                                        <th>카테고리 명</th>
-                                        <th>설명</th>
-                                        <th>Created At</th>
-                                        <th>Updated At</th>
-                                        <th>추가/삭제</th> -->
-                                </tr>
-                            </thead>
-                            <tbody id="tbBody">
-                                <tr>
-                                    <td>
-                                        <span class="custom-checkbox">
-                                            <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                            <label for="checkbox1"></label>
-                                        </span>
-                                    </td>
-                                    <td class="tb_username">이름</td>
-                                    <td class="tb_useremail">설명</td>
-                                    <td class="tb_address">호호</td>
-                                    <td class="tb_phonenumber">하하</td>
-                                    <td>
-                                        <a href="#editCategoryModal" class="td_edit" data-toggle="modal">
-                                            <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}'
-                                                data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
-                                        </a>
-                                        <a href="#deleteCategoryModal" class="td_delete" data-toggle="modal">
-                                            <i class="material-icons" data-toggle="tooltip" title="Delete_Category"
-                                                data-id="${_id}">&#xE872;</i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="tb_username">이름</td>
+                                        <td class="tb_useremail">설명</td>
+                                        <td class="tb_address">호호</td>
+                                        <td class="tb_phonenumber">하하</td>
+                                        <td>
+                                            <a href="#editCategoryModal" class="td_edit" data-toggle="modal">
+                                                <i class="material-icons" data-delay='{"show":"7000", "hide":"3000"}' data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
+                                            </a>
+                                            <a href="#deleteCategoryModal" class="td_delete" data-toggle="modal">
+                                                <i class="material-icons" data-toggle="tooltip" title="Delete_Category" data-id="${_id}">&#xE872;</i>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-                            </tbody>
-                        </table>
-                        <!--table footer 영역입니다-->
-                        <div class="table-footer mt-3">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h2>Manage
-                                        <b>Menu</b>
-                                    </h2>
-                                </div>
-                                <!--createMenuToSystemCodeList 진행될 영역입니다.-->
-                                <div id="systemCodeList" class="col-sm-6 d-flex is-justify-content-end">
+                                </tbody>
+                            </table>
+                            <!--table footer 영역입니다-->
+                            <div class="table-footer mt-3">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h2>Manage
+                                            <b>SystemCode</b>
+                                        </h2>
+                                    </div>
+                                    <!--createMenuToSystemCodeList 진행될 영역입니다.-->
+                                    <div id="systemCodeList" class="col-sm-6 d-flex is-justify-content-end"></div>
 
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -116,13 +100,13 @@
                     <div class="modal-content">
                         <form>
                             <div class="modal-header">
-                                <h4 class="modal-title">Add Category</h4>
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Add
+                                    <span class="camel">Category</span>
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
-                            
-                            <div class="modal-body">
-                            </div>
+
+                            <div class="modal-body"></div>
 
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -138,13 +122,12 @@
                     <div class="modal-content">
                         <form>
                             <div class="modal-header">
-                                <h4 class="modal-title">Edit Employee</h4>
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Edit
+                                    <span class="camel">Employee</span>
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
-                            <div class="modal-body">
-
-                            </div>
+                            <div class="modal-body"></div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel">
                                 <input type="submit" class="btn btn-success md-ok" value="Add">
@@ -159,7 +142,9 @@
                     <div class="modal-content">
                         <form>
                             <div class="modal-header">
-                                <h4 class="modal-title">Delete Category</h4>
+                                <h4 class="modal-title">Delete
+                                    <span class="camel">Category</span>
+                                </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -182,12 +167,12 @@
                     <div class="modal-content">
                         <form>
                             <div class="modal-header">
-                                <h4 class="modal-title">Edit Category</h4>
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Edit
+                                    <span class="camel">Category</span>
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
-                            <div class="modal-body">
-                            </div>
+                            <div class="modal-body"></div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel">
                                 <input type="submit" class="btn btn-info md-ok" id="EditSubmitButton" value="Save">
@@ -196,13 +181,53 @@
                     </div>
                 </div>
             </div>
-           
+
         </section>
 
+        <div class="modal-body"></div>
 
-    </main>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel"/>
+            <input type="submit" class="btn btn-success" value="Add"/>
+        </div>
+    </body>
+</html></form></div></div></div><!-- edit Modal HTML --><div id="editModal" class="modal fade"><div class="modal-dialog"><div class="modal-content"><form>
+<div class="modal-header">
+    <h4 class="modal-title">Edit Employee</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+</div>
+<div class="modal-body"></div>
+<div class="modal-footer">
+    <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel"/>
+    <input type="submit" class="btn btn-success md-ok" value="Add"/>
+</div></form></div></div></div><!-- Delete Modal HTML --><div id="deleteModal" class="modal fade"><div class="modal-dialog"><div class="modal-content"><form>
+<div class="modal-header">
+    <h4 class="modal-title">Delete Category</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+</div>
+<div class="modal-body">
+    <p>Are you sure you want to delete these Records?</p>
+    <p class="text-warning">
+        <small>This action cannot be undone.</small>
+    </p>
+</div>
+<div class="modal-footer">
+    <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel"/>
+    <input type="submit" class="btn btn-danger md-ok" value="Delete" id="td_del_ok"/>
+</div></form></div></div></div><!-- add Modal HTML --><div id="addModal" class="modal fade"><div class="modal-dialog"><div class="modal-content"><form>
+<div class="modal-header">
+    <h4 class="modal-title">Edit Category</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+</div>
+<div class="modal-body"></div>
+<div class="modal-footer">
+    <input type="button" class="btn btn-default md-no" data-dismiss="modal" value="Cancel"/>
+    <input type="submit" class="btn btn-info md-ok" id="EditSubmitButton" value="Save"/>
+</div></form></div></div></div></section></main><footer id="footer"></footer></body></html>
 
-    <footer id="footer"></footer>
-</body>
-
-</html>

@@ -1,7 +1,8 @@
+import {checkToken} from '/permission.js';
+checkToken();
 import * as Api from "../api.js";
 import { addCommas } from "/useful-functions.js";
 const ordersTop = document.querySelector(".orders-top");
-
 getDataFromApi();
 let data;
 globalThis.i = 0;
@@ -35,9 +36,6 @@ function getDataFromProducts(products) {
     `;
   }
 
-  if (price >= 50000) {
-    shipFee = 0;
-  }
   totalFee = price + shipFee;
 
   return { name, price, shipFee, totalFee, info };
@@ -58,7 +56,7 @@ function insertHTMLToList(orderList, length) {
           <div class="date">${date} ${time}</div>
           <div class="info">${name}</div>
           <div class="price">총 ${addCommas(totalFee)}원</div>
-          <div class="status">${statusInfo.orderStatus}</div>
+          <div class="status">${statusInfo.orderStatus}<br>${statusInfo.csStatus}</div>
           <div class="buttons">
             <button class="order-detail detailBtn"  data-columns=${i}>주문상세</button>
             <button class="order-cancle cancleBtn"  data-columns=${i}>주문취소</button>
@@ -123,6 +121,7 @@ async function deleteOrder(colNum) {
 function closeCancleModal() {
   document.querySelector(".modal").style.display = "none";
   document.querySelector(".modal-background").style.display = "none";
+  location.reload();
 }
 
 //상세정보Modal

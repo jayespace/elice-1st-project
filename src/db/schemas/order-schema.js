@@ -85,6 +85,11 @@ const OrderSchema = new Schema({
       )],
       requred: true
     },
+    deliveryFee: {
+      type: Number,
+      required: false,
+      default: 3000
+    },
     paymentMethod: {
       type: String,
       required: false

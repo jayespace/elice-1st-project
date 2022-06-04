@@ -34,7 +34,7 @@ const UserSchema = new Schema(
     image: {
       type: String,
       required: false,
-      default:'https://elice-team12.s3.ap-northeast-2.amazonaws.com/product_dummy/1654062281799.png',
+      default:'https://elice-team12.s3.ap-northeast-2.amazonaws.com/test/1654309525515.png',
     },
     role: {
       type: String,

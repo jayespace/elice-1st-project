@@ -41,13 +41,14 @@ async function handleSubmit(e) {
     const result = await Api.post('/api/login', data);
     const token = result.token;
     const user = result.user;
-    const { _id, fullName, role } = user;
+    const { _id, fullName, role, image } = user;
 
     // 로그인 성공, 토큰 및 유저정보를 세션 스토리지에 저장
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('userid', _id);
     sessionStorage.setItem('username', fullName);
     sessionStorage.setItem('role', role);
+    sessionStorage.setItem('image', image);
 
     // 로그인 성공 알림
     alert(`정상적으로 로그인되었습니다.`);
@@ -56,6 +57,6 @@ async function handleSubmit(e) {
     window.location.href = '/';
   } catch (err) {
     console.error(err.stack);
-    alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
+    alert(`${err.message}`);
   }
 }

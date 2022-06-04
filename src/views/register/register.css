@@ -5,10 +5,6 @@
   height: 85vh;
 }
 
-.register-user-form-box {
-  width: 30rem;
-}
-
 .register-user-form-box .title {
   text-align: center;
 }
@@ -20,4 +16,9 @@
 .register-user-form-box .input:focus {
   border-color: #00d1b2;
   box-shadow: 0 0 0 0.125em rgba(0, 209, 178, 0.25);
+}
+
+#submitButton {
+  width: 300px;
+  height: 45px;
 }

@@ -3,7 +3,7 @@
  * Author: 박상준
  * date : 2022-05-31
  */
-
+ import {redirectMain} from '/permission.js';
 import * as Api from '/api.js';
 import store from '../cart/store.js';
 import { addCommas, searchAddressByDaumPost } from '/useful-functions.js';
@@ -17,6 +17,10 @@ location.search?
   .getLocalStorage()
   .filter((item) => item.cart === 'checked');
 console.log(storedItem);
+if(storedItem.length < 1){
+  alert("상품을 선택해주세요.");
+  redirectMain();
+}
 //user Inputs
 const receiverNameInput = document.getElementById('receiverNameInput');
 const receiverPhoneNumberInput = document.getElementById(
@@ -102,8 +106,9 @@ async function sendOrderInfoByPost(e) {
   const requestSelect = requestSelectBox.value;
   let requestComment = '';
 
-  const receiverNameValid = receiverName.length > 2;
-  const receiverPhoneNumberValid = receiverPhoneNumber.length > 8;
+  const receiverNameValid = (/^[가-힣a-zA-Z]+$/).exec(receiverName);
+  const receiverPhoneNumberValid = receiverPhoneNumber.length > 7 && 	
+  (/^[0-9]+$/).exec(receiverPhoneNumber);
   const addressValid = postalCode && address1 && address2;
 
   if (!receiverNameValid) {
@@ -147,7 +152,7 @@ async function sendOrderInfoByPost(e) {
       totalPrice,
     })
   );
-  const order = {
+  const orderInfo = {
     fullNameTo: receiverName,
     phoneNumberTo: receiverPhoneNumber,
     addressTo: {
@@ -158,11 +163,11 @@ async function sendOrderInfoByPost(e) {
     messageTo: requestComment,
     products,
   };
-
+  console.log(orderInfo);
   try {
-    const result = await Api.post('/api/orders', order);
+    const result = await Api.post('/api/orders', orderInfo);
     if (result) {
-      if(Product){
+      if(location.search){
         sessionStorage.setItem('Product','');
       }else{
         localStorage.clear();
