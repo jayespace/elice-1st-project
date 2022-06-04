@@ -54,11 +54,15 @@ async function updateUserPermission(e){
 }
 
 async function changeUserPassword(e){
+  e.preventDefault();
   console.log(globalThis.email);
   try {
     const result = await Api.post('/api/user/reset-password',  {email:globalThis.email});
     // 비밀번호 찾기 성공 알림
-    if(result)alert(`임시 비밀번호가 발급되었습니다. 이메일을 확인해주세요.`);
+    if(result){
+      alert(`임시 비밀번호가 발급되었습니다. 이메일을 확인해주세요.`);
+      location.reload();
+     }
   }catch(e){
     console.error('정보삭제관련 : ',e);
   }
