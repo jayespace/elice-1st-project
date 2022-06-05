@@ -2,42 +2,47 @@ import {checkAdmin} from '/permission.js';
 checkAdmin();
 
 import * as Api from "/api.js";
-import { randomId } from "/useful-functions.js";
-
-// 요소(element), input 혹은 상수
-const category_table = document.getElementById("category-table");
+const productTable = document.getElementById("category-table");
 const clearfix = document.getElementById("clearfix");
 const mdEditBtn = document.getElementById('mdEditBtn');
 const mdDelBtn = document.getElementById('mdDelBtn');
-//ed-modal
-const EditNameInput = document.getElementById("EditNameInput");
-
-const perPage = 10;
+const perPage = 10; //한번 호출 마다 불러지는 데이터 
 
 addAllElements();
 addAllEvents();
 
-// html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllElements() {
   createProductsPage(1, perPage);
 }
 
-// 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
-  mdEditBtn.addEventListener('click', updateUserInfo);
-  mdDelBtn.addEventListener('click', deleteUserInfo);
-  // EditSearchAddressButton.addEventListener('click',insertAddressInputsByDumPost);
-  // EditSubmitButton.addEventListener('click', updateUserInfo);
+  mdEditBtn.addEventListener('click', updateProductInfo);
+  mdDelBtn.addEventListener('click', deleteProductInfo);
 }
 
-async function updateUserInfo(e) {
+
+/**
+ * Author : Park Award
+ * create At : 22-06-04
+ * @param {event} e
+ * Update 관련 Modal 의 Submit 이벤트 처리 함수 입니다.
+ */
+
+async function updateProductInfo(e) {
   e.preventDefault();
   const id = globalThis.userId;
   console.log(id);
   redirectUrl('sellproduct',`id=${id}`);
 }
 
-async function deleteUserInfo(e) {
+/**
+ * Author : Park Award
+ * create At : 22-06-04
+ * @param {event} e
+ * delete 관련 Modal 의 Submit 이벤트 처리 함수 입니다.
+ */
+
+async function deleteProductInfo(e) {
   const id = globalThis.userId;
   try{
     const result = await Api.delete('/api/products',id);
@@ -49,7 +54,14 @@ async function deleteUserInfo(e) {
   }
 }
 
-
+/**
+ * Author : Park Award
+ * create At : 22-06-04
+ * @param {Number} page 요청 페이지
+ * @param {Number} perPage 페이지당 보여지는 데이터
+ * Product Api에서 데이터를 불러와 
+ * ProductsPage의 모든Element를 호출하는 함수 입니다.
+ */
 
 async function createProductsPage(page, perPage) {
   const query = `?page=${page}&perPage=${perPage}`
@@ -59,42 +71,36 @@ async function createProductsPage(page, perPage) {
   const { page, perPage, totalPage, totalProducts, products } = data;
 
   createProductsToTable(products);
-  createClearFix(perPage, totalProducts, totalPage, page);
+  createPaginationMenu(perPage, totalProducts, totalPage, page);
   }catch(e){
     console.error(e)
   }
 }
 
+/**
+ * Author : Park Award
+ * create At : 22-06-04
+ * update At : 22-06-05
+ * @param {Object} products Product Api의 product Object 값 입니다.
+ * productTable의 현재 상품목록을 생성합니다.
+ */
 async function createProductsToTable(products) {
-  category_table.innerHTML = "";
-  products.forEach(
-    ({
-      _id,
-      name,
-      price,
-      category,
-      briefDesc,
-      fullDesc,
-      manufacturer,
-      stock,
-      keyword,
-      image,
-    }) => {
-      createProductsRow(
-        _id,
-        name,
-        price,
-        category,
-        briefDesc,
-        fullDesc,
-        manufacturer,
-        stock,
-        keyword,
-        image
-      );
-    }
-  );
-  function createProductsRow(
+  productTable.innerHTML = "";
+  products.forEach(product => {
+    productTable.appendChild(createProductsRow(product));
+  });
+}
+
+/**
+ * Author : Park Award
+ * create At : 22-06-05
+ * @param {Object} ProductData 
+ * @returns {Element}
+ * createProductsToTable 에 사용될 tr을 생성하는 함수입니다.
+ *
+ */
+function createProductsRow(ProductData) {
+  const { 
     _id,
     name,
     price,
@@ -104,39 +110,49 @@ async function createProductsToTable(products) {
     manufacturer,
     stock,
     keyword,
-    image
-  ) {
-    category_table.insertAdjacentHTML(
-      "beforeend",
-      `
-        <tr>
-            <td class="tb_image"><div><img src='${image}'></div></td>
-            <td class="tb_name">${name}</td>
-            <td class="tb_price">${price}</td>
-            <td class="tb_category">${category}</td>
-            <td class="tb_briefDesc"><div>${briefDesc}</div></td>
-            <td class="tb_fullDesc"><div>${fullDesc}</div></td>
-            <td class="tb_manufacturer">${manufacturer}</td>
-            <td class="tb_stock">${stock}</td>
-            <td class="tb_keyword">${keyword}</td>
-            <td>
-                <a href="#editProductModal" class="td_edit" data-toggle="modal" data-id="${_id}">
-                    <i class="material-icons"data-id="${_id}">&#xE254;</i>
-                </a>
-                <a href="#deleteCategoryModal" class="td_delete" data-toggle="modal" data-id="${_id}">
-                    <i class="material-icons" data-id="${_id}">&#xE872;</i>
-                </a>
-            </td>
-        </tr>
-        `
-    );
+    image } = ProductData;
+    const newNode = document.createElement('tr');
+    newNode.innerHTML = 
+          `
+          <td class="tb_image"><div><img src='${image}'></div></td>
+          <td class="tb_name">${name}</td>
+          <td class="tb_price">${price}</td>
+          <td class="tb_category">${category}</td>
+          <td class="tb_briefDesc"><div>${briefDesc}</div></td>
+          <td class="tb_fullDesc"><div>${fullDesc}</div></td>
+          <td class="tb_manufacturer">${manufacturer}</td>
+          <td class="tb_stock">${stock}</td>
+          <td class="tb_keyword">${keyword}</td>
+          `
+    const newButtonNode = document.createElement('td');
+    newButtonNode.innerHTML = 
+          `
+              <a href="#editProductModal" class="td_edit" data-toggle="modal" data-id="${_id}">
+                  <i class="material-icons"data-id="${_id}">&#xE254;</i>
+              </a>
+              <a href="#deleteCategoryModal" class="td_delete" data-toggle="modal" data-id="${_id}">
+                  <i class="material-icons" data-id="${_id}">&#xE872;</i>
+              </a>
+          </td>
+          `
+    const aTags = newButtonNode.getElementsByTagName('a');
+    for(let a of aTags)a.addEventListener('click', e => globalThis.userId = e.target.dataset.id)
+    newNode.appendChild(newButtonNode);
+    return newNode;
   }
-  //bind ObejectID
-  const edit = category_table.querySelectorAll('a');
-  edit.forEach(e => e.addEventListener('click',  (e) => globalThis.userId = e.target.dataset.id));
-}
 
-function createClearFix(perPage, totalPRoducts, totalPage, nowPage) {
+
+/**
+ * Author : Park Award
+ * Create At: 22-06-05
+ * @param {Number} perPage 
+ * @param {Number} totalPRoducts 
+ * @param {Number} totalPage 
+ * @param {Number} nowPage 
+ * 
+ *  Product Api의 데이터를 넣어 Pagination Menu를 생성합니다.
+ */
+function createPaginationMenu(perPage, totalPRoducts, totalPage, nowPage) {
   function createPaginationItems(num, active) {
     return `<li class="page-item${active ? " active" : ""} num-item" data-page=${num}>
               <a>${num}</a>

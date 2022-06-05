@@ -6,18 +6,12 @@ import {
   insertImageFile,
 } from '/useful-functions.js';
 
-
 checkToken();
-
-
 const profileHeadLabel = document.querySelector('#securityTitle');
 const fullNameInput = document.getElementById('fullNameInput');
 const currentPasswordInput = document.getElementById('currentPasswordInput');
-//비밀번호 재생성 Inputs
 const reenPasswordInput = document.getElementById('reenPasswordInput');
-const reenPasswordConfirmInput = document.getElementById(
-  'reenPasswordConfirmInput'
-);
+const reenPasswordConfirmInput = document.getElementById('reenPasswordConfirmInput');
 const postalCodeInput = document.getElementById('postalCodeInput');
 const address1Input = document.getElementById('address1Input');
 const address2Input = document.getElementById('address2Input');
@@ -34,15 +28,29 @@ activeModalFunction();
 addAllElements();
 addAllEvents();
 
-//이미지 관련기능
-async function changeImageFile(file) {
+async function addAllElements() {
+  setUserInfoToInputs();
+}
+
+async function addAllEvents() {
+  imageInput.addEventListener('change', changeImageFile);
+  searchAddressButton.addEventListener('click', insertAddressToAddrInputs);
+  saveButton.addEventListener('click', editUserProfile);
+  deleteCompleteButton.addEventListener('click', deleteAccount);
+}
+
+/**
+ * Author : ParkAward
+ * create At : 22-06-05
+ * @param {Event} file 
+ * 사용자가 삽인한 ImageFile을 보여주고 데이터를 imagedata에 보관합니다.
+ */
+ async function changeImageFile(file) {
   if (file.target.files[0]) {
     imagedata = file.target.files[0];
     try {
       const imgSrc = await insertImageFile(file.target.files[0]);
       imageProfile.src = imgSrc;
-      console.log(imgSrc);
-      sessionStorage.setItem('image', imgSrc);
       imageProfile.style.width = '100%';
       imageProfile.style.height = '100%';
     } catch (e) {
@@ -51,24 +59,22 @@ async function changeImageFile(file) {
   }
 }
 
-async function addAllElements() {
-  setUserInfoToInputs();
-}
-
-async function addAllEvents() {
-  imageInput.addEventListener('change', changeImageFile);
-  searchAddressButton.addEventListener('click', insertAddressToAddrInputs);
-  saveButton.addEventListener('click', handlePatch);
-  deleteCompleteButton.addEventListener('click', deleteAccount);
-}
-
+/**
+ * 다음 API를 사용하고 AddrInput 삽입합니다.
+ */
 async function insertAddressToAddrInputs() {
   const { zonecode, address } = await searchAddressByDaumPost();
   postalCodeInput.value = zonecode;
   address1Input.value = address;
   address2Input.focus();
 }
-//계정삭제 관련
+
+/**
+ * Author : Park Award
+ * create At : 22-06-02
+ * 사용자의 정보를 삭제합니다.
+ * @return 잘못된 행동이면 바로 멈춥니다.
+ */
 async function deleteAccount() {
   const userid = sessionStorage.getItem('userid');
   const currentPassword = currentPasswordInput.value;
@@ -89,7 +95,11 @@ async function deleteAccount() {
   } catch (e) {}
 }
 
-//회원정보 셋팅
+/**
+ * Author : Park Award
+ * create At: 22-06-02
+ * 사용자의 정보를 삽입합니다.
+ */
 async function setUserInfoToInputs() {
   const userid = sessionStorage.getItem('userid');
   const data = await Api.get(`/api/users/${userid}`);
@@ -120,8 +130,15 @@ async function setUserInfoToInputs() {
   address2Input.value = address2;
   phoneNumberInput.value = phoneNumber ?? '';
 }
-//회원정보 수정 진행
-async function handlePatch(e) {
+
+/**
+ * Author : Park Award
+ * create At : 22-06-02
+ * @param {Event} e 
+ * @returns {alert} 잘못된 행동이라면 즉시 멈춥니다.
+ * 사용자의 기존 정보와 대조하여 변경된 데이터를 서버에 보냅니다.
+ */
+async function editUserProfile(e) {
   e.preventDefault();
 
   const fullName = fullNameInput.value;
@@ -157,8 +174,6 @@ async function handlePatch(e) {
     !isAddress2CodeValidModify ||
     !isPhoneNumberValidModify
   ) {
-    console.log(isFullNameValidModify, isReenPasswordValidModify, isPostalCodeValidModify, isAddress1CodeValidModify, isAddress2CodeValidModify, isPhoneNumberValidModify);
-    console.log(fullName, reenPassword, currentPassword, postalCode, address1, address2, phoneNumber);
     const formData = new FormData();
     formData.append("fullName", fullName);
     formData.append("password", reenPassword);

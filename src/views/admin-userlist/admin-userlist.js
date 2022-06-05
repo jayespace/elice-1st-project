@@ -1,4 +1,4 @@
-import {checkAdmin} from '/permission.js';
+import { checkAdmin } from '/permission.js';
 checkAdmin();
 
 import * as Api from "/api.js";
@@ -8,15 +8,15 @@ import { searchAddressByDaumPost } from "/useful-functions.js";
 const userInfo_table = document.getElementById("userInfo-table");
 
 //ed-modal
-const EditFullNameInput = document.getElementById('EditFullNameInput');
-const EditEmailInput = document.getElementById('EditEmailInput');
-const EditPostalCodeInput = document.getElementById('EditPostalCodeInput');
-const EditAddress1Input = document.getElementById('EditAddress1Input');
-const EditAddress2Input = document.getElementById('EditAddress2Input');
-const EditPhoneNumberInput = document.getElementById('EditPhoneNumberInput');
-const EditRoleSelectBox = document.getElementById('EditRoleSelectBox');
-const EditSearchAddressButton = document.getElementById('EditSearchAddressButton');
-const EditSubmitButton = document.getElementById('EditSubmitButton');
+const editFullNameInput = document.getElementById('editFullNameInput');
+const editEmailInput = document.getElementById('editEmailInput');
+const editPostalCodeInput = document.getElementById('editPostalCodeInput');
+const editAddress1Input = document.getElementById('editAddress1Input');
+const editAddress2Input = document.getElementById('editAddress2Input');
+const editPhoneNumberInput = document.getElementById('editPhoneNumberInput');
+const editRoleSelectBox = document.getElementById('editRoleSelectBox');
+const editSearchAddressButton = document.getElementById('editSearchAddressButton');
+const editSubmitButton = document.getElementById('editSubmitButton');
 const ChangeSubmitButton = document.getElementById('ChangeSubmitButton');
 
 
@@ -32,119 +32,159 @@ async function addAllElements() {
 
 // 여러 개의 addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllEvents() {
-  EditSearchAddressButton.addEventListener('click',insertAddressInputsByDumPost);
-  EditSubmitButton.addEventListener('click', updateUserPermission);
+  editSearchAddressButton.addEventListener('click', insertAddressInputsByDumPost);
+  editSubmitButton.addEventListener('click', updateUserPermission);
   ChangeSubmitButton.addEventListener('click', changeUserPassword)
 }
 
-async function updateUserPermission(e){
-  console.log(globalThis.email);
-
+/**
+ * Author : Park Award
+ * create At : 22-06-05 
+ * @param {event} e 
+ * 유저의 권한을 변경하는 함수입니다.
+ */
+async function updateUserPermission(e) {
   const id = globalThis.userId
   const data = {}
-  data.role = EditRoleSelectBox.value;
-  try{
-    const result = await Api.patch('/api/admin/users',id,data);
-    if(result){
+  data.role = editRoleSelectBox.value;
+  try {
+    const result = await Api.patch('/api/admin/users', id, data);
+    if (result) {
       alert('성공적 권한 변경')
     }
-  }catch(e){
-    console.error('정보권한변경관련 : ',e);
+  } catch (e) {
+    console.error('정보권한변경관련 : ', e);
   }
 }
 
-async function changeUserPassword(e){
+/**
+ * Author : Park Award
+ * @param {Event} e 
+ * 사용자의 비밀번호를 변경합니다.
+ * 그리고 해당 Email에 임시비밀번호를 발송합니다.
+ */
+async function changeUserPassword(e) {
   e.preventDefault();
   console.log(globalThis.email);
   try {
-    const result = await Api.post('/api/user/reset-password',  {email:globalThis.email});
+    const result = await Api.post('/api/user/reset-password', { email: globalThis.email });
     // 비밀번호 찾기 성공 알림
-    if(result){
+    if (result) {
       alert(`임시 비밀번호가 발급되었습니다. 이메일을 확인해주세요.`);
       location.reload();
-     }
-  }catch(e){
-    console.error('정보삭제관련 : ',e);
+    }
+  } catch (e) {
+    console.error('정보삭제관련 : ', e);
   }
 }
 
-async function insertAddressInputsByDumPost(){
-  const {zonecode, address} = await searchAddressByDaumPost();
-  EditPostalCodeInput.value = zonecode;
-  EditAddress1Input.value = address;
+/**
+ * 다음 API를 사용하고 Input에 데이터를 넣습니다.
+ */
+async function insertAddressInputsByDumPost() {
+  const { zonecode, address } = await searchAddressByDaumPost();
+  editPostalCodeInput.value = zonecode;
+  editAddress1Input.value = address;
 }
+
+/**
+ * Author : Park Award
+ * create At : 22-06-05
+ * API로 부터 받은 사용자 정보를 Table에 생성합니다.
+ */
 async function createUserInfoToTable() {
-  const {users} = await Api.get('/api/admin/userlist','');
+  const { users } = await Api.get('/api/admin/userlist', '');
   console.log(users);
-  users.forEach(({image, _id, fullName, email, address, phoneNumber, role}) =>{
-      //불확실한 값
-      const addr = address
-      ?
-      `
-      (${address.postalCode})${address.address1} ${address.address2 ?? ''}
-      `
-      :
-      ``;
-      const phNum = phoneNumber ?? '';
-      createUserInfoRow(image, _id, fullName, email, addr, role, phNum);
-    });
+  users.forEach(({ image, _id, fullName, email, address, phoneNumber, role }) => {
+    const addr = address?`(${address.postalCode ?? ''})${address.address1 ?? ''} ${address.address2 ?? ''}`:'';
+    const phNum = phoneNumber ?? '';
+    userInfo_table.appendChild(createUserInfoRow(image, _id, fullName, email, addr, role, phNum));
+  });
+}
 
-    const edit = document.querySelectorAll('.td_edit');
-    edit.forEach(e => e.addEventListener('click', setUserInfoToEditModal));
-    const del = document.querySelectorAll('.td_delete');
-    del.forEach(e => e.addEventListener('click', (e) => {
-      globalThis.userId = e.target.dataset.id
-      globalThis.email = e.target.dataset.email
-    }));
+/**
+ * Author : Park Award
+ * create At : 22-06-05
+ * @param {Url} image 
+ * @param {String} _id 
+ * @param {String} fullName 
+ * @param {String} email 
+ * @param {String} address 
+ * @param {String} role 
+ * @param {String} phoneNumber 
+ * @returns {Element}
+ * 사용자의 데이터가 들어간 테이블 로우를 Element를 반환합니다.
+ */
+function createUserInfoRow(image, _id, fullName, email, address, role, phoneNumber) {
+  const newNode = document.createElement('tr');
+  newNode.innerHTML = `
+      <tr>
+          <td class="tb_image"><img src='${image}'></td>
+          <td class="tb_username">${fullName}</td>
+          <td class="tb_useremail">${email}</td>
+          <td class="tb_address">${address}</td>
+          <td class="tb_phonenumber">${phoneNumber}</td>
+          <td class="tb_role">${role}</td>
+          <td>
+          </td>
+      </tr>
+      `
+  const newChildNode = document.createElement('td');
+  newChildNode.innerHTML = `
+    <a href="#editUserInfoModal" class="td_edit" data-toggle="modal" data-id="${_id}" >
+      <i class="material-icons" data-toggle="tooltip" title="edit" data-id="${_id}">&#xE254;</i>
+    </a>
+    <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal" data-id="${_id}" data-email="${email}">
+      <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}" data-email="${email}">&#xf0d2;</i>
+    </a>
+  `;
+  const aTags = newChildNode.getElementsByTagName('a');
+  for (let tag of aTags) {
+    if (tag.classList.contains('td_edit')) {
+      tag.addEventListener('click', setUserInfoToEditModal);
+    }
+    else {
+      tag.addEventListener('click', e => {
+        globalThis.userId = e.target.dataset.id
+        globalThis.email = e.target.dataset.email
+      });
+    }
+  }
+  newNode.appendChild(newChildNode);
+  return newNode;
+}
 
-    function createUserInfoRow(image, _id, fullName, email, address, role, phoneNumber) {
-      userInfo_table.insertAdjacentHTML(
-        "beforeend",
-          `
-          <tr>
-              <td class="tb_image"><img src='${image}'></td>
-              <td class="tb_username">${fullName}</td>
-              <td class="tb_useremail">${email}</td>
-              <td class="tb_address">${address}</td>
-              <td class="tb_phonenumber">${phoneNumber}</td>
-              <td class="tb_role">${role}</td>
-              <td>
-                  <a href="#editUserInfoModal" class="td_edit" data-toggle="modal" data-id="${_id}" >
-                      <i class="material-icons" data-toggle="tooltip" title="Edit" data-id="${_id}">&#xE254;</i>
-                  </a>
-                  <a href="#deleteUserInfoModal" class="td_delete" data-toggle="modal" data-id="${_id}" data-email="${email}">
-                      <i class="material-icons" data-toggle="tooltip" title="Delete_userInfo"  data-id="${_id}" data-email="${email}">&#xf0d2;</i>
-                  </a>
-              </td>
-          </tr>
-          `
-      );
+/**
+ * Author : Park Award
+ * create At : 22-06-05
+ * @param {Event} e 
+ * Edit Modal에 해당 Row의 사용자 정보를 넣습니다
+ */
+async function setUserInfoToEditModal(e) {
+  const id = e.target.dataset.id;
+  globalThis.userId = id;
+  const userInfo = await Api.get('/api/admin/users', id);
+  console.log(userInfo);
+  const { email, fullName, address, phoneNumber, role } = userInfo;
+  editFullNameInput.value = fullName;
+  editEmailInput.value = email;
+  if (address) {
+    editPostalCodeInput.value = address.postalCode;
+    editAddress1Input.value = address.address1;
+    editAddress2Input.value = address.address2 ?? '';
+  }
+  else {
+    editPostalCodeInput.value = '';
+    editAddress1Input.value = '';
+    editAddress2Input.value = '';
+  }
+  editPhoneNumberInput.value = phoneNumber ?? '';
+
+  const options = editRoleSelectBox.options
+  for (let i = 0; i < options.length; i++) {
+    if (options[i].value === role) {
+      options[i].selected = true;
     }
-    async function setUserInfoToEditModal(e){
-      const id = e.target.dataset.id;
-      globalThis.userId = id;
-      const userInfo = await Api.get('/api/admin/users',id);
-      const {email, fullName, address, phoneNumber, role} = userInfo;
-      EditFullNameInput.value = fullName;
-      EditEmailInput.value = email;
-      if(address){
-        EditPostalCodeInput.value = address.postalCode;
-        EditAddress1Input.value = address.address1;
-        EditAddress2Input.value = address.address2 ?? '';
-      }
-      else{
-        EditPostalCodeInput.value = '';
-        EditAddress1Input.value = '';
-        EditAddress2Input.value = '';
-      }
-      EditPhoneNumberInput.value = phoneNumber ?? '';
-  
-      const options = EditRoleSelectBox.options
-      for(let i = 0; i <options.length; i++){
-        if(options[i].value === role){
-          options[i].selected = true;
-        }
-      }
-  
-    }
+  }
+
 }
