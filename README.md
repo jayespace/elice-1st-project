@@ -28,7 +28,7 @@
 * [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
 * [Menu Structure](https://capricious-dust-d0c.notion.site/Menu-Structure-09f8d2f4ed6a4277a11c36d4c66c27ac)
 * [Functional Specification](https://capricious-dust-d0c.notion.site/Fuctional-Specification-fb60727032e541aabf7819111c602217)
-* [최종 발표 PPT](https://docs.google.com/presentation/d/1HRObkg2CqnthsAVqPs43KCF_8cIOJh2sSaSs6i8fo_8/edit?usp=sharing)
+* [최종 발표 PPT](https://docs.google.com/presentation/d/1W4t59tDPg2AbpBWilCT2unrVpatMymyVSCaQbIATrO0/edit?usp=sharing)
 
 
 ## 🙂 팀원 소개
