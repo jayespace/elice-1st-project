@@ -1,14 +1,8 @@
-/***
- *
- * Author: 박상준
- * date : 2022-05-31
- */
- import {redirectMain} from '/permission.js';
+import {redirectMain} from '/permission.js';
 import * as Api from '/api.js';
 import store from '../cart/store.js';
 import { addCommas, searchAddressByDaumPost } from '/useful-functions.js';
 
-// localStorage data
 const storedItem =
 location.search?
   [ JSON.parse( sessionStorage.getItem('product'))]
@@ -64,6 +58,7 @@ function changeRequestBox(e) {
   }
 }
 
+// address Inputs에 다음 API를 사용한 값을 넣습니다.
 async function insertAddressToAddrInputs() {
   const { zonecode, address } = await searchAddressByDaumPost();
   postalCodeInput.value = zonecode;
@@ -95,7 +90,13 @@ function insertOrderSummary() {
   orderTotal.textContent = addCommas(Fee + amount) + '원';
 }
 
-//회원정보 수정 진행
+/**
+ * Author : Park Award
+ * create At: 22-06-01
+ * @param {Event} e 
+ * @returns 
+ * 주문 관련된 데이터를 서버 저장합니다.
+ */
 async function sendOrderInfoByPost(e) {
   e.preventDefault();
   const receiverName = receiverNameInput.value;

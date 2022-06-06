@@ -23,7 +23,14 @@ class CreateTableHelper {
     this.mdAdd = mdAdd;
     this.mdDel = mdDel;
   }
-  // 초기 생성시 도움주는 함수
+  
+  /**
+   * Author : Park Award
+   * created At : 22-06-04
+   * @param {Element} ButtonArea 
+   * @param {Function} callback
+   * System 코드 대한 동적 버튼을 생성합니다.
+   */
   static async initialize(ButtonArea, callback) {
     const tags = await this.createSysCodesButtonElement();
     ButtonArea.insertAdjacentHTML("beforeend", tags);
@@ -31,6 +38,13 @@ class CreateTableHelper {
       e.addEventListener("click", callback);
     });
   }
+
+  /**
+   * Author : Park Award
+   * created At : 22-06-04
+   * @returns 
+   *  System 코드에 등록되어 있는 코드(관리해야할 데이터)에 대한 동적 버튼을 그립니다.
+   */
   static async createSysCodesButtonElement() {
     const sysCodes = await Api.get("/api/admin/systemCodes");
     if(!sessionStorage.getItem('syscode')){
@@ -45,7 +59,11 @@ class CreateTableHelper {
     }
     return sysCodes.map(({ _id, name }) => createButton(_id, name)).join("");
   }
-
+  /**
+   * Author : Park Award
+   * create At : 22-06-05
+   * 테이블 그립니다
+   */
   async createTable() {
     const fn = await this.translateSysCodeToApi(this.sysCode, this.API_ALL);
     const data = await fn();
@@ -54,7 +72,12 @@ class CreateTableHelper {
     this.createModal(data);
   }
  
-
+  /**
+   * Author : Park Award
+   * create At : 22-06-05
+   * @param {Object} data
+ 
+   */
   async createModal(data) {
     this.createInsertModal(data);
     this.createEditModal(data);
@@ -68,6 +91,7 @@ class CreateTableHelper {
 
   createEditModal(data){
     const mdEdit_body = this.mdEdit.querySelector('.modal-body');
+    console.log(mdEdit_body);
     const {name, desc} = data[0];
     const inputData = desc? {name, desc} : {name};
     const fn = this.createHtmlHelper(this.ELE_EDIT);
@@ -81,10 +105,11 @@ class CreateTableHelper {
             data[`${key[i]}`] = document.getElementById(`Edit_${key[i]}`).value;
           }
         try{
+            console.log(data, typeof data);
             const fnAPI = await this.translateSysCodeToApi(this.sysCode, this.API_MODIFY);
             const result = await fnAPI(this.currentId, data);
             if(result){
-                // alert("성공적 전송");
+                alert("성공적 전송");
                 location.reload();
             }
         }catch(e){
@@ -98,6 +123,7 @@ class CreateTableHelper {
 
   createInsertModal(data){
     const mdAdd_body = this.mdAdd.querySelector('.modal-body');
+    const saveButton = this.mdAdd.querySelector('#EditSubmitButton');
     const {name, desc} = data[0];
     const inputData = desc? {name, desc} : {name};
     const fn = this.createHtmlHelper(this.ELE_ADD);
@@ -113,10 +139,11 @@ class CreateTableHelper {
             data[`${key[i]}`] = document.getElementById(`Add_${key[i]}`).value;
           }
         try{
+            console.log("input",key,data, typeof data);
             const fnAPI = await this.translateSysCodeToApi(this.sysCode, this.API_CREATE);
             const result = await fnAPI(data);
             if(result){
-                // alert("성공적 전송");
+                alert("성공적 전송");
                 location.reload();
             }
         }catch(e){
@@ -124,8 +151,7 @@ class CreateTableHelper {
         }
     }
 
-    this.mdAdd.querySelector('.md-ok').
-        addEventListener('click', save);
+    saveButton.addEventListener('click', save);
     
   }
 
@@ -164,7 +190,7 @@ class CreateTableHelper {
         const fn = await this.translateSysCodeToApi(this.sysCode ,this.API_DELETE)
         const result = fn(this.currentId);
         if(result){
-            // alert("성공적으로 삭제됨");
+            alert("성공적으로 삭제됨");
             location.reload();
         }
         }catch(e){
@@ -177,11 +203,19 @@ class CreateTableHelper {
 
   // Tag 생성기
   createHtmlHelper(Type) {
+    console.log("execute HTMLHelper", Type);
     switch (Type) {
       case this.ELE_HEAD:
         return function (keys) {
           keys = Object.keys(keys[0]);
-          let head = '';
+          let head = `
+            <th>
+              <span class="custom-checkbox">
+                  <input type="checkbox" id="selectAll">
+                  <label for="selectAll"></label>
+              </span>
+            </th>
+            `;
           keys.forEach((keys) => (head += `<th>${keys}</th>`));
           return head;
         };
@@ -193,6 +227,13 @@ class CreateTableHelper {
               return value.map((e) => `<td>${e}</td>`).join("");
             }
             let row = `
+              <tr>
+                <td>
+                    <span class="custom-checkbox">
+                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                        <label for="checkbox1"></label>
+                    </span>
+                </td>
                 ${createTabLeData(value)}
                 <td>
                     <a href="#editModal" class="td_edit" data-toggle="modal" data-do="Edit" data-id="${

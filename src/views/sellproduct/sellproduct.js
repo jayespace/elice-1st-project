@@ -4,32 +4,22 @@ import {checkAdmin} from '/permission.js';
 checkAdmin();
 
 const categorySelectBox = document.getElementById("categorySelectBox");
-
 const productNameInput = document.getElementById("productNameInput");
 const inventoryInput = document.getElementById("inventoryInput");
 const priceInput = document.getElementById("priceInput");
 const manufacturerInput = document.getElementById("manufacturerInput");
 const shortDescriptionInput = document.getElementById("shortDescriptionInput");
-const detailDescriptionInput = document.getElementById(
-  "detailDescriptionInput"
-);
+const detailDescriptionInput = document.getElementById("detailDescriptionInput");
 const addKeywordInput = document.getElementById("addKeywordInput");
 const keywordContainer = document.getElementById("keywordContainer");
-
-//버튼
 const addNewProductButton = document.getElementById("addNewProductButton");
 const addKeywordButton = document.getElementById("addKeywordButton");
-
-// 이미지 관련 패턴
 const imageInput = document.getElementById("productimageInput");
 const imageProduct = document.getElementById("product-image");
-
 let imagedata = "";
 
 addAllElements();
 addAllEvents();
-
-
 
 async function addAllElements() {
   createCategoryToCategorySelectBox();
@@ -45,6 +35,11 @@ function addAllEvents() {
   );
 }
 
+/**
+ * Author : Park Award
+ * create At 22-06-04
+ * params의 id값을 조회해서 상품의 아이디값을 표기합니다.
+ */
 async function insertProductInfo(){
   if(location.search){
     const id = new URLSearchParams(location.search).get('id');
@@ -72,7 +67,12 @@ async function insertProductInfo(){
 }
 }
 
-//이미지 업로드 관련
+/**
+ * Author : Park Award
+ * create At: 22-05-04
+ * @param {Event} file 
+ * 사용자가 올린 이미지를 보여주고, 변수에 저장하는 함수입니다.
+ */
 async function changeImageFile(file) {
   if (file.target.files[0]) {
     imagedata = file.target.files[0];
@@ -86,32 +86,54 @@ async function changeImageFile(file) {
     }
   }
 }
-//카테고리 표시 기능
+
+/**
+ * Author : Park Award
+ * create At: 22-05-04
+ * 서버의 Category를 불러와 옵션에 추가합니다.
+ */
 async function createCategoryToCategorySelectBox() {
-  function createCategoryItem(value, nameCategory) {
-    return `
-      <option value="${nameCategory}" class="notification is-primary is-light"> ${nameCategory} </option>
-      `;
-  }
   try {
     const data = await Api.get("/api/categories");
+    categorySelectBox.innerHTML =
+      data.map(({ _id, name }) => 
+      createCategoryItem(_id, name)).join("");
 
-    categorySelectBox.insertAdjacentHTML(
-      "beforeend",
-      data.map(({ _id, name }) => createCategoryItem(_id, name)).join(" ")
-    );
   } catch (e) {
     console.error(e.massage);
   }
 }
-//
+/**
+ * Author : Park Award
+ * create At : 22-05-04
+ * @param {String} value Object Id를 사용하지 않게 됨 
+ * @param {String} nameCategory 
+ * @returns {String}
+ * SelectBox option태그 String을 반환합니다.
+ */
+function createCategoryItem(value, nameCategory) {
+  return `
+    <option value="${nameCategory}" class="notification is-primary is-light"> ${nameCategory} </option>
+    `;
+}
+
+/**
+ * Author : Park Award
+ * create At : 22-05-04
+ * 키워드 Input에 입력된 값을 태그 컨테이너에 띄웁니다.
+ */
 function inputKeywordTag(){
   const keyword = addKeywordInput.value;
   if (!keyword) return;
   addKeywordTag(keyword)
 }
 
-
+/**
+ * Author : Park Award
+ * create At: 22-05-04
+ * @param {String} keyword
+ * 값을 태그 컨테이너에 띄웁니다.
+ */
 function addKeywordTag(keyword) {
   const rand = randomId();
   addKeywordInput.value = "";
@@ -130,7 +152,13 @@ function addKeywordTag(keyword) {
   control.querySelector("a").addEventListener("click", () => control.remove());
 }
 
-//상품 등록/ 수정
+/**
+ * Author : Park Award
+ * create At : 22-05-04
+ * @param {Event} e 
+ * @returns 
+ * 수정된 데이터를 서버에 Patch를 통해 보냅니다.
+ */
 async function handlePatch(e) {
   e.preventDefault();
 
@@ -141,7 +169,6 @@ async function handlePatch(e) {
   const shortDescription = shortDescriptionInput.value;
   const detailDescription = detailDescriptionInput.value;
   const categorySelect = categorySelectBox.value;
-
   const isProductNameValid = productName.length >= 1;
   const isInventoryValid = inventory > 0;
   const isPriceValid = price >= 100;
@@ -166,7 +193,7 @@ async function handlePatch(e) {
     return alert("이미지를 입력해주세요");
   }
   const keyword = document.querySelectorAll("span.tag");
-
+  
   const formData = new FormData();
   if(!globalThis.id || productName !== globalThis.name){
     formData.append("name", productName);

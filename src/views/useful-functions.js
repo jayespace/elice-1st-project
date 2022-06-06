@@ -31,7 +31,7 @@ export const wait = (ms) => {
 
 /**
  * Author: Park Sang Jun
- * create: 2022-06-01
+ * created At: 2022-06-01
  * Img.src 에 사용할 수 있는 img String을 반환합니다.
  * @param {file} file files[0] in type="file"
  * @returns {Pomise} Base64 encoded ImageUrl
@@ -52,7 +52,7 @@ export const insertImageFile = async (file) => {
 }
 /**
  * Author: Park Sang Jun
- * created: 2022-06-01
+ * created At: 2022-06-01
  * Dependency:  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
  * DaumJibunApi 에서 우편번호와 주소 정보를 가져옵니다.
  * @returns {Promise} {zonecode, address} zoncode는 우편번호, adress주소 정보와 건물명을 담긴 데이터입니다. 
