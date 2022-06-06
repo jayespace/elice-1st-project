@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elice SW2 Team12</title>
+  <!-- 아이콘 -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/black-cat.png" />
+  <!-- bulma css 관련 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+  <!-- 폰트 어썸: 아이콘 -->
+  <script defer src="https://kit.fontawesome.com/7630448495.js" crossorigin="anonymous"></script>
+
+  <!-- 커스텀 css, js -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="orders.css" />
+  <script src="orders.js" type="module" defer></script>
+  <script src="../common/landing.js" type="module" defer></script>
+</head>
+
+<body>
+  <!-- 헤더 -->
+  <header id="header">
+  </header>
+
+  <main id="main" role="main">
+    <!-- 주문조회 -->
+    <section class="section">
+      <div class="container">
+        <div class="block account-header">
+          <h1 class="subtitle is-4">주문내역</h1>
+        </div>
+        <div class="container orders-container" id="ordersContainer">
+          <div class="columns orders-top">
+            <div class="column top-date">주문날짜</div>
+            <div class="column top-info">주문정보(전체 상품명 / 금액)</div>
+            <div class="column top-status">상태</div>
+            <div class="column top-cancle">신청</div>
+          </div>
+        </div>
+    </section>
+
+    <!-- 주문 취소 확인 Modal 창 -->
+    <div id="modal" class="modal">
+      <div class="modal-background" id="modalBackground"></div>
+      <div class="modal-content">
+        <div class="box">
+          <p class="mb-3">
+            주문 취소 시 복구할 수 없습니다. 정말 취소하시겠습니까?
+          </p>
+          <div class="buttons">
+            <button class="button mt-5" id="deleteCompleteButton" aria-label="close">
+              네
+            </button>
+            <button class="button is-primary mt-5" id="deleteCancelButton" aria-label="close">
+              아니오
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 주문 상세보기 Modal 창 -->
+    <div id="detailModal" class="detail-modal">
+    </div>
+  
+  </main>
+
+  <footer id="footer">
+  </footer>
+
+</body>
+
+</html>

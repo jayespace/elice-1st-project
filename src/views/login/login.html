@@ -3,14 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>쇼핑-데모</title>
+    <title>Elice SW2 Team12</title>
     <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/elice-rabbit-favicon.png"
-    />
+    <link rel="icon" type="image/png" sizes="16x16" href="/black-cat.png" />
     <!-- bulma css 관련 -->
     <link
       rel="stylesheet"
@@ -22,49 +17,79 @@
       src="https://kit.fontawesome.com/7630448495.js"
       crossorigin="anonymous"
     ></script>
+    <!-- 구글 OAuth -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- 카카오 OAuth -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <!-- 커스텀 css, js -->
     <link rel="stylesheet" href="login.css" />
-    <script src="login.js" type="module" defer></script>
     <script src="../common/landing.js" type="module" defer></script>
+    <script src="login.js" type="module" defer></script>
   </head>
+
   <body>
     <header id="header"></header>
 
-    <!-- 로그인 폼(Form) -->
-    <div class="login-form-container">
-      <form class="box login-form-box" id="loginForm">
-        <p class="title is-5 has-text-info">어서오세요!</p>
-        <div class="field">
-          <label class="label" for="emailInput">이메일</label>
-          <div class="control">
-            <input
-              class="input"
-              id="emailInput"
-              type="email"
-              placeholder="abc@example.com"
-              autocomplete="on"
-            />
+    <main role="main">
+      <!-- 로그인 폼(Form) -->
+      <div class="login-form-container">
+        <form class="box login-form-box" id="loginForm">
+          <p class="title is-5">안녕하세요 🖐</p>
+          <div class="field">
+            <label class="label" for="emailInput">이메일</label>
+            <div class="control">
+              <input
+                class="input"
+                id="emailInput"
+                type="email"
+                placeholder="abc@example.com"
+                autocomplete="on"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="field mb-5">
-          <label class="label" for="passwordInput">비밀번호</label>
-          <div class="control">
-            <input
-              class="input"
-              id="passwordInput"
-              type="password"
-              placeholder="********"
-              autocomplete="on"
-            />
+          <div class="field mb-5">
+            <label class="label" for="passwordInput">비밀번호</label>
+            <div class="control">
+              <input
+                class="input"
+                id="passwordInput"
+                type="password"
+                placeholder="********"
+                autocomplete="on"
+              />
+            </div>
           </div>
-        </div>
+          <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="/find-password">비밀번호를 잊으셨나요?</a></li>
+            </ul>
+          </nav>
 
-        <button class="button is-info is-fullwidth" id="submitButton">
-          로그인하기
-        </button>
-      </form>
-    </div>
+          <button class="button is-primary" id="submitButton">
+            로그인하기
+          </button>
+
+          <!-- OAuth 모음 -->
+          <div class="oauth-container">
+            <!-- 구글 OAuth -->
+            <!-- <div id="googleLoginButton"></div> -->
+
+            <!-- 카카오 OAuth -->
+            <div class="oauth-kakao" id="kakaoLoginButton">
+              <!-- href="/api/auth/kakao"  target='_blank'-->
+              <!-- <a><img src="//k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="150"  alt="카카오 로그인 버튼"/></a> -->
+
+              <a href="/api/auth/kakao"
+                ><img
+                  src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_wide.png"
+                  alt="카카오 로그인 버튼"
+              /></a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
     <footer id="footer"></footer>
   </body>
 </html>

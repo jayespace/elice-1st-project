@@ -3,14 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>쇼핑-n팀</title>
+    <title>Elice SW2 Team12</title>
     <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/elice-rabbit-favicon.png"
-    />
+    <link rel="icon" type="image/png" sizes="16x16" href="/black-cat.png" />
     <!-- bulma css -->
     <link
       rel="stylesheet"
@@ -23,17 +18,56 @@
       crossorigin="anonymous"
     ></script>
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="home.css" />
     <script src="../common/landing.js" type="module" defer></script>
+    <link rel="stylesheet" href="home.css" />
+    <link rel="stylesheet" href="product.css" />
+    <script src="./product.js" type="module" defer></script>
   </head>
   <body>
     <!-- header -->
     <header id="header"></header>
 
     <!-- contents -->
-    <main id="main" role="main"></main>
+    <main id="main" role="main">
+      <!-- Carousel -->
+      <div class="slideshow-container container">
+        <div class="mySlides fade">
+          <img src="./banner.png" style="width: 100%" />
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">❮</a>
+        <a class="next" onclick="plusSlides(1)">❯</a>
+      </div>
+      <br />
+
+      <!-- Products List -->
+      <section class="section">
+        <div class="container">
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <h2 class="subtitle">상품 둘러보기</h2>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <div class="field has-addons has-addons-centered">
+                  <div class="control">
+                    <a href="/products">더보기</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+
+          <div class="product-list"></div>
+        </div>
+      </section>
+    </main>
 
     <!-- footer -->
-    <footer id="footer"></footer>
+    <footer id="footer" class="section"></footer>
   </body>
+  <script src="home.js" defef></script>
 </html>

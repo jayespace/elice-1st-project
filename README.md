@@ -23,6 +23,7 @@
 
 ## 📚 프로젝트 개발 자료
 
+<<<<<<< HEAD
 * [Daily Scrum](https://capricious-dust-d0c.notion.site/093c9da7bfe641708e39b00badb22979)
 * [API TestCase](https://docs.google.com/spreadsheets/d/1vFKmgQDme3tyQ85SEX9_vGW-K-wLmpys8z09be8-O0A/edit?usp=sharing)
 * [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
@@ -33,6 +34,22 @@
 
 ## 🙂 팀원 소개
 | Front-end | Back-end |
+=======
+<<<<<<< HEAD
+* [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
+* [API TESTCASE](https://docs.google.com/spreadsheets/d/1vFKmgQDme3tyQ85SEX9_vGW-K-wLmpys8z09be8-O0A/edit?usp=sharing)
+
+=======
+* [Daily Scrum](https://capricious-dust-d0c.notion.site/093c9da7bfe641708e39b00badb22979)
+* [API Testcase](https://docs.google.com/spreadsheets/d/1vFKmgQDme3tyQ85SEX9_vGW-K-wLmpys8z09be8-O0A/edit?usp=sharing)
+* [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
+* [Menu Structure](https://capricious-dust-d0c.notion.site/Menu-Structure-09f8d2f4ed6a4277a11c36d4c66c27ac)
+* [Functional Specification](https://capricious-dust-d0c.notion.site/Fuctional-Specification-fb60727032e541aabf7819111c602217)
+>>>>>>> feature/userlist-1
+
+## 🙂 팀원 소개
+| front-end | back-end |
+>>>>>>> dev
 | ------ | ------ |
 | 위보람 | 신재이 |
 | 박상준 | 권재구 |
@@ -62,8 +79,15 @@
 - 백: src/views 이외 폴더 전체
 - 실행: **프론트, 백 동시에, express로 실행**
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<br >
+=======
+>>>>>>> dev
 
 <br>
+>>>>>>> feature/userlist-1
 
 ---
 

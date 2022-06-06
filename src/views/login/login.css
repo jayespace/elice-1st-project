@@ -5,14 +5,34 @@
   height: 85vh;
 }
 
-.login-form-box {
-  width: 30rem;
-}
-
 .login-form-box .title {
   text-align: center;
 }
 
 .login-form-box .button {
   font-weight: bold;
+}
+
+.oauth-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.oauth-kakao {
+  padding-top: 0.3rem;
+}
+
+.oauth-kakao:hover {
+  opacity: 0.8;
+}
+
+#submitButton {
+  margin: 0 auto;
+  width: 300px;
+  height: 45px;
+  box-sizing: border-box;
+  font-size: 16px;
+  display: block;
 }
