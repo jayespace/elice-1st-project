@@ -2,7 +2,25 @@
 
 제품들을 조회하고, 장바구니에 추가하고, 또 주문을 할 수 있는 쇼핑몰 웹 서비스 제작 프로젝트입니다. <br />
 귀여움으로 힐링이 되는 **고양이 용품**을 주제로 제작하였습니다. 
+
 ### * Link:  http://kdt-sw2-seoul-team12.elicecoding.com/
+
+<div style="display:flex; justify-content: space-around; text-align:center; border: 1px dashed #dedede; padding-top: 10px;">
+    <div>
+        <img src="https://user-images.githubusercontent.com/101157141/176214307-5c872ff0-88b7-45a8-8a60-1efc832bf87f.gif" alt="사용자" style="zoom:80%;" />
+        <h6>
+            사용자 시나리오
+        </h6>
+    </div>
+    <div>
+        <img src="https://user-images.githubusercontent.com/101157141/176214242-fbd728ba-d4f5-47ce-9fba-f95c607753b2.gif" alt="관리자" style="zoom:80%;" />
+        <h6>
+            관리자 시나리오
+        </h6>
+    </div>
+</div>
+
+
 
 
 
