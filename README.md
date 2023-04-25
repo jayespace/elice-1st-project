@@ -19,6 +19,8 @@
 * 주문시 재고 반영 기능
 * 주문 상태 Status 관리 기능
 
+<br>
+
 ### 🐱 Demo
 
 |  사용자 시나리오                                                                           |    관리자 시나리오            |
@@ -26,26 +28,17 @@
 | ![](https://user-images.githubusercontent.com/101157141/176214307-5c872ff0-88b7-45a8-8a60-1efc832bf87f.gif) |![](https://user-images.githubusercontent.com/101157141/176214242-fbd728ba-d4f5-47ce-9fba-f95c607753b2.gif) |
 
 
-## 📚 프로젝트 개발 자료
-* [Daily Scrum](https://capricious-dust-d0c.notion.site/093c9da7bfe641708e39b00badb22979)
-* [API TestCase](https://docs.google.com/spreadsheets/d/1vFKmgQDme3tyQ85SEX9_vGW-K-wLmpys8z09be8-O0A/edit?usp=sharing)
-* [Flow Chart](https://www.figma.com/file/nLLL1rYlzpyD6ny763wTPt/Flow-Chart)
-* [Menu Structure](https://capricious-dust-d0c.notion.site/Menu-Structure-09f8d2f4ed6a4277a11c36d4c66c27ac)
-* [Functional Specification](https://capricious-dust-d0c.notion.site/Fuctional-Specification-fb60727032e541aabf7819111c602217)
-* [최종 발표 PPT](https://docs.google.com/presentation/d/1W4t59tDPg2AbpBWilCT2unrVpatMymyVSCaQbIATrO0/edit?usp=sharing)
+### 🐱 프로젝트 자료
+|  Flow Chart                                                                           |    최종 발표 PPT           |
+|:--------------------------------------------------------------------------------------:|:-----------------------:|
+| ![](https://user-images.githubusercontent.com/102934821/234160415-72cf54e6-8d0f-4a47-836e-d26fc381651e.png)|![](https://user-images.githubusercontent.com/102934821/234160422-7deaa5dd-7f3f-4826-ba76-627ba1efafd2.png) |
+| API TestCase도 확인해 보실 수 있습니다<br>[API TestCase](https://docs.google.com/spreadsheets/d/1vFKmgQDme3tyQ85SEX9_vGW-K-wLmpys8z09be8-O0A/edit?usp=sharing)  | 아래의 링크에서 확인 가능합니다<br>[최종 발표 PPT](https://docs.google.com/presentation/d/1W4t59tDPg2AbpBWilCT2unrVpatMymyVSCaQbIATrO0/edit?usp=sharing) |
 
+<br>
 
-### 🙂 팀원 소개
-| front-end | back-end |
-| ------ | ------ |
-| 위보람 | 신재이 |
-| 박상준 | 권재구 |
-| 김가은 | |
+###  🐱 주요 사용 기술
 
-
-###  🪄 주요 사용 기술
-
-#### 1. 프론트엔드
+#### 프론트엔드
 
 <p>
   <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
@@ -54,7 +47,7 @@
   <img src="https://img.shields.io/badge/font awesome-EF2D5E?style=for-the-badge&logo=fontawesome&logoColor=white"/>
 </p>
 
-#### 2. 백엔드 
+#### 백엔드 
 
 <p>
   <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
@@ -64,8 +57,21 @@
   <img src="https://img.shields.io/badge/AWS S3-262261?style=for-the-badge&logo=amazons3&logoColor=white"/>
 </p>
 
+<br>
 
-### 📂 폴더 구조
+### 🐱 팀원 소개
+
+| 이름   | 역할       | 구현 기능                                    |
+| ----  | --------  | --------------------------------------------- |
+| 위보람 | 프론트엔드  | 메인 페이지, 장바구니 기능, 디자인 담당 |
+| 박상준 | 프론트엔드  | 관리자 페이지 (상품 & 주문 & 시스템코드)  |
+| 김가은 | 프론트엔드   | 사용자페이지 (상품 & 장바구니 & 주문)  |
+| 신재이 | 백엔드   | 제품 API, 주문 API |
+| 권재구 | 백엔드   | 유저 API (카카오 로그인 연동 & 이메일 기능), 시스템 코드 API |
+
+<br>
+
+### 🐱  폴더 구조
 - 프론트: `src/views` 폴더 
 - 백: src/views 이외 폴더 전체
 - 실행: **프론트, 백 동시에, express로 실행**
